@@ -9,13 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.wallet.WalletActivity"></activity>
+        <activity android:name=".PurchasesActivity"></activity>
+        <activity android:name=".FoodItemActivity" />
+        <activity android:name=".QRActivity" />
+        <activity android:name=".ui.wallet.WalletActivity" />
         <activity android:name=".StallActivity" />
         <activity android:name=".UserProfile" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ui.home.HomeActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.home.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

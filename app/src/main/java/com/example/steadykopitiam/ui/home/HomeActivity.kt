@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.steadykopitiam.*
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import java.util.ArrayList
 
 class HomeActivity : AppCompatActivity() {
@@ -257,8 +258,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun changeNavigationHeaderInfo() {
-//        val headerView = navigationView.getHeaderView(0)
-//        headerView.textEmail.text = "lokeshdesai@android4dev.com"
+       val headerView = navigationView.getHeaderView(0)
+        headerView.username.text = "lokeshdesai@android4dev.com"
     }
 
     private fun setUpDrawerLayout() {

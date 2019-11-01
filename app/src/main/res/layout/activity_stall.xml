@@ -37,7 +37,7 @@
                 app:srcCompat="@drawable/chicken_rice" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/foodLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorWhite"
@@ -54,11 +54,13 @@
                 android:layout_height="2sp"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical"></LinearLayout>
-        </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/foodRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
         <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
 
@@ -73,7 +75,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:itemIconTint="@color/colorWhite"
         app:menu="@menu/drawer_items" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
