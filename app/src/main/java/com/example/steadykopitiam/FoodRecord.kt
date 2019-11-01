@@ -15,6 +15,7 @@ class FoodRecord(
     val extraPrice : Double,
     val deductPrice : Double,
     val stall     : String,
-    val dishType : String
+    val dishType : String,
+    val focus : String
 
 )

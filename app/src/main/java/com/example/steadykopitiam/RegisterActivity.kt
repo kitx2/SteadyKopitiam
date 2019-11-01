@@ -48,6 +48,7 @@ class RegisterActivity : AppCompatActivity(){
     }
 
     fun registerUser(dailyAct:String){
+
         var username  = this.register_name.text.toString()
         var phoneNumber = this.register_phoneNumber.text.toString()
         var password  = this.register_password.text.toString()
@@ -55,7 +56,9 @@ class RegisterActivity : AppCompatActivity(){
         var age       = this.register_age.text.toString()
         var height    = this.register_height.text.toString().toDouble()
         var weight    = this.register_weight.text.toString().toDouble()
-
+        var bmi = (weight / (height*height))
+        var calories : Int = 0
+        var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
         var gender      : String = ""
         var accountBalance : String = "0"
         var accountPoints : String = "0"
@@ -65,14 +68,14 @@ class RegisterActivity : AppCompatActivity(){
         }else {
             gender = "FEMALE"
         }
-        var bmi ="24.3"
-        var carb = "1"
-        var protein = "1"
-        var minerails = "1"
-        var calories = "1"
-        var fibra = "1"
-        var vitamins = "1"
-        var fat = "1"
+
+        var carb = ( calories * 0.6 / 4 )
+        var protein = (calories * 0.125 / 4 )
+        var minerails = "3.4"
+        var fibra = "30"
+        var vitamins = "90"
+        var fat = (calories * 0.275 / 9 )
+
         var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories.toInt(),
             fat.toInt(),fibra.toInt(),minerails.toInt(),vitamins.toInt(),dailyAct,protein.toInt(),password,phoneNumber))
 

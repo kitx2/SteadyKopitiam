@@ -58,15 +58,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                     TableFoodInfo.COLUMN_FOOD_IMAGE + " TEXT," +
                     TableFoodInfo.COLUMN_FOOD_MINERALS + " INTEGER NOT NULL," +
                     TableFoodInfo.COLUMN_FOOD_PROTEIN + " INTEGER NOT NULL," +
+                    TableFoodInfo.COLUMN_FOOD_FOCUS + " TEXT NOT NULL," +
                     TableFoodInfo.COLUMN_FOOD_VITAMINS + " INTEGER NOT NULL)"
 
 
-        private val SQL_CREATE_CART =
-            "CREATE TABLE " + TableCartInfo.TABLE_CART + "(" +
-                    TableCartInfo.COLUMN_CART_ID + " INTEGER PRIMARY KEY," +
-                    TableCartInfo.COLUMN_CART_TOTAL + "DOUBLE NOT NULL," +
-                    TableCartInfo.COLUMN_CART_SUBTOTAL + "DOUBLE NOT NULL,"+
-                    TableCartInfo.COLUMN_FOOD_ID + "INTEGER NOT NULL)"
+
 
         private val SQL_CREATE_ORDERSUMMARY =
             "CREATE TABLE " + TableOrderSummaryInfo.TABLE_ORDERSUMMARY + "(" +
@@ -74,8 +70,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE + " TEXT," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS + " INTEGER," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL + " DOUBLE," +
-                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_DISCOUNT + " DOUBLE," +
-                    TableOrderSummaryInfo.COLUMN_FOOD_ID + " INTEGER)"
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS + " INTEGER,"+
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFOCUS + " TEXT," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME + " TEXT," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCARBS + " INTEGER)"
 
         private val SQL_DELETE_USER = "DROP TABLE IF EXISTS " +
                 TableUserInfo.TABLE_USER
@@ -83,40 +86,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         private val SQL_DELETE_FOOD = "DROP TABLE IF EXISTS " +
                 TableFoodInfo.TABLE_FOOD
 
-        private val SQL_DELETE_CART = "DROP TABLE IF EXISTS " +
-                TableCartInfo.TABLE_CART
-
         private val SQL_DELETE_ORDERSUMMARY = "DROP TABLE IF EXISTS " +
                 TableOrderSummaryInfo.TABLE_ORDERSUMMARY
 
     }
 
 
-    fun checkDataBase(): Boolean {
-        var path = "/data/data/com.example.steadykopitiam"
-        var checkDB: SQLiteDatabase? = null
-        try {
-            checkDB = SQLiteDatabase.openDatabase(
-                path, null,
-                SQLiteDatabase.OPEN_READONLY
-            )
-            checkDB!!.close()
-        } catch (e: SQLiteException) {
-            // database doesn't exist yet.
-        }
-
-        return checkDB != null
-    }
-
-
     override fun onCreate(db: SQLiteDatabase?) {
-
         db?.execSQL(SQL_CREATE_USER)
         db?.execSQL(SQL_CREATE_FOOD)
-        db?.execSQL(SQL_CREATE_CART)
         db?.execSQL(SQL_CREATE_ORDERSUMMARY)
-
-
     }
 
 
@@ -124,7 +103,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL(SQL_DELETE_USER)
         db?.execSQL(SQL_DELETE_FOOD)
-        db?.execSQL(SQL_DELETE_CART)
         db?.execSQL(SQL_DELETE_ORDERSUMMARY)
         onCreate(db)
     }
@@ -331,6 +309,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         values.put(TableFoodInfo.COLUMN_FOOD_MINERALS,food.minerals)
         values.put(TableFoodInfo.COLUMN_FOOD_PROTEIN,food.protein)
         values.put(TableFoodInfo.COLUMN_FOOD_VITAMINS,food.vitamuns)
+        values.put(TableFoodInfo.COLUMN_FOOD_FOCUS,food.focus)
         val newRowId = db.insert(TableFoodInfo.TABLE_FOOD,null,values)
         return true;
     }
@@ -340,10 +319,18 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         val values = ContentValues()
 
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS,orderSummary.orderSummaryAwardedPoints)
-        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_DISCOUNT,orderSummary.orderSummaryDiscount)
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL,orderSummary.orderSummarySubtotal)
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE,orderSummary.orderSummaryTimeDate)
-        values.put(TableOrderSummaryInfo.COLUMN_FOOD_ID,food_id)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES,orderSummary.orderSummaryCalories)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCARBS,orderSummary.orderSummaryFoodCarbs)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT,orderSummary.orderSummaryFat)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE,orderSummary.orderSummaryFibre)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFOCUS,orderSummary.orderSummaryFocus)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS,orderSummary.orderSummaryVitamins)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN,orderSummary.orderSummaryProtein)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME,orderSummary.orderSummaryFoodName)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS,orderSummary.orderSummaryMinerals)
+
         val newRowID = db.insert(TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null,values)
         return true;
     }

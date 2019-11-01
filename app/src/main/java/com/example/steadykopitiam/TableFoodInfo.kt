@@ -25,6 +25,7 @@ class TableFoodInfo:BaseColumns {
         val COLUMN_FOOD_FOODSTALL = "food_stall"
         val COLUMN_FOOD_CALORIES = "food_calories"
         val COLUMN_FOOD_DISHTYPE = "food_dishType"
+        val COLUMN_FOOD_FOCUS = "food_focus"
 
     }
 }
