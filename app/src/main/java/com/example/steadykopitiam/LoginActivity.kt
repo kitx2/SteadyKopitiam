@@ -45,6 +45,8 @@ class LoginActivity : AppCompatActivity() {
 //
 //            Toast.makeText(this,"User retireved "+ str,Toast.LENGTH_LONG).show()
 
+//            git test
+
             if(user.isEmpty()){
                 Toast.makeText(this,"This User does not exists",Toast.LENGTH_LONG).show()
             }else{
