@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UserProfile">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:src="@drawable/steadykopitiam_full"
+        />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:background="#FF134F5C"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="12dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/edit_username"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:hint="@string/edit_username" />
+
+            <EditText
+                android:id="@+id/edit_age"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:hint="@string/edit_age" />
+
+            <EditText
+                android:id="@+id/edit_bmi"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/edit_bmi" />
+
+            <EditText
+                android:id="@+id/edit_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/edit_phoneNumber" />
+
+            <EditText
+                android:id="@+id/carbs_needed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/carbs_needed" />
+
+
+            <EditText
+                android:id="@+id/protein_needed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/protein_needed" />
+
+            <EditText
+                android:id="@+id/minerals_needed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/minerals_needed" />
+
+            <EditText
+                android:id="@+id/fibre_needed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/fibre_needed" />
+
+            <EditText
+                android:id="@+id/calories_needed"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/calories_needed" />
+
+            <EditText
+                android:id="@+id/account_balance"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/account_balance" />
+
+            <EditText
+                android:id="@+id/account_points"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPersonName"
+                android:text="@string/account_points" />
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

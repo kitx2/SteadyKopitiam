@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegisterActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:src="@drawable/steadykopitiam_full"
+        >
+    </ImageView>
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="7">-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginLeft="12dp"-->
+<!--            android:layout_marginRight="12dp"-->
+<!--            android:layout_marginBottom="24dp"-->
+<!--            android:layout_marginTop="12dp">-->
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="7"
+               android:background="#FF134F5C"
+               android:orientation="vertical"
+               android:layout_marginLeft="12dp"
+               android:layout_marginRight="12dp"
+               android:layout_marginBottom="24dp"
+               android:layout_marginTop="12dp">
+
+               <EditText
+                   android:id="@+id/register_email"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:textColor="@android:color/white"
+                   android:fontFamily="@font/roboto"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_email" />
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:orientation="horizontal">
+                   <RadioButton
+                       android:id="@+id/register_male"
+                       android:textColor="@color/colorWhite"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_weight="1"
+                       android:hint="@string/register_male" />
+
+                   <RadioButton
+                       android:id="@+id/register_female"
+                       android:textColor="@color/colorWhite"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_weight="1"
+                       android:hint="@string/register_female" />
+
+
+               </LinearLayout>
+
+
+               <EditText
+                   android:id="@+id/register_phoneNumber"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_phoneNumber"
+                   />
+
+
+               <EditText
+                   android:id="@+id/register_name"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_name"
+                   />
+
+               <EditText
+                   android:id="@+id/register_password"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_password"
+                   />
+
+               <EditText
+                   android:id="@+id/register_age"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_age"
+                   />
+
+               <EditText
+                   android:id="@+id/register_weight"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_weight"
+                   />
+
+
+               <EditText
+                   android:id="@+id/register_height"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:backgroundTint="@color/colorWhite"
+                   android:textCursorDrawable="@color/colorWhite"
+                   android:hint="@string/register_height"
+                   />
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:orientation="horizontal">
+
+
+                   <Spinner
+                       android:id="@+id/spinnerChoice"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1" />
+
+
+               </LinearLayout>
+
+               <Button
+                   android:id="@+id/btn_to_register"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_weight="1"
+                   android:fontFamily="@font/roboto"
+                   android:background="#FF009688"
+                   android:textColor="@android:color/white"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="12dp"
+                   android:layout_marginBottom="12dp"
+                   android:text="@string/btn_to_register" />
+
+
+           </LinearLayout>
+
+
+
+<!--        </androidx.cardview.widget.CardView>-->
+<!--    </ScrollView>-->
+
+
+
+</LinearLayout>
