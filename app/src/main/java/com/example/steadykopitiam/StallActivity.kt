@@ -32,6 +32,7 @@ class StallActivity : AppCompatActivity() {
     private var foodRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodVertical>? = null
     private var adapter: AdapterFoodViewVertical? = null
+
     //TODO: Update foodList
     private val myImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
     private val myImageNameList = arrayOf("Chicken rice", "Char siew rice", "Fishball noodle(Dry)", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")

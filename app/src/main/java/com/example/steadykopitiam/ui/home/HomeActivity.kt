@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import kotlinx.android.synthetic.main.activity_home.*
@@ -19,36 +20,45 @@ import com.example.steadykopitiam.*
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import org.json.JSONArray
+import java.io.IOException
+import java.io.InputStream
 import java.util.ArrayList
 
 class HomeActivity : AppCompatActivity() {
 
     var navigationPosition: Int = 0
 
+
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
     private var adapter: AdapterFoodViewHorizontal? = null
     //TODO: Update foodList
-    private val myImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
-    private val myImageNameList = arrayOf("Chicken rice", "Char siew rice", "Fishball noodle(Dry)", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
-    private val myImageDescriptionList = arrayOf(" Chicken, roasted, with skin, served with rice and chilli sauce.", "Pork barbequed in sweet sauce, served with rice and cucumber.", "Yellow noodles with fish ball and chye sim, served with chili sauce.", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
+
+    private val myImageList = IntArray(size = 2)
+    private val myImageNameList = arrayListOf<String>()
+    private val myImageDescriptionList = arrayListOf<String>()
 
     //All Stall
     private var stallRecyclerView: RecyclerView? = null
     private var stallImageModelArrayList: ArrayList<ModelStallVertical>? = null
     private var stallAdapter: AdapterStallViewVertical? = null
+
     //TODO: Update StallList
-    private val stallMyImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
-    private val stallMyImageNameList = arrayOf("Hainanese Chicken Rice", "Roasted Delights", "Fishball Noodle Stall", "Blk 85 Minced Pork Noodle", "Wen Ji Duck Rice", "Quan Lai Kway Chap", "Ma Bo Lor Mee", "Ah Meng Fried Rice", "Song Zhou Fried Carrot Cake")
+
+    private val stallMyImageList = IntArray(size = 2)
+    private val stallMyImageNameList = arrayListOf<String>()
     private val stallMyImageDescriptionList = arrayOf("Singapore, Rice", "Singapore, rice", "Singapore, Noodle", "Singapore, Noodle", "Singapore, Rice", "Singapore, Noodle", "Singapore, Noodle", "Singapore, Rice", "Singapore, Dim Sum")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        readjson()
         initView()
         setTitle("Home")
+
 
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecycleViewer)
@@ -117,13 +127,55 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+
+   //  --- to read data from json file --- ///
+    private fun readjson(){
+        var json : String? = null
+
+        try{
+
+            val inputStream : InputStream = assets.open("HuangYaHua")
+            json = inputStream.bufferedReader().readText()
+            var jsonArray = JSONArray(json)
+
+            for(i in 0..jsonArray.length()-1){
+
+                var jsonOjb = jsonArray.getJSONObject(i)
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList[i] = final
+
+
+                // get stall image
+                var tempStall : String
+                tempStall = jsonOjb.getString("foodResourceId")
+                var stallImg = resources.getIdentifier(tempStall,"drawable",this.packageName)
+                stallMyImageList[i] = stallImg
+
+
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                stallMyImageNameList.add(jsonOjb.getString("foodStall"))
+            }
+
+        }catch(e: IOException){
+            println("Error happen here")
+        }
+
+    }
+
+
+
+
     private fun populateList(): ArrayList<ModelFoodHorizontal> {
 
         val list = ArrayList<ModelFoodHorizontal>()
-        for (i in myImageList.indices) {
+        for (i in 0..myImageList.size-1) {
             val imageModel = ModelFoodHorizontal()
             imageModel.setNames(myImageNameList[i])
-            imageModel.setImage_drawables(myImageList[i])
+            imageModel.setImage_drawables(myImageList[i].toInt())
             imageModel.setDescriptions(myImageDescriptionList[i])
             list.add(imageModel)
         }
@@ -134,10 +186,10 @@ class HomeActivity : AppCompatActivity() {
     private fun populateStallList(): ArrayList<ModelStallVertical> {
 
         val list = ArrayList<ModelStallVertical>()
-        for (i in stallMyImageList.indices) {
+        for (i in 0..stallMyImageList.size-1) {
             val imageModel = ModelStallVertical()
             imageModel.setNames(stallMyImageNameList[i])
-            imageModel.setImage_drawables(stallMyImageList[i])
+            imageModel.setImage_drawables(stallMyImageList[i].toInt())
             imageModel.setDescriptions((stallMyImageDescriptionList[i]))
             list.add(imageModel)
         }

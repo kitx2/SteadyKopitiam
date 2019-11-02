@@ -1,0 +1,41 @@
+
+
+[
+  {
+    "foodName" : "Chicken Rice",
+    "foodDescription" : " Chicken, roasted, with skin, served with rice and chilli sauce",
+    "foodBasePrice"   : "4.00",
+    "fooddeductPrice" : "3.50",
+    "foodExtraPrice"  : "4.50",
+    "foodStall"       : "Stall Wong Ah Hua",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "75",
+    "foodProtein"     : "16",
+    "foodFat"         : "16",
+    "foodFibre"       : "2",
+    "foodMinerals"    : "1.2",
+    "foodVitamins"    : "0.01",
+    "foodCalories"    : "605",
+    "foodFocus"       : "Carbs",
+    "foodResourceId"  : "chicken_rice"
+
+  },
+  {
+    "foodName" : "Char Siew Rice",
+    "foodDescription" : "Pork barbequed in sweet sauce, sliced thinly, served with rice and cucumber",
+    "foodBasePrice"   : "4.00",
+    "fooddeductPrice" : "3.50",
+    "foodExtraPrice"  : "4.50",
+    "foodStall"       : "Stall Wong Ah Hua",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "91",
+    "foodProtein"     : "14",
+    "foodFat"         : "16",
+    "foodFibre"       : "5",
+    "foodMinerals"    : "0.2",
+    "foodVitamins"    : "0.01",
+    "foodCalories"    : "630",
+    "foodFocus"       : "Carbs",
+    "foodResourceId"  : "char_siew_rice"
+  }
+]

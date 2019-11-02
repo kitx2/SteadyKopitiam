@@ -1,0 +1,53 @@
+[
+  {
+    "foodName" : "Chicken & White Bean Salad",
+    "foodDescription" : "Zucchini and celery give this chicken-and-bean salad a nice crunch. ",
+    "foodBasePrice"   : "4.90",
+    "fooddeductPrice" : "4.50",
+    "foodExtraPrice"  : "5.40",
+    "foodStall"       : "Stall Australia Local Signature",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "24",
+    "foodProtein"     : "34",
+    "foodFat"         : "23",
+    "foodFibre"       : "16",
+    "foodMinerals"    : "0.65",
+    "foodVitamins"    : "0.02",
+    "foodCalories"    : "428",
+    "foodFocus"       : "fibre"
+  },
+  {
+    "foodName" : "Chickpea & Quinoa Buddha Bowl",
+    "foodDescription" : "Buddha bowls have as many variations as there are stars in the sky",
+    "foodBasePrice"   : "5.00",
+    "fooddeductPrice" : "4.50",
+    "foodExtraPrice"  : "5.50",
+    "foodStall"       : "Stall Australia Local Signature",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "75",
+    "foodProtein"     : "18",
+    "foodFat"         : "17",
+    "foodFibre"       : "16",
+    "foodMinerals"    : "0.5",
+    "foodVitamins"    : "0.4",
+    "foodCalories"    : "503",
+    "foodFocus"       : "fibre"
+  },
+  {
+    "foodName" : "Summer Squash & White Bean Saute",
+    "foodDescription" : "Bountiful summer vegetables—zucchini, summer squash, fresh tomatoes",
+    "foodBasePrice"   : "5.50",
+    "fooddeductPrice" : "6.00",
+    "foodExtraPrice"  : "5.00",
+    "foodStall"       : "Stall Australia Local Signature",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "25",
+    "foodProtein"     : "10",
+    "foodFat"         : "6",
+    "foodFibre"       : "10",
+    "foodMinerals"    : "0.6",
+    "foodVitamins"    : "0.03",
+    "foodCalories"    : "1934",
+    "foodFocus"       : "fibre"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "foodName" : "Jamaican Curried Shrimp & Mango Soup",
+    "foodDescription" : "Transport yourself to the islands with this Denmark-inspired soup",
+    "foodBasePrice"   : "5.90",
+    "fooddeductPrice" : "5.40",
+    "foodExtraPrice"  : "6.40",
+    "foodStall"       : "Stall Andersen's Denmark Salad",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "51",
+    "foodProtein"     : "22",
+    "foodFat"         : "13",
+    "foodFibre"       : "7",
+    "foodMinerals"    : "1.1",
+    "foodVitamins"    : "0.2",
+    "foodCalories"    : "389",
+    "foodFocus"       : "vitamins"
+
+  },
+  {
+    "foodName" : "Spiced Eggplant-Lentil Salad with Mango",
+    "foodDescription" : "Spiced eggplant, lentils and mangoes combine deliciously in this Australia-inspired vegetarian salad",
+    "foodBasePrice"   : "5.00",
+    "fooddeductPrice" : "4.50",
+    "foodExtraPrice"  : "5.50",
+    "foodStall"       : "Stall Andersen's Denmark Salad",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "82",
+    "foodProtein"     : "14",
+    "foodFat"         : "20",
+    "foodFibre"       : "17",
+    "foodMinerals"    : "0.4",
+    "foodVitamins"    : "0.1",
+    "foodCalories"    : "518",
+    "foodFocus"       : "vitamins"
+  },
+  {
+    "foodName" : "Vitamin C salad",
+    "foodDescription" : "Fight cold and flu with a good dose of vitamin C",
+    "foodBasePrice"   : "5.50",
+    "fooddeductPrice" : "6.00",
+    "foodExtraPrice"  : "5.00",
+    "foodStall"       : "Stall Andersen's Denmark Salad",
+    "foodDishType"    : "Main Dish",
+    "foodCarbs"       : "13",
+    "foodProtein"     : "8",
+    "foodFat"         : "5",
+    "foodFibre"       : "7",
+    "foodMinerals"    : "0.1",
+    "foodVitamins"    : "0.15",
+    "foodCalories"    : "598",
+    "foodFocus"       : "vitamins"
+  }
+]

@@ -294,7 +294,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
     fun createFood(food:FoodRecord):Boolean{
         val db = writableDatabase
         val values = ContentValues()
-
         values.put(TableFoodInfo.COLUMN_FOOD_NAME,food.foodName)
         values.put(TableFoodInfo.COLUMN_FOOD_BASEPRICE,food.baseprice)
         values.put(TableFoodInfo.COLUMN_FOOD_CALORIES,food.calories)
@@ -314,6 +313,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         return true;
     }
 
+
+    // end of Food Item Method
+
+    // Start of Order Summary Method
     fun createOrderSummary(orderSummary:OrderSummaryRecord, food_id: Int):Boolean{
         val db = writableDatabase
         val values = ContentValues()
@@ -334,5 +337,66 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         val newRowID = db.insert(TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null,values)
         return true;
     }
+
+    fun retrieveAllOrderSummary() :ArrayList<OrderSummaryRecord>{
+        val listOrder = ArrayList<OrderSummaryRecord>()
+        val db = writableDatabase
+
+
+        var cursor : Cursor? = null
+        try{
+            cursor = db.rawQuery("select * from "+
+                    TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null )
+        }catch(e:SQLiteException){
+            db.execSQL(SQL_CREATE_USER)
+            return ArrayList()
+        }
+
+        var orderSummaryTimeDate : String
+        var orderSummaryAwardedPoints : Int
+        var orderSummarySubtotal : Double
+        var orderSummaryFoodName  : String
+        var orderSummaryFoodCarbs : Int
+        var orderSummaryProtein : Int
+        var orderSummaryFat : Int
+        var orderSummaryMinerals : Int
+        var orderSummaryVitamins : Int
+        var orderSummaryCalories : Int
+        var orderSummaryFocus : String
+        var orderSummaryFibre : Int
+
+        if(cursor!!.moveToFirst()){
+            while(cursor.isAfterLast==false){
+                orderSummaryAwardedPoints = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS))
+                orderSummaryCalories = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES))
+                orderSummaryFat = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT))
+                orderSummaryFibre = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE))
+                orderSummaryFocus = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFOCUS))
+                orderSummaryFoodCarbs = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCARBS))
+                orderSummaryFoodName = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME))
+                orderSummaryMinerals = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS))
+                orderSummaryProtein = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN))
+                orderSummarySubtotal = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL))
+                orderSummaryTimeDate = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE))
+                orderSummaryVitamins = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS))
+
+                listOrder.add(
+                    OrderSummaryRecord(orderSummaryTimeDate,orderSummaryAwardedPoints,orderSummarySubtotal,orderSummaryFoodName,orderSummaryFoodCarbs,orderSummaryProtein
+                    ,orderSummaryFat,orderSummaryMinerals,orderSummaryVitamins,orderSummaryCalories,orderSummaryFocus,orderSummaryFibre))
+                cursor.moveToNext()
+
+            }
+        }
+        return listOrder
+    }
+
+
+
+
+
+
+    // End of Food Order Summary
+
+
 
 }
