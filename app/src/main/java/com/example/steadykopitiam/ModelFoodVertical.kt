@@ -1,15 +1,18 @@
 package com.example.steadykopitiam
 
 import android.R.attr.name
-
+import android.R.attr.src
 
 
 class ModelFoodVertical {
+
 
     var name: String? = null
     var description: String? = null
     var price: String? = null
     var image_drawable: Int = 0
+
+
 
     fun getNames(): String {
         return name.toString()

@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -22,6 +23,9 @@ import com.example.steadykopitiam.ui.home.HomeActivity
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import org.json.JSONArray
+import java.io.IOException
+import java.io.InputStream
 import java.util.ArrayList
 
 class StallActivity : AppCompatActivity() {
@@ -34,25 +38,38 @@ class StallActivity : AppCompatActivity() {
     private var adapter: AdapterFoodViewVertical? = null
 
     //TODO: Update foodList
-    private val myImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
-    private val myImageNameList = arrayOf("Chicken rice", "Char siew rice", "Fishball noodle(Dry)", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
-    private val myImageDescriptionList = arrayOf(" Chicken, roasted, with skin, served with rice and chilli sauce.", "Pork barbequed in sweet sauce, served with rice and cucumber.", "Yellow noodles with fish ball and chye sim, served with chili sauce.", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
-    private val myImagePriceList = arrayOf(" $3.00", "$3.00", "$4.00", "$4.00", "$4.00", "$4.00", "$4.00","$4.00", "$3.50", "$4.00", "$4.00")
+    private val myImageList = mutableListOf<Int>()
+    private val myImageNameList = arrayListOf<String>()
+    private val myImageDescriptionList = arrayListOf<String>()
+    private val myImagePriceList =  arrayListOf<String>()
 
+
+    //TODO: update stall name
+    private var stallName : String = ""
+
+
+    //TODO: Update StallList
+
+    private var stallMyImageList : Int = 0
+    private var stallMyImageDescriptionList : String = ""
+//    private val stallMyImageDescriptionList : String = intent.getStringExtra("stallDescription")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stall)
         initView()
-
-        //TODO: update stall name
-        val stallName = "Stall name"
+        stallName = intent.getStringExtra("stallName")
         setTitle(stallName)
+        val stallImageId : Int = intent.getIntExtra("stallImageid",0)
+        stallMyImageDescriptionList = intent.getStringExtra("stallDescription")
+        println("stall image ID "+  stallImageId)
+        readFood()
 
         //Steady Picks
         foodRecyclerView = findViewById(R.id.foodRecyclerView)
 
         imageModelArrayList = populateList()
+
         Log.d("hjhjh", imageModelArrayList!!.size.toString() + "")
         adapter = AdapterFoodViewVertical(applicationContext, imageModelArrayList!!)
         foodRecyclerView!!.adapter = adapter
@@ -84,10 +101,56 @@ class StallActivity : AppCompatActivity() {
         )
 
     }
+    // read the all the food from the stall selected
+    fun readFood(){
+
+        var json : String? = null
+        try{
+
+            val inputStream : InputStream = applicationContext.assets.open(stallName)
+            json = inputStream.bufferedReader().readText()
+            var jsonArray = JSONArray(json)
+
+            for(i in 0..jsonArray.length()-1){
+                var jsonOjb = jsonArray.getJSONObject(i)
+                println("Food name is "+jsonOjb.getString("foodName"))
+
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList.add(final)
+
+//                // get stall image
+//                var tempStall : String
+//                tempStall = jsonOjb.getString("stallImageId")
+//                var stallImg = resources.getIdentifier(tempStall,"drawable",this.packageName)
+//                stallMyImageList = stallImg
+
+                // update food infor
+                myImagePriceList.add(jsonOjb.getString("foodBasePrice"))
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+
+            }
+        }catch(e: IOException){
+        }
+    }
+
+    private fun readStallJson(){
+        var json : String? = null
+        try{
+
+        }catch (e: IOException){
+
+        }
+    }
     private fun populateList(): ArrayList<ModelFoodVertical> {
 
         val list = ArrayList<ModelFoodVertical>()
-        for (i in myImageList.indices) {
+        println("Food size +***"+ myImageList.size)
+        println("iamge name size  " + myImageNameList.size)
+        for (i in 0..myImageList.size-1) {
             val imageModel = ModelFoodVertical()
             imageModel.setNames(myImageNameList[i])
             imageModel.setImage_drawables(myImageList[i])
@@ -95,6 +158,21 @@ class StallActivity : AppCompatActivity() {
             imageModel.setPrices(myImagePriceList[i])
             list.add(imageModel)
         }
+
+        return list
+    }
+
+
+    private fun populateStallList(): ArrayList<ModelStallVertical> {
+
+        val list = ArrayList<ModelStallVertical>()
+
+            val imageModel = ModelStallVertical()
+            imageModel.setNames("")
+            imageModel.setImage_drawables(stallMyImageList)
+            imageModel.setDescriptions((stallMyImageDescriptionList))
+            list.add(imageModel)
+
 
         return list
     }

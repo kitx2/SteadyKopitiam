@@ -14,7 +14,10 @@
     "foodMinerals"    : "1.1",
     "foodVitamins"    : "0.2",
     "foodCalories"    : "389",
-    "foodFocus"       : "vitamins"
+    "foodFocus"       : "vitamins",
+    "foodResourceId"  : "jamacian_curried_shrimp_and_mango_soup",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "andersonsalad"
 
   },
   {
@@ -32,7 +35,10 @@
     "foodMinerals"    : "0.4",
     "foodVitamins"    : "0.1",
     "foodCalories"    : "518",
-    "foodFocus"       : "vitamins"
+    "foodFocus"       : "vitamins",
+    "foodResourceId"  : "spiced_eggplant_lentil_salad_with_mango",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "andersonsalad"
   },
   {
     "foodName" : "Vitamin C salad",
@@ -49,6 +55,9 @@
     "foodMinerals"    : "0.1",
     "foodVitamins"    : "0.15",
     "foodCalories"    : "598",
-    "foodFocus"       : "vitamins"
+    "foodFocus"       : "vitamins",
+    "foodResourceId"  : "vitamin_c",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "andersonsalad"
   }
 ]

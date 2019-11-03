@@ -7,7 +7,7 @@
     "foodBasePrice"   : "4.00",
     "fooddeductPrice" : "3.50",
     "foodExtraPrice"  : "4.50",
-    "foodStall"       : "Stall Wong Ah Hua",
+    "foodStall"       : "Wong Ah Hua",
     "foodDishType"    : "Main Dish",
     "foodCarbs"       : "75",
     "foodProtein"     : "16",
@@ -17,7 +17,9 @@
     "foodVitamins"    : "0.01",
     "foodCalories"    : "605",
     "foodFocus"       : "Carbs",
-    "foodResourceId"  : "chicken_rice"
+    "foodResourceId"  : "chicken_rice",
+    "foodStallDescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!",
+    "stallImageId" : "chickenricestall"
 
   },
   {
@@ -26,7 +28,7 @@
     "foodBasePrice"   : "4.00",
     "fooddeductPrice" : "3.50",
     "foodExtraPrice"  : "4.50",
-    "foodStall"       : "Stall Wong Ah Hua",
+    "foodStall"       : "Wong Ah Hua",
     "foodDishType"    : "Main Dish",
     "foodCarbs"       : "91",
     "foodProtein"     : "14",
@@ -36,6 +38,8 @@
     "foodVitamins"    : "0.01",
     "foodCalories"    : "630",
     "foodFocus"       : "Carbs",
-    "foodResourceId"  : "char_siew_rice"
+    "foodResourceId"  : "char_siew_rice",
+    "foodStallDescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!",
+    "stallImageId" : "chickenricestall"
   }
 ]

@@ -14,7 +14,11 @@
     "foodMinerals"    : "0.65",
     "foodVitamins"    : "0.02",
     "foodCalories"    : "428",
-    "foodFocus"       : "fibre"
+    "foodFocus"       : "fibre",
+    "foodResourceId"  : "chicken_white_bean_salad",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "australisignture"
+
   },
   {
     "foodName" : "Chickpea & Quinoa Buddha Bowl",
@@ -31,7 +35,12 @@
     "foodMinerals"    : "0.5",
     "foodVitamins"    : "0.4",
     "foodCalories"    : "503",
-    "foodFocus"       : "fibre"
+    "foodFocus"       : "fibre",
+    "foodResourceId"  : "chickpea_cuinoa_buddha_bowl",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "australisignture"
+
+
   },
   {
     "foodName" : "Summer Squash & White Bean Saute",
@@ -48,6 +57,9 @@
     "foodMinerals"    : "0.6",
     "foodVitamins"    : "0.03",
     "foodCalories"    : "1934",
-    "foodFocus"       : "fibre"
+    "foodFocus"       : "fibre",
+    "foodResourceId"  : "summer_squash_white_bean_saute",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "australisignture"
   }
 ]

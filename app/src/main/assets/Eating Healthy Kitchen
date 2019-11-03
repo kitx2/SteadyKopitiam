@@ -14,8 +14,10 @@
     "foodMinerals"    : "0.5",
     "foodVitamins"    : "0.01",
     "foodCalories"    : "203",
-    "foodFocus"       : "Protein"
-
+    "foodFocus"       : "Protein",
+    "foodResourceId"  : "white_fish_stew",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "healthy_food_restaurant"
   },
   {
     "foodName" : "Sauteed Chicken Breasts with Creamy Chive Sauce",
@@ -32,6 +34,9 @@
     "foodMinerals"    : "0.5",
     "foodVitamins"    : "0.05",
     "foodCalories"    : "257",
-    "foodFocus"       : "Protein"
+    "foodFocus"       : "Protein",
+    "foodResourceId"  : "sauteed_chicken_creasts_with_creamy_chive_cauce",
+    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "stallImageId" : "healthy_food_restaurant"
   }
 ]
