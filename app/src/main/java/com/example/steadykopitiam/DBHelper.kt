@@ -291,27 +291,27 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
 
     // *** Food Item table method *** //
 
-    fun createFood(food:FoodRecord):Boolean{
-        val db = writableDatabase
-        val values = ContentValues()
-        values.put(TableFoodInfo.COLUMN_FOOD_NAME,food.foodName)
-        values.put(TableFoodInfo.COLUMN_FOOD_BASEPRICE,food.baseprice)
-        values.put(TableFoodInfo.COLUMN_FOOD_CALORIES,food.calories)
-        values.put(TableFoodInfo.COLUMN_FOOD_CARBS,food.carbs)
-        values.put(TableFoodInfo.COLUMN_FOOD_DEDUCTEDPRICE,food.deductPrice)
-        values.put(TableFoodInfo.COLUMN_FOOD_DESCRIPTION,food.description)
-        values.put(TableFoodInfo.COLUMN_FOOD_DISHTYPE,food.dishType)
-        values.put(TableFoodInfo.COLUMN_FOOD_EXTRAPRICE,food.extraPrice)
-        values.put(TableFoodInfo.COLUMN_FOOD_FAT,food.fat)
-        values.put(TableFoodInfo.COLUMN_FOOD_FIBRE,food.fibre)
-        values.put(TableFoodInfo.COLUMN_FOOD_FOODSTALL,food.stall)
-        values.put(TableFoodInfo.COLUMN_FOOD_MINERALS,food.minerals)
-        values.put(TableFoodInfo.COLUMN_FOOD_PROTEIN,food.protein)
-        values.put(TableFoodInfo.COLUMN_FOOD_VITAMINS,food.vitamuns)
-        values.put(TableFoodInfo.COLUMN_FOOD_FOCUS,food.focus)
-        val newRowId = db.insert(TableFoodInfo.TABLE_FOOD,null,values)
-        return true;
-    }
+//    fun createFood(food:FoodRecord):Boolean{
+//        val db = writableDatabase
+//        val values = ContentValues()
+//        values.put(TableFoodInfo.COLUMN_FOOD_NAME,food.foodName)
+//        values.put(TableFoodInfo.COLUMN_FOOD_BASEPRICE,food.baseprice)
+//        values.put(TableFoodInfo.COLUMN_FOOD_CALORIES,food.calories)
+//        values.put(TableFoodInfo.COLUMN_FOOD_CARBS,food.carbs)
+//        values.put(TableFoodInfo.COLUMN_FOOD_DEDUCTEDPRICE,food.deductPrice)
+//        values.put(TableFoodInfo.COLUMN_FOOD_DESCRIPTION,food.description)
+//        values.put(TableFoodInfo.COLUMN_FOOD_DISHTYPE,food.dishType)
+//        values.put(TableFoodInfo.COLUMN_FOOD_EXTRAPRICE,food.extraPrice)
+//        values.put(TableFoodInfo.COLUMN_FOOD_FAT,food.fat)
+//        values.put(TableFoodInfo.COLUMN_FOOD_FIBRE,food.fibre)
+//        values.put(TableFoodInfo.COLUMN_FOOD_FOODSTALL,food.stall)
+//        values.put(TableFoodInfo.COLUMN_FOOD_MINERALS,food.minerals)
+//        values.put(TableFoodInfo.COLUMN_FOOD_PROTEIN,food.protein)
+//        values.put(TableFoodInfo.COLUMN_FOOD_VITAMINS,food.vitamuns)
+//        values.put(TableFoodInfo.COLUMN_FOOD_FOCUS,food.focus)
+//        val newRowId = db.insert(TableFoodInfo.TABLE_FOOD,null,values)
+//        return true;
+//    }
 
 
     // end of Food Item Method

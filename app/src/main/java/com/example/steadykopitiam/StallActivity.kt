@@ -59,6 +59,7 @@ class StallActivity : AppCompatActivity() {
         setContentView(R.layout.activity_stall)
         initView()
         stallName = intent.getStringExtra("stallName")
+        println("Stall name " + stallName)
         setTitle(stallName)
         val stallImageId : Int = intent.getIntExtra("stallImageid",0)
         stallMyImageDescriptionList = intent.getStringExtra("stallDescription")
@@ -90,7 +91,12 @@ class StallActivity : AppCompatActivity() {
 
                         //Start new Activity
                         //TODO: Pass stall name to QR Activity
+
                         val myIntent = Intent(applicationContext, QRActivity::class.java)
+                        myIntent.putExtra("foodName",imageModelArrayList!![position].getNames())
+                        myIntent.putExtra("stallName",stallName)
+                        myIntent.putExtra("foodImage,",imageModelArrayList!![position].getImage_drawables())
+                        myIntent.putExtra("foodPrice",imageModelArrayList!![position].getPrices())
                         startActivity(myIntent)
                     }
 

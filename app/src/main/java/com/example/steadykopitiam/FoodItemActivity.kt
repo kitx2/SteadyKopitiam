@@ -32,6 +32,8 @@ class FoodItemActivity : AppCompatActivity() {
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
     private var adapter: AdapterFoodViewHorizontal? = null
+
+
     //TODO: Update foodList
     private val myImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
     private val myImageNameList = arrayOf("Chicken rice", "Char siew rice", "Fishball noodle(Dry)", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
@@ -44,13 +46,26 @@ class FoodItemActivity : AppCompatActivity() {
         initView()
 
         //TODO: update stall name
-        val stallName = "Stall name"
+        val stallName : String = intent.getStringExtra("foodStall")
         setTitle(stallName)
 
+
         //TODO: Retrieve JSON and extract specific food item details
+        val foodName : String = intent.getStringExtra("foodName")
+        val foodProtein : String = intent.getStringExtra("foodProtein")
+        val foodCarbs : String = intent.getStringExtra("foodCarbs")
+        val foodFat : String = intent.getStringExtra("foodFat")
+        val foodFibre : String = intent.getStringExtra("foodFibre")
+        val foodVitamins : String = intent.getStringExtra("foodVitamins")
+        val foodCalories : String = intent.getStringExtra("foodCalories")
+        val foodDescription : String = intent.getStringExtra("foodDescription")
+        val foodFocus : String = intent.getStringExtra("foodFocus")
+        val foodDeductPrice : String = intent.getStringExtra("foodDeductPrice")
+        val foodExtraPrice : String = intent.getStringExtra("foodExtraPrice")
+        val foodDishType : String = intent.getStringExtra("foodDishType")
 
         //TODO: Render the details into Nutrition display table
-
+        
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecyclerView)
 

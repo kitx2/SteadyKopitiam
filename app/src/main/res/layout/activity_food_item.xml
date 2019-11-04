@@ -123,16 +123,22 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/textView3"
+                                    android:id="@+id/foodCarbs"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="TextView" />
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/foodProtein"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="TextView" />
+
+                                <TextView
+                                    android:id="@+id/foodFibre"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView2" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -142,16 +148,20 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/textView5"
+                                    android:id="@+id/foodFat"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView2" />
+
+                                <TextView
+                                    android:id="@+id/foodProtien"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="TextView" />
 
-                                <TextView
-                                    android:id="@+id/textView6"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="TextView" />
+
+
+
                             </LinearLayout>
                         </LinearLayout>
 
