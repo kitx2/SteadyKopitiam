@@ -3,7 +3,7 @@
     "foodName" : "Chicken & White Bean Salad",
     "foodDescription" : "Zucchini and celery give this chicken-and-bean salad a nice crunch. ",
     "foodBasePrice"   : "4.90",
-    "fooddeductPrice" : "4.50",
+    "foodDeductPrice" : "4.50",
     "foodExtraPrice"  : "5.40",
     "foodStall"       : "Stall Australia Local Signature",
     "foodDishType"    : "Main Dish",
@@ -16,7 +16,7 @@
     "foodCalories"    : "428",
     "foodFocus"       : "fibre",
     "foodResourceId"  : "chicken_white_bean_salad",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "Amazing Australian-style Homemade Food.",
     "stallImageId" : "australisignture"
 
   },
@@ -24,7 +24,7 @@
     "foodName" : "Chickpea & Quinoa Buddha Bowl",
     "foodDescription" : "Buddha bowls have as many variations as there are stars in the sky",
     "foodBasePrice"   : "5.00",
-    "fooddeductPrice" : "4.50",
+    "foodDeductPrice" : "4.50",
     "foodExtraPrice"  : "5.50",
     "foodStall"       : "Stall Australia Local Signature",
     "foodDishType"    : "Main Dish",
@@ -37,7 +37,7 @@
     "foodCalories"    : "503",
     "foodFocus"       : "fibre",
     "foodResourceId"  : "chickpea_cuinoa_buddha_bowl",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "Amazing Australian-style Homemade Food.",
     "stallImageId" : "australisignture"
 
 

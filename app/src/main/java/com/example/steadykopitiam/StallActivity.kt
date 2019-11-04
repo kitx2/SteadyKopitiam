@@ -2,10 +2,12 @@ package com.example.steadykopitiam
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -61,9 +63,14 @@ class StallActivity : AppCompatActivity() {
         stallName = intent.getStringExtra("stallName")
         println("Stall name " + stallName)
         setTitle(stallName)
-        val stallImageId : Int = intent.getIntExtra("stallImageid",0)
         stallMyImageDescriptionList = intent.getStringExtra("stallDescription")
-        println("stall image ID "+  stallImageId)
+
+        //Set Stall image
+        val stallImageId : Int = intent.getIntExtra("stallImageid",0)
+        val stallPic : ImageView = findViewById(R.id.StallPic)
+        val myDrawable : Drawable = getResources().getDrawable(stallImageId)
+        stallPic.setImageDrawable(myDrawable)
+
         readFood()
 
         //Steady Picks

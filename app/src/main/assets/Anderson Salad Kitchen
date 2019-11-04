@@ -1,11 +1,11 @@
 [
   {
     "foodName" : "Jamaican Curried Shrimp & Mango Soup",
-    "foodDescription" : "Transport yourself to the islands with this Denmark-inspired soup",
+    "foodDescription" : "Transport yourself to the islands with this Danish-inspired soup",
     "foodBasePrice"   : "5.90",
-    "fooddeductPrice" : "5.40",
+    "foodDeductPrice" : "5.40",
     "foodExtraPrice"  : "6.40",
-    "foodStall"       : "Stall Andersen's Denmark Salad",
+    "foodStall"       : "Stall Andersen's Danish Salad",
     "foodDishType"    : "Main Dish",
     "foodCarbs"       : "51",
     "foodProtein"     : "22",
@@ -16,15 +16,15 @@
     "foodCalories"    : "389",
     "foodFocus"       : "vitamins",
     "foodResourceId"  : "jamacian_curried_shrimp_and_mango_soup",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "Delicious Danish-style Organic Salad.",
     "stallImageId" : "andersonsalad"
 
   },
   {
     "foodName" : "Spiced Eggplant-Lentil Salad with Mango",
-    "foodDescription" : "Spiced eggplant, lentils and mangoes combine deliciously in this Australia-inspired vegetarian salad",
+    "foodDescription" : "Spiced eggplant, lentils and mangoes combine deliciously in this Australian-inspired vegetarian salad",
     "foodBasePrice"   : "5.00",
-    "fooddeductPrice" : "4.50",
+    "foodDeductPrice" : "4.50",
     "foodExtraPrice"  : "5.50",
     "foodStall"       : "Stall Andersen's Denmark Salad",
     "foodDishType"    : "Main Dish",
@@ -37,14 +37,14 @@
     "foodCalories"    : "518",
     "foodFocus"       : "vitamins",
     "foodResourceId"  : "spiced_eggplant_lentil_salad_with_mango",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "Delicious Danish-style Organic Salad.",
     "stallImageId" : "andersonsalad"
   },
   {
     "foodName" : "Vitamin C salad",
     "foodDescription" : "Fight cold and flu with a good dose of vitamin C",
     "foodBasePrice"   : "5.50",
-    "fooddeductPrice" : "6.00",
+    "foodDeductPrice" : "6.00",
     "foodExtraPrice"  : "5.00",
     "foodStall"       : "Stall Andersen's Denmark Salad",
     "foodDishType"    : "Main Dish",
@@ -57,7 +57,7 @@
     "foodCalories"    : "598",
     "foodFocus"       : "vitamins",
     "foodResourceId"  : "vitamin_c",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "Delicious Danish-style Organic Salad.",
     "stallImageId" : "andersonsalad"
   }
 ]

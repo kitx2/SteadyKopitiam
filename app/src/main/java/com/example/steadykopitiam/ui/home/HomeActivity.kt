@@ -177,7 +177,7 @@ class HomeActivity : AppCompatActivity() {
                 var stallImg = resources.getIdentifier(tempStall,"drawable",this.packageName)
                 stallMyImageList[i] = stallImg
                 stallMyImageNameList.add(jsonOjb.getString("stallName"))
-                stallMyImageDescriptionList.add(jsonOjb.getString("stalldescription"))
+                stallMyImageDescriptionList.add(jsonOjb.getString("stallDescription"))
             }
         }catch(e: IOException){
             println("Error happen here")

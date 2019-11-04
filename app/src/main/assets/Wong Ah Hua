@@ -5,7 +5,7 @@
     "foodName" : "Chicken Rice",
     "foodDescription" : " Chicken, roasted, with skin, served with rice and chilli sauce",
     "foodBasePrice"   : "4.00",
-    "fooddeductPrice" : "3.50",
+    "foodDeductPrice" : "3.50",
     "foodExtraPrice"  : "4.50",
     "foodStall"       : "Wong Ah Hua",
     "foodDishType"    : "Main Dish",
@@ -18,7 +18,7 @@
     "foodCalories"    : "605",
     "foodFocus"       : "Carbs",
     "foodResourceId"  : "chicken_rice",
-    "foodStallDescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!",
+    "foodStallDescription" : "Kuala Lumpur Authentic Hainanese Chicken Rice.",
     "stallImageId" : "chickenricestall"
 
   },
@@ -26,7 +26,7 @@
     "foodName" : "Char Siew Rice",
     "foodDescription" : "Pork barbequed in sweet sauce, sliced thinly, served with rice and cucumber",
     "foodBasePrice"   : "4.00",
-    "fooddeductPrice" : "3.50",
+    "foodDeductPrice" : "3.50",
     "foodExtraPrice"  : "4.50",
     "foodStall"       : "Wong Ah Hua",
     "foodDishType"    : "Main Dish",
@@ -39,7 +39,7 @@
     "foodCalories"    : "630",
     "foodFocus"       : "Carbs",
     "foodResourceId"  : "char_siew_rice",
-    "foodStallDescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!",
+    "foodStallDescription" : "Kuala Lumpur Authentic Hainanese Chicken Rice.",
     "stallImageId" : "chickenricestall"
   }
 ]

@@ -2,22 +2,22 @@
   {
     "stallName" : "Wong Ah Hua",
     "stallImage" : "chickenricestall",
-    "stalldescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!"
+    "stallDescription" : "Kuala Lumpur Authentic Hainanese Chicken Rice."
   },
   {
     "stallName" : "Eating Healthy Kitchen",
     "stallImage" : "healthy_food_restaurant",
-    "stalldescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!"
+    "stallDescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!"
   },
   {
     "stallName" : "Anderson Salad Kitchen",
     "stallImage" : "andersonsalad",
-    "stalldescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!"
+    "stallDescription" : "Delicious Danish-style Organic Salad."
   },
   {
     "stallName" : "Australia Signature Food",
     "stallImage" : "australisignture",
-    "stalldescription" : "Kuala Lumpur Authentic Hai Nan Chicken Rice, Best in the town !!!"
+    "stallDescription" : "Amazing Australian-style Homemade Food."
   }
 
 ]
