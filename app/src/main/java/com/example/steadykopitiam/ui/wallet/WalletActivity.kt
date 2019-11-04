@@ -12,11 +12,17 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.steadykopitiam.R
+import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
+import com.example.steadykopitiam.ui.profile.ProfileActivity
+import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class WalletActivity : AppCompatActivity() {
+    //TODO: Reference username from Database
+    val username : String = "Test Username"
 
     var navigationPosition: Int = 3
 
@@ -87,26 +93,40 @@ class WalletActivity : AppCompatActivity() {
                     navigationPosition = R.id.nav_home
                     val myIntent = Intent(this, HomeActivity::class.java)
                     startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
                     finish()
                 }
                 R.id.nav_purchases -> {
                     toolbar.title = "Purchases"
                     navigationPosition = R.id.nav_purchases
+                    val myIntent = Intent(this, PurchasesActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
                 R.id.nav_profile -> {
                     toolbar.title = "Profile"
                     navigationPosition = R.id.nav_profile
+                    val myIntent = Intent(this, ProfileActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
                 R.id.nav_wallet -> {
                     toolbar.title = "Wallet"
                     navigationPosition = R.id.nav_wallet
                     val myIntent = Intent(this, WalletActivity::class.java)
                     startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
                     finish()
                 }
                 R.id.nav_about -> {
                     toolbar.title = "About"
                     navigationPosition = R.id.nav_about
+                    val myIntent = Intent(this, AboutActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
             }
             // set item as selected to persist highlight
@@ -139,8 +159,8 @@ class WalletActivity : AppCompatActivity() {
     }
 
     private fun changeNavigationHeaderInfo() {
-//        val headerView = navigationView.getHeaderView(0)
-//        headerView.textEmail.text = "lokeshdesai@android4dev.com"
+        val headerView = navigationView.getHeaderView(0)
+        headerView.username.text = username
     }
 
     private fun setUpDrawerLayout() {

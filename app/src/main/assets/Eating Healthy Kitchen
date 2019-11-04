@@ -5,7 +5,7 @@
     "foodBasePrice"   : "6.00",
     "foodDeductPrice" : "5.50",
     "foodExtraPrice"  : "6.50",
-    "foodStall"       : "Stall EatingHealthy Kitchen",
+    "foodStall"       : "Eating Healthy Kitchen",
     "foodDishType"    : "Main Dish",
     "foodCarbs"       : "26",
     "foodProtein"     : "48",
@@ -16,7 +16,7 @@
     "foodCalories"    : "203",
     "foodFocus"       : "Protein",
     "foodResourceId"  : "white_fish_stew",
-    "foodStallDescription" : "American ",
+    "foodStallDescription" : "American-Italian fusion.",
     "stallImageId" : "healthy_food_restaurant"
   },
   {
@@ -25,7 +25,7 @@
     "foodBasePrice"   : "5.50",
     "foodDeductPrice" : "5.00",
     "foodExtraPrice"  : "6.00",
-    "foodStall"       : "Stall EatingHealthy Kitchen",
+    "foodStall"       : "Eating Healthy Kitchen",
     "foodDishType"    : "Main Dish",
     "foodCarbs"       : "12",
     "foodProtein"     : "36",
@@ -36,7 +36,7 @@
     "foodCalories"    : "257",
     "foodFocus"       : "Protein",
     "foodResourceId"  : "sauteed_chicken_creasts_with_creamy_chive_cauce",
-    "foodStallDescription" : "Australia Authentice Food, Enjoy!",
+    "foodStallDescription" : "American-Italian fusion.",
     "stallImageId" : "healthy_food_restaurant"
   }
 ]
