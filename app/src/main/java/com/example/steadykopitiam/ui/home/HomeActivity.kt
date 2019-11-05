@@ -3,6 +3,7 @@ package com.example.steadykopitiam.ui.home
 import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -58,6 +59,8 @@ class HomeActivity : AppCompatActivity() {
     private val stallMyImageNameList = arrayListOf<String>()
     private val stallMyImageDescriptionList = arrayListOf<String>()
 
+    lateinit var sharedPreferences: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +70,8 @@ class HomeActivity : AppCompatActivity() {
         initView()
         setTitle("Home")
 
-
+        sharedPreferences = getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        Toast.makeText(this, sharedPreferences.getString("SomeString", "Default value"), Toast.LENGTH_SHORT).show()
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecycleViewer)
 

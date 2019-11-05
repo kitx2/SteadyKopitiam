@@ -18,5 +18,6 @@ class TableOrderSummaryInfo:BaseColumns {
         val COLUMN_ORDERSUMMARY_FOODVITAMNS = "foodVitamins"
         val COLUMN_ORDERSUMMARY_FOODCALORIES  = "foodCalories"
         val COLUMN_ORDERSUMMARY_FOODFOCUS = "foodFocus"
+        val COLUMN_ORDERSUMMARY_FOODEXTRAOPRICE = "foodExtraPrice"
     }
 }

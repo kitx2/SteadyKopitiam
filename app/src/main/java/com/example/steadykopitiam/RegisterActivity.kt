@@ -1,9 +1,11 @@
 package com.example.steadykopitiam
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.example.steadykopitiam.ui.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity(){
@@ -43,6 +45,8 @@ class RegisterActivity : AppCompatActivity(){
         val btn_to_register = findViewById<Button>(R.id.btn_to_register)
         btn_to_register.setOnClickListener {
             registerUser(dailtAct)
+            val myIntent = Intent(this,HomeActivity::class.java)
+            startActivity(myIntent)
         }
 
     }
@@ -60,7 +64,7 @@ class RegisterActivity : AppCompatActivity(){
         var calories : Int = 0
         var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
         var gender      : String = ""
-        var accountBalance : String = "0"
+        var accountBalance : String = "20"
         var accountPoints : String = "0"
 
         if(this.register_male.text.toString()!= ""){
@@ -68,16 +72,23 @@ class RegisterActivity : AppCompatActivity(){
         }else {
             gender = "FEMALE"
         }
+        if(dailyAct.equals("High")){
+            calories = (bmr * 1.7).toInt()
+        }else if(dailyAct.equals("Medium")){
+            calories = (bmr * 1.5).toInt()
+        }else{
+            calories = (bmr * 1.2).toInt()
+        }
 
         var carb = ( calories * 0.6 / 4 )
         var protein = (calories * 0.125 / 4 )
         var minerails = "3.4"
         var fibra = "30"
-        var vitamins = "90"
+        var vitamins = "0.09"
         var fat = (calories * 0.275 / 9 )
 
-        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories.toInt(),
-            fat.toInt(),fibra.toInt(),minerails.toInt(),vitamins.toInt(),dailyAct,protein.toInt(),password,phoneNumber))
+        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
+            fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
 
 
         Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()

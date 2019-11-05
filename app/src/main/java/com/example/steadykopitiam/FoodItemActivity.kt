@@ -26,11 +26,23 @@ import kotlinx.android.synthetic.main.activity_home.drawerLayout
 import kotlinx.android.synthetic.main.activity_home.navigationView
 import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.nav_header_main.view.*
-import java.util.ArrayList
+import android.preference.PreferenceManager
+import android.content.SharedPreferences
+import com.example.steadykopitiam.ui.purchases.PurchasesActivity
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class FoodItemActivity : AppCompatActivity() {
 
     var navigationPosition: Int = 0
+    lateinit var kopitiamDBHelper: DBHelper
+    var user = ArrayList<UserRecord>()
+    private var userpassword : String? = ""
+    private var useremail  : String? = ""
+    private var awardedPoint : Double = 0.0
+
 
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
@@ -47,6 +59,7 @@ class FoodItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_item)
+        kopitiamDBHelper = DBHelper(this)
         initView()
 
         //TODO: update stall name
@@ -73,8 +86,8 @@ class FoodItemActivity : AppCompatActivity() {
         //TODO: Render the details into Nutrition display table
         this.foodLabel.text = foodName
         this.foodDescription.text = foodDescription
-        this.foodCarbs.text = " Carbs in g " + foodCarbs
-        this.foodProtein.text = " Protein in g "+ foodProtein
+        this.foodCarbs.text = "Carbs in g " + foodCarbs
+        this.foodProtein.text = "Protein in g "+ foodProtein
         this.foodCalories.text = "Calories in g "+ foodCalories
         this.foodFat.text = "Fat in g "+foodFat
         this.foodFibre.text = "Fibre in g " + foodFibre
@@ -128,14 +141,46 @@ class FoodItemActivity : AppCompatActivity() {
         val btnPurchase : Button = findViewById(R.id.btnPurchase)
         btnPurchase.setOnClickListener {
             //TODO: Validate wallet amount, else prompt user to top-up
+            //TODO: how to determine the food price is extra or deduct or not
+
+            val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+            userpassword = preferences.getString("userPassword", "")
+            useremail = preferences.getString("userEmail", "")
+            user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+            // check if wallet got enought money
+            if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
+                Toast.makeText(this, "Your account balance is not enough to pucharse food,Please Top up!! ",Toast.LENGTH_SHORT).show()
+            }else{
+
+                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
+                val curTime = simpleDateFormat.format(Date())
+                awardedPoint = ( foodBasePrice / 10 )
+                println("current Time is "+ curTime)
+
+
+                var result = kopitiamDBHelper.createOrderSummary(
+                    OrderSummaryRecord(curTime,awardedPoint,foodBasePrice,foodName,foodCalories.toInt(),foodProtein.toInt(),
+                    foodFat.toInt(),foodMinerals.toDouble(),foodVitamins.toDouble(),foodCalories.toInt(),foodFocus,foodFibre.toInt(),foodExtraPrice.toString())
+                )
+                if(result){
+                    Toast.makeText(this,"Food has been added into order summary.",Toast.LENGTH_SHORT).show()
+                    val myIntent = Intent(applicationContext, PurchasesActivity::class.java)
+                    myIntent.putExtra("foodName",foodName)
+                    myIntent.putExtra("foodPrice",foodBasePrice)
+                    myIntent.putExtra("coinEarced",awardedPoint)
+                    startActivity(myIntent)
+                    finish()
+                }
+
+            }
+
             //TODO: Persist purchase order in DB
             //TODO: Store 10% rebate of spending amount in wallet
 
             //TODO - BONUS feature: Send sms for confirmation of order made
             //Direct user to last order
-            val myIntent = Intent(applicationContext, QRActivity::class.java)
-            startActivity(myIntent)
-            finish()
+
         }
     }
 

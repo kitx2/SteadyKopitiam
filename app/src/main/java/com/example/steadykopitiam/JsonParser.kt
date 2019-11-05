@@ -22,19 +22,17 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
     override fun doInBackground(vararg p0: Void?): Boolean {
         return parse()
 
-
     }
 
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
-//        val myIntent = Intent(c, FoodItemActivity::class.java)
+        val myIntent = Intent(c.applicationContext,FoodItemActivity::class.java)
 
         if (result!!) {
             // create order summary here  -- go to confirm page and pass data into it
             var fr = FoodRecord()
 
 
-            val myIntent = Intent(c.applicationContext,FoodItemActivity::class.java)
             myIntent.putExtra("foodName",foodRecord.getFoodNames())
             myIntent.putExtra("foodStall",foodRecord.getStall())
             myIntent.putExtra("foodBasePrice",foodRecord.getBasePrice())
@@ -51,12 +49,10 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             myIntent.putExtra("foodDishType",foodRecord.getDishType())
             myIntent.putExtra("foodVitamins",foodRecord.getVitamins())
             println("Food price !!!!!!!!!!!!!!"+ foodRecord.getBasePrice())
-
+            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             c.applicationContext.startActivity(myIntent)
               //Toast.makeText(c," Food pass is "+foodRecord.getFoodNames(),Toast.LENGTH_SHORT).show()
 
-
-//            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 //            c.startActivity(myIntent)
 
         } else {
@@ -81,13 +77,12 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                 // pass the data to food Record obj
                 println("food get from internet "+jsonObject.getString("foodName"))
                 if(jsonObject.getString("foodName").equals(foodName)){
-
                     foodRecord.setFoodNames(jsonObject.getString("foodName"))
                     foodRecord.setProtein(jsonObject.getString("foodProtein"))
                     foodRecord.setCalories(jsonObject.getString("foodCalories"))
-                    foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())
+                    foodRecord.setBasePrice(foodPrice.toDouble())
                     foodRecord.setCarbs(jsonObject.getString("foodCarbs"))
-                    foodRecord.setDeductedPrice(3.50)
+                    foodRecord.setDeductedPrice(jsonObject.getString("fooddeductPrice").toDouble())
                     foodRecord.setDescription(jsonObject.getString("foodDescription"))
                     foodRecord.setDishType(jsonObject.getString("foodDishType"))
                     foodRecord.setExtraPrice(jsonObject.getString("foodExtraPrice").toDouble())

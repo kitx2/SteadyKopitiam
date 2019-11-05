@@ -37,14 +37,17 @@ class PurchasesActivity : AppCompatActivity() {
 
     val sdf = SimpleDateFormat("dd/MM/yyyy, hh:mm")
     val currentDate = sdf.format(Date())
+    private var foodName : String = ""
+    private var foodPrice : Double = 0.0
+    private var coinEarned : Double = 0.0
 
     //TODO: Update foodList
-    private val myOrderDateList = arrayOf(currentDate.toString(),currentDate.toString(),currentDate.toString())
-    private val myOrderNameList = arrayOf("Steamed Chicken Rice","Steamed Chicken Rice","Steamed Chicken Rice")
-    private val myOrderPointList =arrayOf("40","40","40")
+    private val myOrderDateList = arrayOf(currentDate.toString())
+    private val myOrderNameList = arrayListOf<String>()
+    private val myOrderPointList = DoubleArray(size=1)
     var double : Double = 4.00
     var pricetag : String = "S$".plus(String.format("%.2f", double))
-    private val myOrderPriceList = arrayOf(pricetag,pricetag,pricetag)
+    private var myOrderPriceList : Double = 0.0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +56,15 @@ class PurchasesActivity : AppCompatActivity() {
         setTitle("Purchases")
         initView()
 
-
-
+        foodName = intent.getStringExtra("foodName")
+        foodPrice = intent.getDoubleExtra("foodPrice",0.0)
+        coinEarned = intent.getDoubleExtra("coinEarced",0.0)
         //Order list
+
+
+        myOrderNameList.add(foodName)
+        myOrderPointList[0] = coinEarned
+        myOrderPriceList = foodPrice
         orderRecycleView = findViewById(R.id.orderRecycleView)
 
         imageModelArrayList = populateList()
@@ -69,14 +78,14 @@ class PurchasesActivity : AppCompatActivity() {
     private fun populateList(): ArrayList<ModelOrderVertical> {
 
         val list = ArrayList<ModelOrderVertical>()
-        for (i in myOrderNameList.indices) {
+
             val orderModel = ModelOrderVertical()
-            orderModel.setNames(myOrderNameList[i])
-            orderModel.setDates(myOrderDateList[i])
-            orderModel.setPoints(myOrderPointList[i])
-            orderModel.setPrices(myOrderPriceList[i])
+            orderModel.setNames(myOrderNameList[0])
+            orderModel.setDates(myOrderDateList[0])
+            orderModel.setPoints(myOrderPointList[0].toString())
+            orderModel.setPrices(myOrderPriceList.toString())
             list.add(orderModel)
-        }
+
 
         return list
     }

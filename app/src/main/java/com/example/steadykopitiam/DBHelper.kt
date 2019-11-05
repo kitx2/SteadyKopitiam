@@ -34,8 +34,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
             TableUserInfo.COLUMN_USER_CARBS + " INTEGER NOT NULL," +
             TableUserInfo.COLUMN_USER_FAT + " INTEGER NOT NULL,"+
             TableUserInfo.COLUMN_USER_FIBRE + " INTEGER NOT NULL,"+
-            TableUserInfo.COLUMN_USER_MINERALS + " INTEGER NOT NULL," +
-            TableUserInfo.COLUMN_USER_VITAMINS + " INTEGER NOT NULL," +
+            TableUserInfo.COLUMN_USER_MINERALS + " DOUBLE NOT NULL," +
+            TableUserInfo.COLUMN_USER_VITAMINS + " DOUBLE NOT NULL," +
             TableUserInfo.COLUMN_USER__DAILYACTIVITY + " TEXT," +
             TableUserInfo.COLUMN_USER_PROTEIN + " INTEGER NOT NULL," +
                     TableUserInfo.COLUMN_USER_PHONENUMBER + " TEXT NOT NULL," +
@@ -68,16 +68,17 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
             "CREATE TABLE " + TableOrderSummaryInfo.TABLE_ORDERSUMMARY + "(" +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_ID + "INTEGER PRIMARY KEY," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE + " TEXT," +
-                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS + " DOUBLE," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL + " DOUBLE," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES + " INTEGER," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE + " INTEGER," +
-                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS + " INTEGER," +
-                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS + " INTEGER,"+
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS + " DOUBLE," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS + " DOUBLE,"+
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFOCUS + " TEXT," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME + " TEXT," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN + " INTEGER," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT + " INTEGER," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODEXTRAOPRICE + " TEXT," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCARBS + " INTEGER)"
 
         private val SQL_DELETE_USER = "DROP TABLE IF EXISTS " +
@@ -174,8 +175,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         var user_calories : Int
         var user_fat : Int
         var user_fibre : Int
-        var user_minerals : Int
-        var user_vitamins : Int
+        var user_minerals : Double
+        var user_vitamins : Double
         var user_dailyActivies : String
         var user_protein: Int
         var user_passeord : String
@@ -195,18 +196,18 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                 accountPoints = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
                 user_carbs = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CARBS))
                 user_calories = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CALORIES))
-                user_minerals = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
+                user_minerals = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
                 user_fat = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_FAT))
                 user_fibre = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_FIBRE))
                 user_protein = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PROTEIN))
-                user_vitamins = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_VITAMINS))
+                user_vitamins = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_VITAMINS))
                 user_dailyActivies = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER__DAILYACTIVITY))
                 user_passeord = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PASSWORD))
                 user_phoneNumber = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PHONENUMBER))
                 user.add(
                     UserRecord(username,gender,height,weight,bmi,age,email,
-                    accountBalance,accountPoints,user_carbs ,user_calories,user_minerals,
-                        user_fat,user_fibre,user_vitamins,user_dailyActivies,user_protein,user_passeord,user_phoneNumber))
+                    accountBalance,accountPoints,user_carbs ,user_calories,user_fat,user_fibre,user_minerals,
+                        user_vitamins,user_dailyActivies,user_protein,user_passeord,user_phoneNumber))
                 cursor.moveToNext()
 
             }
@@ -245,8 +246,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         var user_calories : Int
         var user_fat : Int
         var user_fibre : Int
-        var user_minerals : Int
-        var user_vitamins : Int
+        var user_minerals : Double
+        var user_vitamins : Double
         var user_dailyActivies : String
         var user_protein: Int
         var user_passeord_db : String
@@ -267,19 +268,19 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                 accountPoints = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
                 user_carbs = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CARBS))
                 user_calories = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CALORIES))
-                user_minerals = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
+                user_minerals = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
                 user_fat = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_FAT))
                 user_fibre = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_FIBRE))
                 user_protein = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PROTEIN))
-                user_vitamins = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_VITAMINS))
+                user_vitamins = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_VITAMINS))
                 user_dailyActivies = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER__DAILYACTIVITY))
                 user_passeord_db = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PASSWORD))
                 user_phoneNumber = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_PHONENUMBER))
                 if(email.equals(email_db)&& password.equals(user_passeord_db)){
                     user.add(
                         UserRecord(username,gender,height,weight,bmi,age,email_db,
-                            accountBalance,accountPoints,user_carbs ,user_calories,user_minerals,
-                            user_fat,user_fibre,user_vitamins,user_dailyActivies,user_protein,user_passeord_db,user_phoneNumber))
+                            accountBalance,accountPoints,user_carbs ,user_calories, user_fat,user_fibre,user_minerals,
+                           user_vitamins,user_dailyActivies,user_protein,user_passeord_db,user_phoneNumber))
                 }
                 cursor.moveToNext()
             }
@@ -317,7 +318,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
     // end of Food Item Method
 
     // Start of Order Summary Method
-    fun createOrderSummary(orderSummary:OrderSummaryRecord, food_id: Int):Boolean{
+    fun createOrderSummary(orderSummary:OrderSummaryRecord):Boolean{
         val db = writableDatabase
         val values = ContentValues()
 
@@ -333,6 +334,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN,orderSummary.orderSummaryProtein)
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME,orderSummary.orderSummaryFoodName)
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS,orderSummary.orderSummaryMinerals)
+        values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODEXTRAOPRICE,orderSummary.orderSummaryExtraPrice)
 
         val newRowID = db.insert(TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null,values)
         return true;
@@ -353,36 +355,38 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         }
 
         var orderSummaryTimeDate : String
-        var orderSummaryAwardedPoints : Int
+        var orderSummaryAwardedPoints : Double
         var orderSummarySubtotal : Double
         var orderSummaryFoodName  : String
         var orderSummaryFoodCarbs : Int
         var orderSummaryProtein : Int
         var orderSummaryFat : Int
-        var orderSummaryMinerals : Int
-        var orderSummaryVitamins : Int
+        var orderSummaryMinerals : Double
+        var orderSummaryVitamins : Double
         var orderSummaryCalories : Int
         var orderSummaryFocus : String
         var orderSummaryFibre : Int
+        var orderSummaryExtraPrice : String = ""
 
         if(cursor!!.moveToFirst()){
             while(cursor.isAfterLast==false){
-                orderSummaryAwardedPoints = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS))
+                orderSummaryAwardedPoints = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS))
                 orderSummaryCalories = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES))
                 orderSummaryFat = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT))
                 orderSummaryFibre = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE))
                 orderSummaryFocus = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFOCUS))
                 orderSummaryFoodCarbs = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCARBS))
                 orderSummaryFoodName = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODNAME))
-                orderSummaryMinerals = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS))
+                orderSummaryMinerals = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS))
                 orderSummaryProtein = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODPROTEIN))
                 orderSummarySubtotal = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL))
                 orderSummaryTimeDate = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE))
-                orderSummaryVitamins = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS))
+                orderSummaryVitamins = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODVITAMNS))
+                orderSummaryExtraPrice = cursor.getString(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODEXTRAOPRICE))
 
                 listOrder.add(
                     OrderSummaryRecord(orderSummaryTimeDate,orderSummaryAwardedPoints,orderSummarySubtotal,orderSummaryFoodName,orderSummaryFoodCarbs,orderSummaryProtein
-                    ,orderSummaryFat,orderSummaryMinerals,orderSummaryVitamins,orderSummaryCalories,orderSummaryFocus,orderSummaryFibre))
+                    ,orderSummaryFat,orderSummaryMinerals,orderSummaryVitamins,orderSummaryCalories,orderSummaryFocus,orderSummaryFibre,orderSummaryExtraPrice))
                 cursor.moveToNext()
 
             }

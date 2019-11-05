@@ -35,9 +35,11 @@ import java.net.MalformedURLException
 import java.net.URL
 
 class QRActivity : AppCompatActivity() {
+    lateinit var kopitiamDBHelper: DBHelper
     var allPermissionsGrantedFlag : Int = 0
     private var jsonURL : String? = ""
-
+    private var finalPrice : String =" "
+    private var listOrderSumm = ArrayList<OrderSummaryRecord>()
     lateinit var sharedPreferences: SharedPreferences
 
 
@@ -49,6 +51,7 @@ class QRActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
+        kopitiamDBHelper = DBHelper(this)
 
         val qrlabel : TextView = findViewById(R.id.qrLabel)
         val stallLabel : TextView = findViewById(R.id.stallLabel)
@@ -61,9 +64,14 @@ class QRActivity : AppCompatActivity() {
 
         var foodName : String = intent.getStringExtra("foodName")
         var stallName : String = intent.getStringExtra("stallName")
-        var foodPrice : String = intent.getStringExtra("foodPrice")
+//        var foodPrice : String = intent.getStringExtra("foodPrice") // foodbase price by default
 
-        println("FoodName is QQQQQWWWWWW "+ foodName)
+
+        // to check if food is ordered before
+        var foodPrice = checkFoodOrderBefore(foodName)
+        if(foodPrice.equals("")){
+            foodPrice = intent.getStringExtra("foodPrice")
+        }
 
         qrlabel.setText("Please scan the QR code from the selected stall below.")
         stallLabel.setText(stallName)
@@ -120,9 +128,9 @@ class QRActivity : AppCompatActivity() {
                     jsonURL = barcodes?.valueAt(0)?.displayValue
                     InternerJSON(this@QRActivity,jsonURL!!,stallName,foodName,foodPrice).execute()
 //                    finish()
-//
+
                     println(" %%%% Hellow OWrld ")
-                    sleep(5)
+                    sleep(50)
                     //println(sharedPreferences.getString("Key", "default value"))
                     Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
                     cameraSource.stop()
@@ -141,6 +149,21 @@ class QRActivity : AppCompatActivity() {
         }else{
             allPermissionsGrantedFlag = 1
         }
+    }
+
+
+
+    private fun checkFoodOrderBefore(foodName: String ): String {
+        // retrieve all order summary
+
+        listOrderSumm = kopitiamDBHelper.retrieveAllOrderSummary()
+        for(i in 0..listOrderSumm.size-1){
+            if(listOrderSumm[i].orderSummaryFoodName.equals(foodName)){
+                    return listOrderSumm[i].orderSummaryExtraPrice
+            }
+        }
+
+        return ""
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -178,6 +201,8 @@ class QRActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
 
 
