@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.widget.TextView
 import android.widget.Toast
+import com.example.steadykopitiam.ui.home.HomeActivity
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -19,22 +20,21 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
     }
 
     override fun doInBackground(vararg p0: Void?): Boolean {
-        var fObj = parse()
-        if(!fObj.equals(null)){
-            println("Sohai !!!!")
-            return true
-        }else{
-            println(" Not Sohai !!!!")
-            return false
-        }
+        return parse()
+
 
     }
 
     override fun onPostExecute(result: Boolean?) {
         super.onPostExecute(result)
+//        val myIntent = Intent(c, FoodItemActivity::class.java)
+
         if (result!!) {
             // create order summary here  -- go to confirm page and pass data into it
-            val myIntent = Intent(c,FoodItemActivity::class.java)
+            var fr = FoodRecord()
+
+
+            val myIntent = Intent(c.applicationContext,FoodItemActivity::class.java)
             myIntent.putExtra("foodName",foodRecord.getFoodNames())
             myIntent.putExtra("foodStall",foodRecord.getStall())
             myIntent.putExtra("foodBasePrice",foodRecord.getBasePrice())
@@ -49,7 +49,15 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             myIntent.putExtra("foodDeductPrice",foodRecord.getDeductedPrice())
             myIntent.putExtra("foodExtraPrice",foodRecord.getExtraPrice())
             myIntent.putExtra("foodDishType",foodRecord.getDishType())
-            c.startActivity(myIntent)
+            myIntent.putExtra("foodVitamins",foodRecord.getVitamins())
+            println("Food price !!!!!!!!!!!!!!"+ foodRecord.getBasePrice())
+
+            c.applicationContext.startActivity(myIntent)
+              //Toast.makeText(c," Food pass is "+foodRecord.getFoodNames(),Toast.LENGTH_SHORT).show()
+
+
+//            myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//            c.startActivity(myIntent)
 
         } else {
             Toast.makeText(c, "unable to parse", Toast.LENGTH_LONG).show()
@@ -58,9 +66,10 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                         jsonData, Toast.LENGTH_LONG
             ).show()
         }
+
     }
 
-    private fun parse() : FoodRecord {
+    private fun parse() : Boolean {
 
         try {
             val ja = JSONArray(jsonData)
@@ -72,13 +81,13 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                 // pass the data to food Record obj
                 println("food get from internet "+jsonObject.getString("foodName"))
                 if(jsonObject.getString("foodName").equals(foodName)){
-                    println("get the same food name hahahahahahaah")
+
                     foodRecord.setFoodNames(jsonObject.getString("foodName"))
                     foodRecord.setProtein(jsonObject.getString("foodProtein"))
                     foodRecord.setCalories(jsonObject.getString("foodCalories"))
                     foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())
                     foodRecord.setCarbs(jsonObject.getString("foodCarbs"))
-                    foodRecord.setDeductedPrice(jsonObject.getString("fooddeductPrice").toDouble())
+                    foodRecord.setDeductedPrice(3.50)
                     foodRecord.setDescription(jsonObject.getString("foodDescription"))
                     foodRecord.setDishType(jsonObject.getString("foodDishType"))
                     foodRecord.setExtraPrice(jsonObject.getString("foodExtraPrice").toDouble())
@@ -87,37 +96,14 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                     foodRecord.setFocus(jsonObject.getString("foodFocus"))
                     foodRecord.setMinerals(jsonObject.getString("foodMinerals"))
                     foodRecord.setStall(jsonObject.getString("foodStall"))
+                    foodRecord.setVitamins(jsonObject.getString("foodVitamins"))
                 }
             }
-            return foodRecord
+            return true
         } catch (e: JSONException) {
             e.printStackTrace()
-            return foodRecord
+            return false
         }
     }
 
-//    class User(
-//        private var m_username: String,
-//        private var m_name: String,
-//        private var m_email: String,
-//        private var m_city: String
-//    ) {
-//        fun getUsername(): String {
-//            return m_username
-//        }
-//
-//        fun getName(): String {
-//            return m_name
-//        }
-//
-//        fun getEmail(): String {
-//            return m_email
-//        }
-//
-//        fun getCity():String{
-//            return m_city
-//        }
-//
-//
-//    }
 }

@@ -52,5 +52,14 @@
 
     </string-array>
 
+    // --- food text view in food Item activity --- //
+    <string name="foodCarbs">Carbs in g </string>
+    <string name="foodProtein">Protein in g</string>
+    <string name="foodFibre">Fibre in g</string>
+    <string name="foodFat">Fat in g</string>
+    <string name="foodVitamins">Vitamins in g</string>
+    <string name="foodMinerals">Minerals in g </string>
+    <string name="foodCalories">Calories in g </string>
+
 
 </resources>

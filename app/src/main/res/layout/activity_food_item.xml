@@ -58,7 +58,7 @@
                         android:gravity="left|bottom"
                         android:paddingTop="10sp"
                         android:paddingBottom="10sp"
-                        android:text="Steamed Chicken Rice"
+                        android:text="insert food name here"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -71,7 +71,7 @@
                         android:layout_marginBottom="20dp"
                         android:fontFamily="@font/roboto"
                         android:gravity="left|top"
-                        android:text="Chicken, roasted, with skin, served with rice and chilli sauce" />
+                        android:text="insert description here" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -126,19 +126,19 @@
                                     android:id="@+id/foodCarbs"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="TextView" />
+                                    android:text="@string/foodCarbs" />
 
                                 <TextView
                                     android:id="@+id/foodProtein"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="TextView" />
+                                    android:text="@string/foodProtein" />
 
                                 <TextView
                                     android:id="@+id/foodFibre"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TextView2" />
+                                    android:text="@string/foodFibre" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -151,14 +151,34 @@
                                     android:id="@+id/foodFat"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TextView2" />
+                                    android:text="@string/foodFat" />
 
                                 <TextView
-                                    android:id="@+id/foodProtien"
+                                    android:id="@+id/foodVitamin"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="TextView" />
+                                    android:text="@string/foodVitamins" />
 
+                                <TextView
+                                    android:id="@+id/foodMinerals"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/foodMinerals" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/foodCalories"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/foodCalories" />
 
 
 

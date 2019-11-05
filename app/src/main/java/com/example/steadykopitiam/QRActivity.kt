@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +15,7 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.vision.CameraSource
@@ -20,11 +23,23 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_food_item.*
+import org.json.JSONArray
+import org.json.JSONException
+import java.io.BufferedInputStream
+import java.io.BufferedReader
 import java.io.IOException
+import java.io.InputStreamReader
+import java.lang.Thread.sleep
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 
 class QRActivity : AppCompatActivity() {
     var allPermissionsGrantedFlag : Int = 0
     private var jsonURL : String? = ""
+
+    lateinit var sharedPreferences: SharedPreferences
+
 
     private val permissionList = arrayOf(
         Manifest.permission.CAMERA,
@@ -38,6 +53,9 @@ class QRActivity : AppCompatActivity() {
         val qrlabel : TextView = findViewById(R.id.qrLabel)
         val stallLabel : TextView = findViewById(R.id.stallLabel)
         val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        sharedPreferences = this.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        var sharedPrefEditor = sharedPreferences.edit()
+
 
         //TODO: get stall name from StallActivity
 
@@ -101,13 +119,17 @@ class QRActivity : AppCompatActivity() {
                     v.vibrate(400)
                     jsonURL = barcodes?.valueAt(0)?.displayValue
                     InternerJSON(this@QRActivity,jsonURL!!,stallName,foodName,foodPrice).execute()
-                    // handle the food item object
+//                    finish()
+//
+                    println(" %%%% Hellow OWrld ")
+                    sleep(5)
+                    //println(sharedPreferences.getString("Key", "default value"))
+                    Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
                     cameraSource.stop()
                     cameraSource.release()
+
                 }
             }
-
-
         }))
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -156,5 +178,7 @@ class QRActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
 }

@@ -98,7 +98,7 @@ class FoodRecord(){
     }
 
     fun setBasePrice(basePrice : Double ){
-        this.baseprice = baseprice
+        this.baseprice = basePrice
     }
 
     fun getExtraPrice() : Double {
@@ -114,7 +114,7 @@ class FoodRecord(){
     }
 
     fun setDeductedPrice(deductedPrice:Double){
-        this.deductPrice = deductPrice
+        this.deductPrice = deductedPrice
     }
 
     fun getStall(): String {
