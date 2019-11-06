@@ -59,6 +59,7 @@
 
                     android:hint="@string/register_email"
                     android:inputType="textEmailAddress"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -85,6 +86,7 @@
                     android:fontFamily="@font/roboto"
                     android:hint="@string/register_password"
                     android:password="true"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -113,6 +115,7 @@
                     android:hint="@string/register_phoneNumber"
                     android:maxLength="8"
                     android:numeric="integer"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -138,6 +141,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="@font/roboto"
                     android:hint="@string/register_name"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -209,6 +213,7 @@
                     android:hint="@string/register_age"
                     android:maxLength="3"
                     android:numeric="integer"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -236,6 +241,7 @@
                     android:hint="@string/register_weight"
                     android:maxLength="5"
                     android:numeric="decimal"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
@@ -263,6 +269,7 @@
                     android:hint="@string/register_height"
                     android:maxLength="5"
                     android:numeric="decimal"
+                    android:singleLine="true"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorLightGrey"
                     android:textCursorDrawable="@color/colorPrimary" />
