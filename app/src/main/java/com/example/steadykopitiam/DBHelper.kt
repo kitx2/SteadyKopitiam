@@ -340,7 +340,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         return true;
     }
 
-    fun retrieveAllOrderSummary() :ArrayList<OrderSummaryRecord>{
+    fun retrieveAllOrderSummary() : ArrayList<OrderSummaryRecord>{
         val listOrder = ArrayList<OrderSummaryRecord>()
         val db = writableDatabase
 

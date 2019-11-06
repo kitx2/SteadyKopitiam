@@ -91,6 +91,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                         println("WWWWWW")
                         foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())
                     }
+
                     println("Hello World 4564556")
                     foodRecord.setFoodNames(jsonObject.getString("foodName"))
                     foodRecord.setProtein(jsonObject.getString("foodProtein"))

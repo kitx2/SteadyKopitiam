@@ -33,7 +33,7 @@ import java.util.ArrayList
 class HomeActivity : AppCompatActivity() {
     //TODO: Reference username from Database
     val username : String = "Test Username"
-
+    lateinit var kopitiamDBHelper: DBHelper
     var navigationPosition: Int = 0
     private var stallName : String = ""
     private var stallDescription : String = ""
@@ -45,7 +45,7 @@ class HomeActivity : AppCompatActivity() {
     private var adapter: AdapterFoodViewHorizontal? = null
 
     //TODO: Update foodList
-    private val myImageList = IntArray(size = 2)
+    private var myImageList = IntArray(size = 4)
     private val myImageNameList = arrayListOf<String>()
     private val myImageDescriptionList = arrayListOf<String>()
 
@@ -65,10 +65,12 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        kopitiamDBHelper = DBHelper(this)
         readRecommendedjson()
         readStalljson()
         initView()
         setTitle("Home")
+
 
         sharedPreferences = getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
         Toast.makeText(this, sharedPreferences.getString("SomeString", "Default value"), Toast.LENGTH_SHORT).show()
@@ -147,28 +149,182 @@ class HomeActivity : AppCompatActivity() {
 
    //  --- to read data from json file --- ///
     private fun readRecommendedjson(){
-        var json : String? = null
-        // read recommended list food
-        try{
-            val inputStream : InputStream = assets.open("Wong Ah Hua")
-            json = inputStream.bufferedReader().readText()
-            var jsonArray = JSONArray(json)
-            for(i in 0..jsonArray.length()-1){
+       // retrieve order summary and time ordered if there is not any then recommened 4 foods from different stall
 
-                var jsonOjb = jsonArray.getJSONObject(i)
-                var tempRec : String
-                // get food image
-                tempRec= (jsonOjb.getString("foodResourceId"))
-                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
-                myImageList[i] = final
+       // data to pass to stall activity, stall name, stall description and iamge id
+       var orSum = kopitiamDBHelper.retrieveAllOrderSummary()
+       if(orSum.size == 0 ){
 
-                // update information of stall and food
-                myImageNameList.add(jsonOjb.getString("foodName"))
-                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
-            }
-        }catch(e: IOException){
-            println("Error happen here")
-        }
+           // read recommended list food
+           try{
+               for(i in 0..myImageList.size-1){
+                   println(" TTTTT ")
+                   if(i == 0 ){
+                       println(" RRRRRR ")
+                       var json : String? = null
+                       val inputStream : InputStream = assets.open("Wong Ah Hua")
+                       json = inputStream.bufferedReader().readText()
+                       var jsonArray = JSONArray(json)
+                       var jsonOjb = jsonArray.getJSONObject(0)
+                       var tempRec : String
+                       // get food image
+                       tempRec= (jsonOjb.getString("foodResourceId"))
+                       var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                       myImageList[i] = final
+                       // update information of stall and food
+                       myImageNameList.add(jsonOjb.getString("foodName"))
+                       myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   }else if( i == 1 ){
+                       var json : String? = null
+                       val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
+                       json = inputStream.bufferedReader().readText()
+                       var jsonArray = JSONArray(json)
+                       var jsonOjb = jsonArray.getJSONObject(0)
+                       var tempRec : String
+                       // get food image
+                       tempRec= (jsonOjb.getString("foodResourceId"))
+                       var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                       myImageList[i] = final
+                       // update information of stall and food
+                       myImageNameList.add(jsonOjb.getString("foodName"))
+                       myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   }else if(i == 2 ){
+                       var json : String? = null
+                       val inputStream : InputStream = assets.open("Australia Signature Food")
+                       json = inputStream.bufferedReader().readText()
+                       var jsonArray = JSONArray(json)
+                       var jsonOjb = jsonArray.getJSONObject(0)
+                       var tempRec : String
+                       // get food image
+                       tempRec= (jsonOjb.getString("foodResourceId"))
+                       var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                       myImageList[i] = final
+                       // update information of stall and food
+                       myImageNameList.add(jsonOjb.getString("foodName"))
+                       myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   }else{
+                       var json : String? = null
+                       val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
+                       json = inputStream.bufferedReader().readText()
+                       var jsonArray = JSONArray(json)
+                       var jsonOjb = jsonArray.getJSONObject(0)
+                       var tempRec : String
+                       // get food image
+                       tempRec= (jsonOjb.getString("foodResourceId"))
+                       var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                       myImageList[i] = final
+                       // update information of stall and food
+                       myImageNameList.add(jsonOjb.getString("foodName"))
+                       myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   }
+               }
+           }catch(e: IOException){
+               println("Error happen here")
+           }
+       }else{
+           var count : Int = 4
+           var addCarbs : Boolean = false
+           var addProtein : Boolean = false
+           var addFibre : Boolean = false
+           var addVitamins : Boolean = false
+
+           for(i in 0..orSum.size-1){
+               // if there is order summary check its focus and  ** dont have stall name in ordersummary  but can assgign stall name with hardcode or .
+               //if focus is in it then move to next stall but what if have all focus alr then call another method to check food name
+               // store focus into a arraylist then open every json file to check if focus string not the same then retrieve food item from there
+               var focus = orSum[i].orderSummaryFocus
+               if(focus.equals("Carbs")){
+                   addCarbs = true
+                   count = count - 1
+               }
+
+               if(focus.equals("Protein")){
+                   addProtein = true
+                   count = count - 1
+               }
+               if (focus.equals("vitamins")){
+                   addVitamins = true
+                   count = count - 1
+               }
+
+               if (focus.equals("fibre")){
+                   addFibre = true
+                   count = count - 1
+               }
+           }
+            // reassign link
+           myImageList = IntArray(count)
+           var temp : Int = 0
+               if(!addCarbs && temp < count){
+                   var json : String? = null
+                   val inputStream : InputStream = assets.open("Wong Ah Hua")
+                   json = inputStream.bufferedReader().readText()
+                   var jsonArray = JSONArray(json)
+                   var jsonOjb = jsonArray.getJSONObject(0)
+                   var tempRec : String
+                   // get food image
+                   tempRec= (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   myImageList[temp] = final
+                   temp = temp + 1
+                   // update information of stall and food
+                   myImageNameList.add(jsonOjb.getString("foodName"))
+                   myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+               }
+               if(!addFibre && temp < count ){
+                   var json : String? = null
+                   val inputStream : InputStream = assets.open("Australia Signature Food")
+                   json = inputStream.bufferedReader().readText()
+                   var jsonArray = JSONArray(json)
+                   var jsonOjb = jsonArray.getJSONObject(0)
+                   var tempRec : String
+                   // get food image
+                   tempRec= (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   myImageList[temp] = final
+                   // update information of stall and food
+                   temp = temp + 1
+                   myImageNameList.add(jsonOjb.getString("foodName"))
+                   myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+               }
+
+               if(!addProtein && temp < count){
+                   var json : String? = null
+                   val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
+                   json = inputStream.bufferedReader().readText()
+                   var jsonArray = JSONArray(json)
+                   var jsonOjb = jsonArray.getJSONObject(0)
+                   var tempRec : String
+                   // get food image
+                   tempRec= (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   myImageList[temp] = final
+                   // update information of stall and food
+                   temp = temp + 1
+                   myImageNameList.add(jsonOjb.getString("foodName"))
+                   myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+               }
+               if(!addVitamins && temp < count){
+                   var json : String? = null
+                   val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
+                   json = inputStream.bufferedReader().readText()
+                   var jsonArray = JSONArray(json)
+                   var jsonOjb = jsonArray.getJSONObject(0)
+                   var tempRec : String
+                   // get food image
+                   tempRec= (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   myImageList[temp] = final
+                   // update information of stall and food
+                   temp = temp + 1
+                   myImageNameList.add(jsonOjb.getString("foodName"))
+                   myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+               }
+
+
+       }
+
+
     }
 
 
@@ -193,6 +349,8 @@ class HomeActivity : AppCompatActivity() {
             println("Error happen here")
         }
     }
+
+
 
 
 

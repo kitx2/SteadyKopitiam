@@ -87,8 +87,8 @@ class FoodItemActivity : AppCompatActivity() {
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
 
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
-        if(foodpricePref.getBoolean("foodPriceIncPrefs",false)){
-            Toast.makeText(this, "You have purchased "+foodName+"before and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+        if(foodpricePref.getBoolean("isPriceIncrease",false)){
+            Toast.makeText(this, "You have purchased "+foodName+"in the past 3 days and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
         }
 
 

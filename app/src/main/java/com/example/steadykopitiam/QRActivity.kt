@@ -77,11 +77,12 @@ class QRActivity : AppCompatActivity() {
         var foodPrice = checkFoodOrderBefore(foodName)
         if(foodPrice.equals("")){
             foodPrice = intent.getStringExtra("foodPrice")
+            sharedPrefEditor.putBoolean("isPriceIncrease",false)
         }else{
             sharedPrefEditor.putBoolean("isPriceIncrease",true)
-            sharedPrefEditor.commit()
-        }
 
+        }
+        sharedPrefEditor.commit()
         println("FoodPrice is "+foodPrice)
 
         qrlabel.setText("Please scan the QR code from the selected stall below.")
