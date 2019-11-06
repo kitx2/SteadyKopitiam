@@ -11,85 +11,93 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_weight="5"
-        android:src="@drawable/steadykopitiam_full"
-        >
-    </ImageView>
+        android:src="@drawable/steadykopitiam_full"></ImageView>
 
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_weight="5"
 
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FF134F5C"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <EditText
                 android:id="@+id/email_input_login"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="12dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/colorWhite"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/email_input_login"
                 android:textColor="@color/colorWhite"
-                android:textCursorDrawable="@color/colorWhite"
-                android:hint="@string/email_input_login" />
+                android:textColorHint="@color/colorPrimary"
+                android:textCursorDrawable="@color/colorWhite" />
 
             <EditText
                 android:id="@+id/email_input_password"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="12dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/colorWhite"
-                android:textCursorDrawable="@color/colorWhite"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/password_input_login"
                 android:textColor="@color/colorWhite"
-                android:hint="@string/password_input_login" />
+                android:textColorHint="@color/colorPrimary"
+                android:textCursorDrawable="@color/colorWhite" />
 
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="#FF009688"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/btn_login"
                 android:textColor="@android:color/white"
-                android:text="@string/btn_login" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btn_signup"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 android:background="#FF009688"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/btn_signup"
                 android:textColor="@android:color/white"
-                android:text="@string/btn_signup" />
+                android:textSize="16sp" />
 
         </LinearLayout>
-
-
 
 
     </androidx.cardview.widget.CardView>

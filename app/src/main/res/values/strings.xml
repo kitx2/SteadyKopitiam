@@ -24,8 +24,8 @@
     <string name="register_female">Female</string>
     <string name="register_phoneNumber">Phone Number</string>
     <string name="register_name">Name</string>
-    <string name="register_height">Height</string>
-    <string name="register_weight">Weight</string>
+    <string name="register_height">Height (m)</string>
+    <string name="register_weight">Weight (kg)</string>
     <string name="register_age">Age</string>
     <string name="register_password">Password</string>
 

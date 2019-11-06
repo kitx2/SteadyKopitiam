@@ -35,7 +35,7 @@ class PurchasesActivity : AppCompatActivity() {
     private var imageModelArrayList: ArrayList<ModelOrderVertical>? = null
     private var adapter: AdapterOrderViewVertical? = null
 
-    val sdf = SimpleDateFormat("dd/MM/yyyy, hh:mm")
+    val sdf = SimpleDateFormat("dd/MM/yyyy, HH:mm")
     val currentDate = sdf.format(Date())
     private var foodName : String = ""
     private var foodPrice : Double = 0.0
