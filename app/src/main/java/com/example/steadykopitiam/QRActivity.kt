@@ -33,6 +33,12 @@ import java.lang.Thread.sleep
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.Period
+import java.util.*
+import kotlin.collections.ArrayList
 
 class QRActivity : AppCompatActivity() {
     lateinit var kopitiamDBHelper: DBHelper
@@ -56,7 +62,7 @@ class QRActivity : AppCompatActivity() {
         val qrlabel : TextView = findViewById(R.id.qrLabel)
         val stallLabel : TextView = findViewById(R.id.stallLabel)
         val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        sharedPreferences = this.getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("foodPriceIncPrefs", Context.MODE_PRIVATE)
         var sharedPrefEditor = sharedPreferences.edit()
 
 
@@ -71,7 +77,12 @@ class QRActivity : AppCompatActivity() {
         var foodPrice = checkFoodOrderBefore(foodName)
         if(foodPrice.equals("")){
             foodPrice = intent.getStringExtra("foodPrice")
+        }else{
+            sharedPrefEditor.putBoolean("isPriceIncrease",true)
+            sharedPrefEditor.commit()
         }
+
+        println("FoodPrice is "+foodPrice)
 
         qrlabel.setText("Please scan the QR code from the selected stall below.")
         stallLabel.setText(stallName)
@@ -159,7 +170,23 @@ class QRActivity : AppCompatActivity() {
         listOrderSumm = kopitiamDBHelper.retrieveAllOrderSummary()
         for(i in 0..listOrderSumm.size-1){
             if(listOrderSumm[i].orderSummaryFoodName.equals(foodName)){
+
+                var date = listOrderSumm[i].orderSummaryTimeDate
+                // convert to string to date
+                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
+                var d = Date()
+                d = simpleDateFormat.parse(date)
+                val curTime = simpleDateFormat.format(Date())
+                var cur = simpleDateFormat.parse(curTime)
+                // means user eaten this food 3 days before
+                if((cur.time - 10) > d.time){
+                    println("hahahahalololololoo")
                     return listOrderSumm[i].orderSummaryExtraPrice
+                }
+
+                println(" currtime " + cur.time)
+                println("ORder sumaaary tyime "+ d.time)
+
             }
         }
 

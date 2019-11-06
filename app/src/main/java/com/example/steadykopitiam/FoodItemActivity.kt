@@ -44,6 +44,7 @@ class FoodItemActivity : AppCompatActivity() {
     private var awardedPoint : Double = 0.0
 
 
+
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
@@ -67,6 +68,8 @@ class FoodItemActivity : AppCompatActivity() {
         setTitle(stallName)
 
 
+
+
         //TODO: Retrieve JSON and extract specific food item details
         val foodName : String = intent.getStringExtra("foodName")
         val foodProtein : String = intent.getStringExtra("foodProtein")
@@ -82,6 +85,12 @@ class FoodItemActivity : AppCompatActivity() {
         val foodDishType : String = intent.getStringExtra("foodDishType")
         val foodMinerals : String = intent.getStringExtra("foodMinerals")
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
+
+        var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
+        if(foodpricePref.getBoolean("foodPriceIncPrefs",false)){
+            Toast.makeText(this, "You have purchased "+foodName+"before and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+        }
+
 
         //TODO: Render the details into Nutrition display table
         this.foodLabel.text = foodName

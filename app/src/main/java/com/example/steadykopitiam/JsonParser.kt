@@ -2,10 +2,12 @@ package com.example.steadykopitiam
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.widget.TextView
 import android.widget.Toast
 import com.example.steadykopitiam.ui.home.HomeActivity
+import com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -14,7 +16,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
 
     val foodRecord = FoodRecord()
     private var size : Int = 0
-
+    lateinit  var sharedPref : SharedPreferences
     override fun onPreExecute() {
         super.onPreExecute()
     }
@@ -77,10 +79,22 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                 // pass the data to food Record obj
                 println("food get from internet "+jsonObject.getString("foodName"))
                 if(jsonObject.getString("foodName").equals(foodName)){
+                    sharedPref = c?.getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
+                    // check if price increase
+                    println("food Price in JsonParser "+foodPrice)
+                    println("food Price from json file "+jsonObject.getString("foodExtraPrice"))
+                    if(sharedPref.getBoolean("isPriceIncrease",false)){
+                        println("Hello World 123123")
+                        println("Food price in Json Aprser "+foodPrice)
+                        foodRecord.setBasePrice(jsonObject.getString("foodExtraPrice").toDouble())
+                    }else{
+                        println("WWWWWW")
+                        foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())
+                    }
+                    println("Hello World 4564556")
                     foodRecord.setFoodNames(jsonObject.getString("foodName"))
                     foodRecord.setProtein(jsonObject.getString("foodProtein"))
                     foodRecord.setCalories(jsonObject.getString("foodCalories"))
-                    foodRecord.setBasePrice(foodPrice.toDouble())
                     foodRecord.setCarbs(jsonObject.getString("foodCarbs"))
                     foodRecord.setDeductedPrice(jsonObject.getString("fooddeductPrice").toDouble())
                     foodRecord.setDescription(jsonObject.getString("foodDescription"))
