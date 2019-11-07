@@ -16,7 +16,10 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
 
     val foodRecord = FoodRecord()
     private var size : Int = 0
+
+    // sharedPref to check if price increase
     lateinit  var sharedPref : SharedPreferences
+    // sharedPred to check if recommended food choose then price deducted
     lateinit var foodFromRecoList : SharedPreferences
 
     override fun onPreExecute() {
@@ -50,6 +53,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             myIntent.putExtra("foodExtraPrice",foodRecord.getExtraPrice())
             myIntent.putExtra("foodDishType",foodRecord.getDishType())
             myIntent.putExtra("foodVitamins",foodRecord.getVitamins())
+            myIntent.putExtra("foodImage",foodRecord.getImage())
             println("Food price !!!!!!!!!!!!!!"+ foodRecord.getBasePrice())
             println("Food price DeDucted &&&&&&!!!!!!"+ foodRecord.getDeductedPrice())
             myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -104,6 +108,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                     foodRecord.setMinerals(jsonObject.getString("foodMinerals"))
                     foodRecord.setStall(jsonObject.getString("foodStall"))
                     foodRecord.setVitamins(jsonObject.getString("foodVitamins"))
+                    foodRecord.setImage(jsonObject.getString("foodResourceId"))
                 }
             }
             return true

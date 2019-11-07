@@ -1,5 +1,7 @@
 package com.example.steadykopitiam
 
+import java.lang.StringBuilder
+
 class FoodRecord(){
 
     var foodName: String? = null
@@ -17,6 +19,7 @@ class FoodRecord(){
     private var stall: String? = ""
     private var dishType: String? = ""
     private var focus: String? = ""
+    private var foodimage : String = ""
 
 
 
@@ -139,6 +142,14 @@ class FoodRecord(){
 
     fun setFocus(focus :String ){
         this.focus = focus
+    }
+
+    fun getImage():String {
+        return foodimage
+    }
+
+    fun setImage(foodImage:String) {
+        this.foodimage = foodImage
     }
 }
 

@@ -28,6 +28,8 @@ import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import android.preference.PreferenceManager
 import android.content.SharedPreferences
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import org.json.JSONArray
 import java.io.IOException
@@ -46,13 +48,13 @@ class FoodItemActivity : AppCompatActivity() {
     private var useremail  : String? = ""
     private var awardedPoint : Double = 0.0
 
-
-
-
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
     private var adapter: AdapterFoodViewHorizontal? = null
+    private var foodNameInRecc : String = ""
+    private var stallNameInRecc : String = ""
+    private var foodPrice : String = ""
 
 
     //TODO: Update foodList
@@ -91,6 +93,15 @@ class FoodItemActivity : AppCompatActivity() {
         val foodDishType : String = intent.getStringExtra("foodDishType")
         val foodMinerals : String = intent.getStringExtra("foodMinerals")
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
+        val foodImage : String = intent.getStringExtra("foodImage")
+
+        val imagePlaceholder : ImageView = findViewById(R.id.stallPlaceholder)
+//        val foodLabel : TextView = findViewById(R.id.foodLabel)
+//        val foodDescLabel: TextView = findViewById(R.id.foodDescLabel)
+        var id = application.resources.getIdentifier("jamacian_curried_shrimp_and_mango_soup:drawable",null,null)
+        imagePlaceholder.setImageResource(id)
+        foodLabel.text = foodName
+        foodDescLabel.text = foodDescription
 
 
         // if user had order food before in the past 3 days
@@ -111,7 +122,7 @@ class FoodItemActivity : AppCompatActivity() {
 
         //TODO: Render the details into Nutrition display table
         this.foodLabel.text = foodName
-        this.foodDescription.text = foodDescription
+        this.foodDescLabel.text = foodDescription
         this.foodCarbs.text = "Carbs in g " + foodCarbs
         this.foodProtein.text = "Protein in g "+ foodProtein
         this.foodCalories.text = "Calories in g "+ foodCalories
@@ -139,7 +150,18 @@ class FoodItemActivity : AppCompatActivity() {
                     override fun onClick(view: View, position: Int) {
                         //TODO: Start new Activity here
 
+                        foodNameInRecc = imageModelArrayList!![position].getNames()
+                        stallNameInRecc = imageModelArrayList!![position].getStallName()
+                        foodPrice =  imageModelArrayList!![position].getFoodPrice()
+                        var sharedPreForReccEditer = foodFromRecoList.edit()
+                        sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",true)
+                        sharedPreForReccEditer.commit()
 
+                        val myIntent = Intent(applicationContext,QRActivity::class.java)
+                        myIntent.putExtra("foodName",foodNameInRecc)
+                        myIntent.putExtra("stallName",stallNameInRecc)
+                        myIntent.putExtra("foodPrice",foodPrice)
+                        startActivity(myIntent)
                         Toast.makeText(
                             applicationContext,
                             imageModelArrayList!![position].getNames(),
@@ -147,7 +169,7 @@ class FoodItemActivity : AppCompatActivity() {
                         ).show()
                         //Start new Activity
                         //TODO: Pass stall name to QR Activity
-                        val myIntent = Intent(applicationContext, QRActivity::class.java)
+
                         startActivity(myIntent)
                         finish()
                     }
@@ -201,13 +223,10 @@ class FoodItemActivity : AppCompatActivity() {
                 }
 
             }
-
             //TODO: Persist purchase order in DB
             //TODO: Store 10% rebate of spending amount in wallet
-
             //TODO - BONUS feature: Send sms for confirmation of order made
             //Direct user to last order
-
         }
     }
     //  --- to read data from json file --- Jy ///
@@ -217,7 +236,6 @@ class FoodItemActivity : AppCompatActivity() {
         // data to pass to stall activity, stall name, stall description and image id
         var orSum = kopitiamDBHelper.retrieveAllOrderSummary()
         if(orSum.size == 0 ){
-
             // read recommended all stall list of food
             try{
                 for(i in 0..myImageList.size-1){

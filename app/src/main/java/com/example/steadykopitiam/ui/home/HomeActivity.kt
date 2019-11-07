@@ -67,8 +67,6 @@ class HomeActivity : AppCompatActivity() {
     private val stallMyImageNameList = arrayListOf<String>()
     private val stallMyImageDescriptionList = arrayListOf<String>()
 
-    lateinit var sharedPreferences: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
