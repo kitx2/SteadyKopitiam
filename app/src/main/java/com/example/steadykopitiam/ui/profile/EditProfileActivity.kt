@@ -1,5 +1,7 @@
 package com.example.steadykopitiam.ui.profile
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -9,58 +11,46 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import com.example.steadykopitiam.DBHelper
-import com.example.steadykopitiam.R
 import com.example.steadykopitiam.UserRecord
-import com.example.steadykopitiam.ui.home.HomeActivity
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.activity_edit_profile.*
-import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_age
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_email
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_height
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_name
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_password
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_phoneNumber
-import kotlinx.android.synthetic.main.activity_register.reg_input_layout_weight
-import kotlinx.android.synthetic.main.activity_register.register_age
-import kotlinx.android.synthetic.main.activity_register.register_email
-import kotlinx.android.synthetic.main.activity_register.register_height
-import kotlinx.android.synthetic.main.activity_register.register_name
-import kotlinx.android.synthetic.main.activity_register.register_password
-import kotlinx.android.synthetic.main.activity_register.register_phoneNumber
-import kotlinx.android.synthetic.main.activity_register.register_weight
+import android.widget.RadioButton
+import android.widget.ArrayAdapter
+
 
 class EditProfileActivity : AppCompatActivity() {
     lateinit var kopitiamDBHelper: DBHelper
 
+    //User details
+    var user = ArrayList<UserRecord>()
+    private var userpassword : String? = ""
+    private var useremail  : String? = ""
+    var choice = arrayOf("High","Medium","Low")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(com.example.steadykopitiam.R.layout.activity_edit_profile)
 
-        var choice = arrayOf("High","Medium","Low")
-        val btnUpdateProfile : Button = findViewById(R.id.btnUpdateProfile)
-        val spinner = findViewById<Spinner>(R.id.spinnerChoice)
+        val btnUpdateProfile : Button = findViewById(com.example.steadykopitiam.R.id.btnUpdateProfile)
+        val spinner = findViewById<Spinner>(com.example.steadykopitiam.R.id.profile_spinnerChoice)
         var genderStr : String = ""
         var dailyAct : String = ""
 
-        val reg_input_layout_email: TextInputLayout = findViewById(R.id.reg_input_layout_email)
-        val register_email : EditText = findViewById(R.id.register_email)
-        val reg_input_layout_phoneNumber: TextInputLayout = findViewById(R.id.reg_input_layout_phoneNumber)
-        val register_phoneNumber : EditText = findViewById(R.id.register_phoneNumber)
-        val reg_input_layout_name: TextInputLayout = findViewById(R.id.reg_input_layout_name)
-        val register_name : EditText = findViewById(R.id.register_name)
-        val reg_input_layout_password: TextInputLayout = findViewById(R.id.reg_input_layout_password)
-        val register_password : EditText = findViewById(R.id.register_password)
-        val reg_input_layout_age: TextInputLayout = findViewById(R.id.reg_input_layout_age)
-        val register_age : EditText = findViewById(R.id.register_age)
-        val reg_input_layout_weight: TextInputLayout = findViewById(R.id.reg_input_layout_weight)
-        val register_weight : EditText = findViewById(R.id.register_weight)
-        val reg_input_layout_height: TextInputLayout = findViewById(R.id.reg_input_layout_height)
-        val register_height : EditText = findViewById(R.id.register_height)
-        val radio_group : RadioGroup = findViewById(R.id.radio_group)
+        val reg_input_layout_email: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_email)
+        val register_email : EditText = findViewById(com.example.steadykopitiam.R.id.profile_email)
+        val reg_input_layout_phoneNumber: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_phoneNumber)
+        val register_phoneNumber : EditText = findViewById(com.example.steadykopitiam.R.id.profile_phoneNumber)
+        val reg_input_layout_name: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_name)
+        val register_name : EditText = findViewById(com.example.steadykopitiam.R.id.profile_name)
+        val reg_input_layout_password: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_password)
+        val register_password : EditText = findViewById(com.example.steadykopitiam.R.id.profile_password)
+        val reg_input_layout_age: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_age)
+        val register_age : EditText = findViewById(com.example.steadykopitiam.R.id.profile_age)
+        val reg_input_layout_weight: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_weight)
+        val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
+        val reg_input_layout_height: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_height)
+        val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
+        val radio_group : RadioGroup = findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
 
-        //Text validation
-        validation()
 
         if (spinner != null) {
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, choice)
@@ -83,6 +73,7 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
+
         // Get radio group selected item
         radio_group.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
@@ -90,6 +81,12 @@ class EditProfileActivity : AppCompatActivity() {
                 genderStr = radio.text.toString()
             })
 
+        //Render user data
+        fetchUser()
+        //Text validation
+        validation()
+
+        //Update user data
         btnUpdateProfile.setOnClickListener {
             var valid : Boolean = true
             if(register_email.text.isEmpty()) {
@@ -121,26 +118,37 @@ class EditProfileActivity : AppCompatActivity() {
                 valid = false
             }
             if(valid) {
-                updateUser(dailyAct, genderStr)
-                val myIntent = Intent(this, EditProfileActivity::class.java)
-                startActivity(myIntent)
-                this.overridePendingTransition(0, 0)
-                finish()
+                var bool: Boolean = updateUser(dailyAct, genderStr)
+                if(bool) {
+//                    Toast.makeText(this, bool.toString(), Toast.LENGTH_LONG).show()
+                    val myIntent = Intent(this, ProfileActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
             }
 
         }
 
+
     }
 
-    fun updateUser(dailyAct:String, genderString: String){
+    fun updateUser(dailyAct:String, genderString: String):Boolean{
+        val register_email : EditText = findViewById(com.example.steadykopitiam.R.id.profile_email)
+        val register_phoneNumber : EditText = findViewById(com.example.steadykopitiam.R.id.profile_phoneNumber)
+        val register_name : EditText = findViewById(com.example.steadykopitiam.R.id.profile_name)
+        val register_password : EditText = findViewById(com.example.steadykopitiam.R.id.profile_password)
+        val register_age : EditText = findViewById(com.example.steadykopitiam.R.id.profile_age)
+        val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
+        val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
 
-        var username  = this.register_name.text.toString()
-        var phoneNumber = this.register_phoneNumber.text.toString()
-        var password  = this.register_password.text.toString()
-        var email     = this.register_email.text.toString()
-        var age       = this.register_age.text.toString()
-        var height    = this.register_height.text.toString().toDouble()
-        var weight    = this.register_weight.text.toString().toDouble()
+        var username  = register_name.text.toString()
+        var phoneNumber = register_phoneNumber.text.toString()
+        var password  = register_password.text.toString()
+        var email     = register_email.text.toString()
+        var age       = register_age.text.toString()
+        var height    = register_height.text.toString().toDouble()
+        var weight    = register_weight.text.toString().toDouble()
         var bmi = (weight / (height*height))
         var calories : Int = 0
         var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
@@ -164,14 +172,39 @@ class EditProfileActivity : AppCompatActivity() {
         var vitamins = "0.09"
         var fat = (calories * 0.275 / 9 )
 
-        var result = kopitiamDBHelper.insertUser(
+        var result = kopitiamDBHelper.updateUser(
             UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
                 fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
         )
-        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
+//        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
+        kopitiamDBHelper = DBHelper(this)
+
+        //TODO: SetText and Set Index position of spinner
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+
+        return result
     }
 
     fun validation() {
+        val reg_input_layout_email: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_email)
+        val register_email : EditText = findViewById(com.example.steadykopitiam.R.id.profile_email)
+        val reg_input_layout_phoneNumber: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_phoneNumber)
+        val register_phoneNumber : EditText = findViewById(com.example.steadykopitiam.R.id.profile_phoneNumber)
+        val reg_input_layout_name: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_name)
+        val register_name : EditText = findViewById(com.example.steadykopitiam.R.id.profile_name)
+        val reg_input_layout_password: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_password)
+        val register_password : EditText = findViewById(com.example.steadykopitiam.R.id.profile_password)
+        val reg_input_layout_age: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_age)
+        val register_age : EditText = findViewById(com.example.steadykopitiam.R.id.profile_age)
+        val reg_input_layout_weight: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_weight)
+        val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
+        val reg_input_layout_height: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_height)
+        val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
+        val radio_group : RadioGroup = findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
 
         register_email.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -277,6 +310,58 @@ class EditProfileActivity : AppCompatActivity() {
                     reg_input_layout_weight.setError(null)
             }
         })
+
+    }
+
+    @SuppressLint("DefaultLocale")
+    fun fetchUser() {
+        val register_email : EditText = findViewById(com.example.steadykopitiam.R.id.profile_email)
+        val register_phoneNumber : EditText = findViewById(com.example.steadykopitiam.R.id.profile_phoneNumber)
+        val register_name : EditText = findViewById(com.example.steadykopitiam.R.id.profile_name)
+        val register_password : EditText = findViewById(com.example.steadykopitiam.R.id.profile_password)
+        val register_age : EditText = findViewById(com.example.steadykopitiam.R.id.profile_age)
+        val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
+        val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
+        val radio_group : RadioGroup = findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
+
+
+        kopitiamDBHelper = DBHelper(this)
+
+        //TODO: SetText and Set Index position of spinner
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+
+        if (!user.isEmpty()) {
+            register_email.setText(user.get(0).email)
+            register_password.setText(user.get(0).user_password)
+            register_phoneNumber.setText(user.get(0).phoneNumber)
+            register_name.setText(user.get(0).username)
+            register_age.setText(user.get(0).age)
+            register_height.setText(user.get(0).height.toString())
+            register_weight.setText(user.get(0).weight.toString())
+
+            var gender: String = user.get(0).gender
+//            Toast.makeText(this, gender, Toast.LENGTH_SHORT).show()
+            if (gender.equals("male")) {
+                (radio_group.getChildAt(0) as RadioButton).isChecked = true
+            } else {
+                (radio_group.getChildAt(1) as RadioButton).isChecked = true
+            }
+
+            val spinner =
+                findViewById<Spinner>(com.example.steadykopitiam.R.id.profile_spinnerChoice)
+            val compareValue = user.get(0).user_dailyActivies
+            val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, choice)
+
+            spinner.setAdapter(arrayAdapter)
+
+//             Toast.makeText(this, choice.indexOf(compareValue).toString(), Toast.LENGTH_LONG).show()
+             spinner.setSelection(choice.indexOf(compareValue),true)
+
+        }
 
     }
 }

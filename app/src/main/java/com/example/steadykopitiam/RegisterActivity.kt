@@ -1,6 +1,8 @@
 package com.example.steadykopitiam
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,11 +22,14 @@ class RegisterActivity : AppCompatActivity(){
 
     var choice = arrayOf("High","Medium","Low")
     lateinit var kopitiamDBHelper: DBHelper
+    lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         kopitiamDBHelper = DBHelper(this)
+        sharedPreferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
 
         val btn_to_register = findViewById<Button>(R.id.btn_to_register)
         val spinner = findViewById<Spinner>(R.id.spinnerChoice)
@@ -75,8 +80,6 @@ class RegisterActivity : AppCompatActivity(){
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 val radio: RadioButton = findViewById(checkedId)
                 genderStr = radio.text.toString()
-//                Toast.makeText(applicationContext," On checked change " + genderStr,
-//                    Toast.LENGTH_SHORT).show()
             })
 
 
@@ -113,6 +116,12 @@ class RegisterActivity : AppCompatActivity(){
             if(valid) {
                 registerUser(dailtAct, genderStr)
                 val myIntent = Intent(this, HomeActivity::class.java)
+
+                var sharedPrefEditor = sharedPreferences.edit()
+                sharedPrefEditor.putString("userPassword", register_password.text.toString())
+                sharedPrefEditor.putString("userEmail", register_email.text.toString())
+                sharedPrefEditor.commit()
+
                 startActivity(myIntent)
             }
 
@@ -154,7 +163,7 @@ class RegisterActivity : AppCompatActivity(){
 
         var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
             fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
-        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
+
     }
 
     fun validation() {

@@ -45,7 +45,7 @@
                 android:paddingBottom="20dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_email"
+                    android:id="@+id/profile_input_layout_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -53,7 +53,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_email"
+                        android:id="@+id/profile_email"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -73,7 +73,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_password"
+                    android:id="@+id/profile_input_layout_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -81,7 +81,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_password"
+                        android:id="@+id/profile_password"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -101,7 +101,7 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_phoneNumber"
+                    android:id="@+id/profile_input_layout_phoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -109,7 +109,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_phoneNumber"
+                        android:id="@+id/profile_phoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -129,7 +129,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_name"
+                    android:id="@+id/profile_input_layout_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -137,7 +137,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_name"
+                        android:id="@+id/profile_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -162,14 +162,14 @@
                     android:orientation="horizontal">
 
                     <RadioGroup
-                        android:id="@+id/radio_group"
+                        android:id="@+id/profile_radio_group"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <RadioButton
-                            android:id="@+id/register_male"
+                            android:id="@+id/profile_male"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -183,7 +183,7 @@
                             android:textSize="18sp" />
 
                         <RadioButton
-                            android:id="@+id/register_female"
+                            android:id="@+id/profile_female"
                             style="@android:style/Widget.CompoundButton.RadioButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -201,7 +201,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_age"
+                    android:id="@+id/profile_input_layout_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -209,7 +209,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_age"
+                        android:id="@+id/profile_age"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -229,7 +229,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_weight"
+                    android:id="@+id/profile_input_layout_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -237,7 +237,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_weight"
+                        android:id="@+id/profile_weight"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -257,7 +257,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reg_input_layout_height"
+                    android:id="@+id/profile_input_layout_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -265,7 +265,7 @@
                     app:errorTextAppearance="@style/ErrorText">
 
                     <EditText
-                        android:id="@+id/register_height"
+                        android:id="@+id/profile_height"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="0dp"
@@ -293,7 +293,7 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/reg_input_layout_choice"
+                        android:id="@+id/profile_input_layout_choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/colorPrimary"
@@ -301,7 +301,7 @@
                         app:helperTextEnabled="false">
 
                         <Spinner
-                            android:id="@+id/spinnerChoice"
+                            android:id="@+id/profile_spinnerChoice"
                             style="@style/Widget.AppCompat.Spinner.DropDown.ActionBar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

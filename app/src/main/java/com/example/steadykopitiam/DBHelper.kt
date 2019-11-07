@@ -288,6 +288,43 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         return user
     }
 
+    fun updateUser(user: UserRecord):Boolean {
+        val db = this.writableDatabase
+        var values = ContentValues()
+        var userFetched = readUser(user.email, user.user_password)
+
+        if(!userFetched.isNullOrEmpty()) {
+            val selection = TableUserInfo.COLUMN_USER_EMAIL + " LIKE ?"
+            val selectionArgs = arrayOf(user.email)
+
+            values.put(TableUserInfo.COLUMN_USER_ACCOUNTBALANCE,user.accountBalance)
+            values.put(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS,user.accountPoints)
+            values.put(TableUserInfo.COLUMN_USER_AGE,user.age)
+            values.put(TableUserInfo.COLUMN_USER_BMI,user.bmi)
+            values.put(TableUserInfo.COLUMN_USER_CALORIES,user.user_calories)
+            values.put(TableUserInfo.COLUMN_USER_GENDER,user.gender)
+            values.put(TableUserInfo.COLUMN_USER_HEIGHT,user.height)
+            values.put(TableUserInfo.COLUMN_USER_WEIGHT,user.weight)
+            values.put(TableUserInfo.COLUMN_USER_EMAIL,user.email)
+            values.put(TableUserInfo.COLUMN_USER_CARBS,user.user_carbs)
+            values.put(TableUserInfo.COLUMN_USER_FAT,user.user_fat)
+            values.put(TableUserInfo.COLUMN_USER_FIBRE,user.user_fibre)
+            values.put(TableUserInfo.COLUMN_USER_PROTEIN,user.user_protein)
+            values.put(TableUserInfo.COLUMN_USER__DAILYACTIVITY,user.user_dailyActivies)
+            values.put(TableUserInfo.COLUMN_USER_VITAMINS,user.user_vitamins)
+            values.put(TableUserInfo.COLUMN_USER_MINERALS,user.user_minerals)
+            values.put(TableUserInfo.COLUMN_USER_USERNAME,user.username)
+            values.put(TableUserInfo.COLUMN_USER_PASSWORD,user.user_password)
+            values.put(TableUserInfo.COLUMN_USER_PHONENUMBER,user.phoneNumber)
+
+//            val retVal = db.update(TableUserInfo.TABLE_USER, values, "email = " + user.email, null)
+            db.update(TableUserInfo.TABLE_USER,values,selection,selectionArgs)
+
+            return true
+        }
+        return false
+    }
+
     // *** End of User table method ***
 
     // *** Food Item table method *** //
