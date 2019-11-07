@@ -30,24 +30,26 @@ class PurchasesActivity : AppCompatActivity() {
 
     var navigationPosition: Int = 1
 
+    lateinit var kopitiamDBHelper: DBHelper
+
     //Orderlist
     private var orderRecycleView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelOrderVertical>? = null
     private var adapter: AdapterOrderViewVertical? = null
 
-    val sdf = SimpleDateFormat("dd/MM/yyyy, HH:mm")
-    val currentDate = sdf.format(Date())
-    private var foodName : String = ""
-    private var foodPrice : Double = 0.0
-    private var coinEarned : Double = 0.0
+//    val sdf = SimpleDateFormat("dd/MM/yyyy, HH:mm")
+//    val currentDate = sdf.format(Date())
+//    private var foodName : String = ""
+//    private var foodPrice : Double = 0.0
+//    private var coinEarned : Double = 0.0
 
     //TODO: Update foodList
-    private val myOrderDateList = arrayOf(currentDate.toString())
+    private val myOrderDateList = arrayListOf<String>()
     private val myOrderNameList = arrayListOf<String>()
-    private val myOrderPointList = DoubleArray(size=1)
-    var double : Double = 4.00
-    var pricetag : String = "S$".plus(String.format("%.2f", double))
-    private var myOrderPriceList : Double = 0.0
+    private var myOrderPointList =  DoubleArray(size=1)
+//    var double : Double = 4.00
+//    var pricetag : String = "S$".plus(String.format("%.2f", double))
+    private var myOrderPriceList = arrayListOf<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,16 +57,18 @@ class PurchasesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_purchases)
         setTitle("Purchases")
         initView()
+        kopitiamDBHelper = DBHelper(this)
+        readOrderSummary()
 
-        foodName = intent.getStringExtra("foodName")
-        foodPrice = intent.getDoubleExtra("foodPrice",0.0)
-        coinEarned = intent.getDoubleExtra("coinEarced",0.0)
+//        foodName = intent.getStringExtra("foodName")
+//        foodPrice = intent.getDoubleExtra("foodPrice",0.0)
+//        coinEarned = intent.getDoubleExtra("coinEarced",0.0)
         //Order list
 
-
-        myOrderNameList.add(foodName)
-        myOrderPointList[0] = coinEarned
-        myOrderPriceList = foodPrice
+        // all hard code value
+//        myOrderNameList.add(foodName)
+//        myOrderPointList[0] = coinEarned
+//        myOrderPriceList = foodPrice
         orderRecycleView = findViewById(R.id.orderRecycleView)
 
         imageModelArrayList = populateList()
@@ -75,16 +79,37 @@ class PurchasesActivity : AppCompatActivity() {
 
     }
 
+
+    private fun readOrderSummary(){
+        var orderSum = kopitiamDBHelper.retrieveAllOrderSummary()
+        // update new size of double array
+        orderSum.sortByDescending {it.orderSummaryTimeDate }
+        myOrderPointList = DoubleArray(orderSum.size)
+
+        for(i in 0..orderSum.size-1){
+            myOrderNameList.add(orderSum[i].orderSummaryFoodName)
+            myOrderPriceList.add("S$".plus(String.format("%.2f", orderSum[i].orderSummarySubtotal)))
+            println("order price ++++ "+orderSum[i].orderSummarySubtotal)
+            myOrderDateList.add(orderSum[i].orderSummaryTimeDate)
+            myOrderPointList[i] = orderSum[i].orderSummaryAwardedPoints
+        }
+
+
+
+    }
+
     private fun populateList(): ArrayList<ModelOrderVertical> {
 
         val list = ArrayList<ModelOrderVertical>()
+            for(i in 0..myOrderPointList.size-1){
+                val orderModel = ModelOrderVertical()
+                orderModel.setNames(myOrderNameList[i])
+                orderModel.setDates(myOrderDateList[i])
+                orderModel.setPoints(myOrderPointList[i].toString())
+                orderModel.setPrices(myOrderPriceList[i].toString())
+                list.add(orderModel)
+            }
 
-            val orderModel = ModelOrderVertical()
-            orderModel.setNames(myOrderNameList[0])
-            orderModel.setDates(myOrderDateList[0])
-            orderModel.setPoints(myOrderPointList[0].toString())
-            orderModel.setPrices(myOrderPriceList.toString())
-            list.add(orderModel)
 
 
         return list

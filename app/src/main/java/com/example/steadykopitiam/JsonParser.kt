@@ -17,6 +17,8 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
     val foodRecord = FoodRecord()
     private var size : Int = 0
     lateinit  var sharedPref : SharedPreferences
+    lateinit var foodFromRecoList : SharedPreferences
+
     override fun onPreExecute() {
         super.onPreExecute()
     }
@@ -33,8 +35,6 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
         if (result!!) {
             // create order summary here  -- go to confirm page and pass data into it
             var fr = FoodRecord()
-
-
             myIntent.putExtra("foodName",foodRecord.getFoodNames())
             myIntent.putExtra("foodStall",foodRecord.getStall())
             myIntent.putExtra("foodBasePrice",foodRecord.getBasePrice())
@@ -51,12 +51,9 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             myIntent.putExtra("foodDishType",foodRecord.getDishType())
             myIntent.putExtra("foodVitamins",foodRecord.getVitamins())
             println("Food price !!!!!!!!!!!!!!"+ foodRecord.getBasePrice())
+            println("Food price DeDucted &&&&&&!!!!!!"+ foodRecord.getDeductedPrice())
             myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             c.applicationContext.startActivity(myIntent)
-              //Toast.makeText(c," Food pass is "+foodRecord.getFoodNames(),Toast.LENGTH_SHORT).show()
-
-//            c.startActivity(myIntent)
-
         } else {
             Toast.makeText(c, "unable to parse", Toast.LENGTH_LONG).show()
             Toast.makeText(
@@ -66,33 +63,33 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
         }
 
     }
-
+    // --- to read the food information correctly and handle price based on past order --- Jy
     private fun parse() : Boolean {
 
         try {
             val ja = JSONArray(jsonData)
             size = JSONArray(jsonData).length()
-            println("size of the json retrieve from qr code "+ja.length())
+
             // to find which food is selected
             for(i in 0..ja.length()-1){
                 var jsonObject = ja.getJSONObject(i)
-                // pass the data to food Record obj
-                println("food get from internet "+jsonObject.getString("foodName"))
+
                 if(jsonObject.getString("foodName").equals(foodName)){
                     sharedPref = c?.getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
+                    foodFromRecoList = c?.getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
+
                     // check if price increase
-                    println("food Price in JsonParser "+foodPrice)
-                    println("food Price from json file "+jsonObject.getString("foodExtraPrice"))
                     if(sharedPref.getBoolean("isPriceIncrease",false)){
-                        println("Hello World 123123")
-                        println("Food price in Json Aprser "+foodPrice)
                         foodRecord.setBasePrice(jsonObject.getString("foodExtraPrice").toDouble())
-                    }else{
-                        println("WWWWWW")
+                    }
+                      // if recommnaded food is selected
+                    else if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
+                        foodRecord.setBasePrice(jsonObject.getString("fooddeductPrice").toDouble())
+                        println("food recc is true ")
+                    }
+                    else{
                         foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())
                     }
-
-                    println("Hello World 4564556")
                     foodRecord.setFoodNames(jsonObject.getString("foodName"))
                     foodRecord.setProtein(jsonObject.getString("foodProtein"))
                     foodRecord.setCalories(jsonObject.getString("foodCalories"))

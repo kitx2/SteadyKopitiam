@@ -10,6 +10,8 @@ class ModelFoodHorizontal {
     var description: String? = null
     var image_drawable: Int = 0
     var foodfocus: String? = null
+    var foodStallName : String? = null
+    var selectedfoodPrice : String? = null
 
     fun getNames(): String {
         return name.toString()
@@ -41,6 +43,22 @@ class ModelFoodHorizontal {
 
     fun setImage_drawables(image_drawable: Int) {
         this.image_drawable = image_drawable
+    }
+
+    fun getStallName() :String {
+        return foodStallName.toString()
+    }
+
+    fun setStallName(stallName:String){
+        this.foodStallName = stallName
+    }
+
+    fun getFoodPrice():String {
+        return selectedfoodPrice.toString()
+    }
+
+    fun setFoodPrice(foodPrice : String ){
+        this.selectedfoodPrice = foodPrice
     }
 
 }

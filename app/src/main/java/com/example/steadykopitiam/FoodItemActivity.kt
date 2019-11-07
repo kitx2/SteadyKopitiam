@@ -29,6 +29,9 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 import android.preference.PreferenceManager
 import android.content.SharedPreferences
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
+import org.json.JSONArray
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,6 +48,7 @@ class FoodItemActivity : AppCompatActivity() {
 
 
 
+
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
@@ -52,21 +56,23 @@ class FoodItemActivity : AppCompatActivity() {
 
 
     //TODO: Update foodList
-    private val myImageList = intArrayOf(R.drawable.chicken_rice, R.drawable.char_siew_rice, R.drawable.fishball_noodle_dry, R.drawable.minced_pork_noodle, R.drawable.duck_rice, R.drawable.kway_chap, R.drawable.lor_mee, R.drawable.fried_rice, R.drawable.fried_carrot_cake)
-    private val myImageNameList = arrayOf("Chicken rice", "Char siew rice", "Fishball noodle(Dry)", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
-    private val myImageDescriptionList = arrayOf(" Chicken, roasted, with skin, served with rice and chilli sauce.", "Pork barbequed in sweet sauce, served with rice and cucumber.", "Yellow noodles with fish ball and chye sim, served with chili sauce.", "Minced pork noodle", "Duck rice", "Kway chap", "Lor mee", "Fried rice", "Fried carrot cake")
-
+    private var myImageList = intArrayOf()
+    private val myImageNameList = arrayListOf<String>()
+    private val myImageDescriptionList = arrayListOf<String>()
+    private val myImageFoodFocusList = arrayListOf<String>()
+    private var stallnameInRecommendedList = arrayListOf<String>()
+    private val myImageFoodPrice = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_item)
         kopitiamDBHelper = DBHelper(this)
         initView()
+        readRecommendedjson()
 
         //TODO: update stall name
         val stallName : String = intent.getStringExtra("foodStall")
         setTitle(stallName)
-
 
 
 
@@ -86,9 +92,20 @@ class FoodItemActivity : AppCompatActivity() {
         val foodMinerals : String = intent.getStringExtra("foodMinerals")
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
 
+
+        // if user had order food before in the past 3 days
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
         if(foodpricePref.getBoolean("isPriceIncrease",false)){
             Toast.makeText(this, "You have purchased "+foodName+"in the past 3 days and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+        }
+
+        // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
+        var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
+        if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
+            Toast.makeText(this, "You have select "+foodName+" from our recommendation list  ",Toast.LENGTH_SHORT).show()
+            var sharedPreForReccEditer = foodFromRecoList.edit()
+            sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
+            sharedPreForReccEditer.commit()
         }
 
 
@@ -121,12 +138,13 @@ class FoodItemActivity : AppCompatActivity() {
 
                     override fun onClick(view: View, position: Int) {
                         //TODO: Start new Activity here
+
+
                         Toast.makeText(
                             applicationContext,
                             imageModelArrayList!![position].getNames(),
                             Toast.LENGTH_SHORT
                         ).show()
-
                         //Start new Activity
                         //TODO: Pass stall name to QR Activity
                         val myIntent = Intent(applicationContext, QRActivity::class.java)
@@ -175,9 +193,9 @@ class FoodItemActivity : AppCompatActivity() {
                 if(result){
                     Toast.makeText(this,"Food has been added into order summary.",Toast.LENGTH_SHORT).show()
                     val myIntent = Intent(applicationContext, PurchasesActivity::class.java)
-                    myIntent.putExtra("foodName",foodName)
-                    myIntent.putExtra("foodPrice",foodBasePrice)
-                    myIntent.putExtra("coinEarced",awardedPoint)
+//                    myIntent.putExtra("foodName",foodName)
+//                    myIntent.putExtra("foodPrice",foodBasePrice)
+//                    myIntent.putExtra("coinEarced",awardedPoint)
                     startActivity(myIntent)
                     finish()
                 }
@@ -192,17 +210,238 @@ class FoodItemActivity : AppCompatActivity() {
 
         }
     }
+    //  --- to read data from json file --- Jy ///
+    private fun readRecommendedjson(){
+        // retrieve order summary and time ordered if there is not any then recommened 4 foods from different stall
+
+        // data to pass to stall activity, stall name, stall description and image id
+        var orSum = kopitiamDBHelper.retrieveAllOrderSummary()
+        if(orSum.size == 0 ){
+
+            // read recommended all stall list of food
+            try{
+                for(i in 0..myImageList.size-1){
+                    println(" TTTTT ")
+                    if(i == 0 ){
+                        println(" RRRRRR ")
+                        var json : String? = null
+                        val inputStream : InputStream = assets.open("Wong Ah Hua")
+                        json = inputStream.bufferedReader().readText()
+                        var jsonArray = JSONArray(json)
+                        var jsonOjb = jsonArray.getJSONObject(0)
+                        var tempRec : String
+                        // get food image
+                        tempRec= (jsonOjb.getString("foodResourceId"))
+                        var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                        myImageList[i] = final
+                        // update information of stall and food
+                        myImageNameList.add(jsonOjb.getString("foodName"))
+                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                        stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                        myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
+                    }else if( i == 1 ){
+                        var json : String? = null
+                        val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
+                        json = inputStream.bufferedReader().readText()
+                        var jsonArray = JSONArray(json)
+                        var jsonOjb = jsonArray.getJSONObject(0)
+                        var tempRec : String
+                        // get food image
+                        tempRec= (jsonOjb.getString("foodResourceId"))
+                        var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                        myImageList[i] = final
+                        // update information of stall and food
+                        myImageNameList.add(jsonOjb.getString("foodName"))
+                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                        stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                        myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
+
+                    }else if(i == 2 ){
+                        var json : String? = null
+                        val inputStream : InputStream = assets.open("Australia Signature Food")
+                        json = inputStream.bufferedReader().readText()
+                        var jsonArray = JSONArray(json)
+                        var jsonOjb = jsonArray.getJSONObject(0)
+                        var tempRec : String
+                        // get food image
+                        tempRec= (jsonOjb.getString("foodResourceId"))
+                        var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                        myImageList[i] = final
+                        // update information of stall and food
+                        myImageNameList.add(jsonOjb.getString("foodName"))
+                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                        stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                        myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
+
+                    }else{
+                        var json : String? = null
+                        val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
+                        json = inputStream.bufferedReader().readText()
+                        var jsonArray = JSONArray(json)
+                        var jsonOjb = jsonArray.getJSONObject(0)
+                        var tempRec : String
+                        // get food image
+                        tempRec= (jsonOjb.getString("foodResourceId"))
+                        var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                        myImageList[i] = final
+                        // update information of stall and food
+                        myImageNameList.add(jsonOjb.getString("foodName"))
+                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                        stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                        myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
+
+                    }
+                }
+            }catch(e: IOException){
+                println("Error happen here")
+            }
+        }else{
+            var count : Int = 4
+            var addCarbs : Boolean = false
+            var addProtein : Boolean = false
+            var addFibre : Boolean = false
+            var addVitamins : Boolean = false
+
+            for(i in 0..orSum.size-1){
+                // if there is order summary check its focus and  ** dont have stall name in ordersummary  but can assgign stall name with hardcode or .
+                //if focus is in it then move to next stall but what if have all focus alr then call another method to check food name
+                // store focus into a arraylist then open every json file to check if focus string not the same then retrieve food item from there
+                var focus = orSum[i].orderSummaryFocus
+                if(focus.equals("Carbs")){
+                    addCarbs = true
+                    count = count - 1
+                }
+
+                if(focus.equals("Protein")){
+                    addProtein = true
+                    count = count - 1
+                }
+                if (focus.equals("vitamins")){
+                    addVitamins = true
+                    count = count - 1
+                }
+
+                if (focus.equals("fibre")){
+                    addFibre = true
+                    count = count - 1
+                }
+            }
+            // track recommndantion food based on food (past) order summary
+            myImageList = IntArray(count)
+            var temp : Int = 0
+            if(!addCarbs && temp < count){
+                var json : String? = null
+                val inputStream : InputStream = assets.open("Wong Ah Hua")
+                json = inputStream.bufferedReader().readText()
+                var jsonArray = JSONArray(json)
+                var jsonOjb = jsonArray.getJSONObject(0)
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList[temp] = final
+                temp = temp + 1
+                // update information of stall and food
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+
+            }
+            if(!addFibre && temp < count ){
+                var json : String? = null
+                val inputStream : InputStream = assets.open("Australia Signature Food")
+                json = inputStream.bufferedReader().readText()
+                var jsonArray = JSONArray(json)
+                var jsonOjb = jsonArray.getJSONObject(0)
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList[temp] = final
+                // update information of stall and food
+                temp = temp + 1
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+
+            }
+
+            if(!addProtein && temp < count){
+                var json : String? = null
+                val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
+                json = inputStream.bufferedReader().readText()
+                var jsonArray = JSONArray(json)
+                var jsonOjb = jsonArray.getJSONObject(0)
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList[temp] = final
+                // update information of stall and food
+                temp = temp + 1
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+
+            }
+            if(!addVitamins && temp < count){
+                var json : String? = null
+                val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
+                json = inputStream.bufferedReader().readText()
+                var jsonArray = JSONArray(json)
+                var jsonOjb = jsonArray.getJSONObject(0)
+                var tempRec : String
+                // get food image
+                tempRec= (jsonOjb.getString("foodResourceId"))
+                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                myImageList[temp] = final
+                // update information of stall and food
+                temp = temp + 1
+                myImageNameList.add(jsonOjb.getString("foodName"))
+                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+            }
+
+
+        }
+
+
+    }
 
     private fun populateList(): ArrayList<ModelFoodHorizontal> {
 
         val list = ArrayList<ModelFoodHorizontal>()
-        for (i in myImageList.indices) {
+        for (i in 0..myImageList.size-1) {
             val imageModel = ModelFoodHorizontal()
             imageModel.setNames(myImageNameList[i])
             imageModel.setImage_drawables(myImageList[i])
             imageModel.setDescriptions(myImageDescriptionList[i])
+            imageModel.setFoodFocus((myImageFoodFocusList[i]))
+            imageModel.setStallName(stallnameInRecommendedList[i])
             list.add(imageModel)
         }
+
+//        val list = java.util.ArrayList<ModelFoodHorizontal>()
+//        for (i in 0..myImageList.size-1) {
+//            val imageModel = ModelFoodHorizontal()
+//            imageModel.setNames(myImageNameList[i])
+//            imageModel.setImage_drawables(myImageList[i])
+//            imageModel.setDescriptions(myImageDescriptionList[i])
+//            imageModel.setFoodFocus(myImageFoodFocusList[i])
+//            imageModel.setStallName(stallnameInRecommendedList[i])
+//            list.add(imageModel)
 
         return list
     }

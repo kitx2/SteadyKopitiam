@@ -34,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
     //TODO: Reference username from Database
     val username : String = "Test Username"
     lateinit var kopitiamDBHelper: DBHelper
+    lateinit var sharedPreForRecc : SharedPreferences
     var navigationPosition: Int = 0
     private var stallName : String = ""
     private var stallDescription : String = ""
@@ -43,12 +44,18 @@ class HomeActivity : AppCompatActivity() {
     private var steadyPicksRecyclerView: RecyclerView? = null
     private var imageModelArrayList: ArrayList<ModelFoodHorizontal>? = null
     private var adapter: AdapterFoodViewHorizontal? = null
+    private var foodNameInRecc : String = ""
+    private var stallNameInRecc : String = ""
+    private var foodPrice : String = ""
+
 
     //TODO: Update foodList
     private var myImageList = IntArray(size = 4)
     private val myImageNameList = arrayListOf<String>()
     private val myImageDescriptionList = arrayListOf<String>()
     private val myImageFoodFocusList = arrayListOf<String>()
+    private var stallnameInRecommendedList = arrayListOf<String>()
+    private val myImageFoodPrice = arrayListOf<String>()
 
     //All Stall
     private var stallRecyclerView: RecyclerView? = null
@@ -73,8 +80,10 @@ class HomeActivity : AppCompatActivity() {
         setTitle("Home")
 
 
-        sharedPreferences = getSharedPreferences("MySharedPreferences", Context.MODE_PRIVATE)
-        Toast.makeText(this, sharedPreferences.getString("SomeString", "Default value"), Toast.LENGTH_SHORT).show()
+        sharedPreForRecc = getSharedPreferences("IsReccFoodSelected", Context.MODE_PRIVATE)
+
+
+
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecycleViewer)
 
@@ -92,6 +101,18 @@ class HomeActivity : AppCompatActivity() {
 
                     override fun onClick(view: View, position: Int) {
                         //TODO: Start new Activity here
+                        foodNameInRecc = imageModelArrayList!![position].getNames()
+                        stallNameInRecc = imageModelArrayList!![position].getStallName()
+                        foodPrice =  imageModelArrayList!![position].getFoodPrice()
+                        var sharedPreForReccEditer = sharedPreForRecc.edit()
+                        sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",true)
+                        sharedPreForReccEditer.commit()
+                        val myIntent = Intent(applicationContext,QRActivity::class.java)
+                        myIntent.putExtra("foodName",foodNameInRecc)
+                        myIntent.putExtra("stallName",stallNameInRecc)
+                        myIntent.putExtra("foodPrice",foodPrice)
+                        startActivity(myIntent)
+
                         Toast.makeText(
                             applicationContext,
                             imageModelArrayList!![position].getNames(),
@@ -148,15 +169,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
-   //  --- to read data from json file --- ///
+   //  --- to read data from json file --- Jy ///
     private fun readRecommendedjson(){
        // retrieve order summary and time ordered if there is not any then recommened 4 foods from different stall
 
-       // data to pass to stall activity, stall name, stall description and iamge id
+       // data to pass to stall activity, stall name, stall description and image id
        var orSum = kopitiamDBHelper.retrieveAllOrderSummary()
        if(orSum.size == 0 ){
 
-           // read recommended list food
+           // read recommended all stall list of food
            try{
                for(i in 0..myImageList.size-1){
                    println(" TTTTT ")
@@ -176,6 +197,8 @@ class HomeActivity : AppCompatActivity() {
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                       stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                       myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
                    }else if( i == 1 ){
                        var json : String? = null
                        val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
@@ -191,6 +214,8 @@ class HomeActivity : AppCompatActivity() {
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                       stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                       myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
 
                    }else if(i == 2 ){
                        var json : String? = null
@@ -207,6 +232,8 @@ class HomeActivity : AppCompatActivity() {
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                       stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                       myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
 
                    }else{
                        var json : String? = null
@@ -223,6 +250,8 @@ class HomeActivity : AppCompatActivity() {
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                        myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                       stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                       myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
 
                    }
                }
@@ -260,7 +289,7 @@ class HomeActivity : AppCompatActivity() {
                    count = count - 1
                }
            }
-            // reassign link
+            // track recommndantion food based on food (past) order summary
            myImageList = IntArray(count)
            var temp : Int = 0
                if(!addCarbs && temp < count){
@@ -279,6 +308,8 @@ class HomeActivity : AppCompatActivity() {
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                   stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                   myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
 
                }
                if(!addFibre && temp < count ){
@@ -297,6 +328,8 @@ class HomeActivity : AppCompatActivity() {
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                   stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                   myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
 
                }
 
@@ -316,6 +349,8 @@ class HomeActivity : AppCompatActivity() {
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                   stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                   myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
 
                }
                if(!addVitamins && temp < count){
@@ -334,7 +369,8 @@ class HomeActivity : AppCompatActivity() {
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
-
+                   stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                   myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
                }
 
 
@@ -342,6 +378,8 @@ class HomeActivity : AppCompatActivity() {
 
 
     }
+    // --- end of read recommondation --- //
+
 
     // --- read stall info   --- //
     private fun readStalljson(){
@@ -374,6 +412,7 @@ class HomeActivity : AppCompatActivity() {
             imageModel.setImage_drawables(myImageList[i])
             imageModel.setDescriptions(myImageDescriptionList[i])
             imageModel.setFoodFocus(myImageFoodFocusList[i])
+            imageModel.setStallName(stallnameInRecommendedList[i])
             list.add(imageModel)
         }
 
