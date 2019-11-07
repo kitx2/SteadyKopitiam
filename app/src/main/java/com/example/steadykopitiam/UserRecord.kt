@@ -11,7 +11,7 @@ class UserRecord(
     val age : String,
     val email : String,
     val accountBalance : Double,
-    val accountPoints : Double,
+    val accountPoints : Int,
     val user_carbs : Int,
     val user_calories : Int,
     val user_fat : Int,

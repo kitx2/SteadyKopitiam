@@ -1,30 +1,39 @@
 package com.example.steadykopitiam.ui.wallet
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.steadykopitiam.DBHelper
 import com.example.steadykopitiam.R
+import com.example.steadykopitiam.UserRecord
 import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
 import com.example.steadykopitiam.ui.profile.ProfileActivity
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class WalletActivity : AppCompatActivity() {
     //TODO: Reference username from Database
     val username : String = "Test Username"
-
     var navigationPosition: Int = 3
+    lateinit var kopitiamDBHelper: DBHelper
+
+    //User details
+    var user = ArrayList<UserRecord>()
+    private var userpassword : String? = ""
+    private var useremail  : String? = ""
+    var accountBalance: Double = 0.0
+    var accountPoints: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,16 +71,71 @@ class WalletActivity : AppCompatActivity() {
         }
         val btnTopUp: Button = findViewById(R.id.btnTopUp)
         btnTopUp.setOnClickListener { view ->
-            if(topUpAmount.text != "Top up amount")
-                Toast.makeText(applicationContext,"Successfully top up " + topUpValue + " into your wallet." , Toast.LENGTH_SHORT).show()
-
-            /*TODO:
-            #1 - Update Top up value into user table
-            #2 - Update current Balance textView
-             */
-            //currentBal + topUpValue.toDouble()
+            if(topUpAmount.text != "Top up amount") {
+                Toast.makeText(
+                    applicationContext,
+                    "Successfully top up " + topUpValue + " into your wallet.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                topUpAmount.text = "Top up amount"
+                topUpWallet(topUpValue)
+                fetchUser()
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "Select a top up value",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
+        fetchUser()
     }
+
+    fun fetchUser() {
+        val coinBalance : TextView = findViewById(R.id.coinBalance)
+        val currentBalance : TextView = findViewById(R.id.currentBalance)
+
+
+        kopitiamDBHelper = DBHelper(this)
+
+        //TODO: SetText and Set Index position of spinner
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+
+        if (!user.isEmpty()) {
+            accountBalance = user.get(0).accountBalance
+            accountPoints = user.get(0).accountPoints
+
+            coinBalance.text = accountPoints.toString()
+            currentBalance.text = String.format("$%.2f",accountBalance)
+        }
+
+
+
+    }
+
+    fun topUpWallet(TopUpValue:Int) {
+        var finalAccountBalance = accountBalance + TopUpValue
+        //TODO: SetText and Set Index position of spinner
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+
+        if(!user.isNullOrEmpty()) {
+            var result = kopitiamDBHelper.updateUser(
+                UserRecord(user.get(0).username,user.get(0).gender,user.get(0).height,user.get(0).weight,
+                    user.get(0).bmi,user.get(0).age,user.get(0).email,finalAccountBalance,user.get(0).accountPoints,user.get(0).user_carbs,user.get(0).user_calories,
+                    user.get(0).user_fat,user.get(0).user_fibre,user.get(0).user_minerals,user.get(0).user_vitamins,user.get(0).user_dailyActivies,user.get(0).user_protein,user.get(0).user_password,user.get(0).phoneNumber)
+            )
+        }
+
+    }
+
 
     private fun initView() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)

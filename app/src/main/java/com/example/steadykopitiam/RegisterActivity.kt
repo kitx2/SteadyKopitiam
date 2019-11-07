@@ -142,7 +142,7 @@ class RegisterActivity : AppCompatActivity(){
         var calories : Int = 0
         var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
         var gender      : String = genderString
-        var accountBalance : String = "20"
+        var accountBalance : String = "0"
         var accountPoints : String = "0"
 
 
@@ -161,7 +161,8 @@ class RegisterActivity : AppCompatActivity(){
         var vitamins = "0.09"
         var fat = (calories * 0.275 / 9 )
 
-        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
+        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,
+            bmi,age,email,accountBalance.toDouble(),accountPoints.toInt(),carb.toInt(),calories,
             fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
 
     }
