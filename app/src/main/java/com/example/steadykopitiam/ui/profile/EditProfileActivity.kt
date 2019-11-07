@@ -25,6 +25,8 @@ class EditProfileActivity : AppCompatActivity() {
     private var userpassword : String? = ""
     private var useremail  : String? = ""
     var choice = arrayOf("High","Medium","Low")
+    var accountBalance: Double = 0.0
+    var accountPoints: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,7 @@ class EditProfileActivity : AppCompatActivity() {
         val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
         val reg_input_layout_height: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_height)
         val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
-        val radio_group : RadioGroup = findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
+        val radio_group : RadioGroup = this.findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
 
 
         if (spinner != null) {
@@ -153,9 +155,6 @@ class EditProfileActivity : AppCompatActivity() {
         var calories : Int = 0
         var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
         var gender      : String = genderString
-        var accountBalance : String = "20"
-        var accountPoints : String = "0"
-
 
         if(dailyAct.equals("High")){
             calories = (bmr * 1.7).toInt()
@@ -173,7 +172,8 @@ class EditProfileActivity : AppCompatActivity() {
         var fat = (calories * 0.275 / 9 )
 
         var result = kopitiamDBHelper.updateUser(
-            UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
+            UserRecord(username,gender,height,weight,
+                bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories,
                 fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
         )
 //        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
@@ -342,6 +342,8 @@ class EditProfileActivity : AppCompatActivity() {
             register_age.setText(user.get(0).age)
             register_height.setText(user.get(0).height.toString())
             register_weight.setText(user.get(0).weight.toString())
+            accountBalance = user.get(0).accountBalance
+            accountPoints = user.get(0).accountPoints
 
             var gender: String = user.get(0).gender
 //            Toast.makeText(this, gender, Toast.LENGTH_SHORT).show()

@@ -29,7 +29,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
             TableUserInfo.COLUMN_USER_GENDER + " TEXT NOT NULL," +
             TableUserInfo.COLUMN_USER_HEIGHT + " DOUBLE NOT NULL," +
             TableUserInfo.COLUMN_USER_ACCOUNTBALANCE + " DOUBLE," +
-            TableUserInfo.COLUMN_USER_ACCOUNTPOINTS + " DOUBLE," +
+            TableUserInfo.COLUMN_USER_ACCOUNTPOINTS + "INTEGER," +
             TableUserInfo.COLUMN_USER_BMI + " DOUBLE NOT NULL," +
             TableUserInfo.COLUMN_USER_CARBS + " INTEGER NOT NULL," +
             TableUserInfo.COLUMN_USER_FAT + " INTEGER NOT NULL,"+
@@ -170,7 +170,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         var age : String
         var email : String
         var accountBalance : Double
-        var accountPoints : Double
+        var accountPoints : Int
         var user_carbs : Int
         var user_calories : Int
         var user_fat : Int
@@ -193,7 +193,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                 age = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_AGE))
                 email =cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_EMAIL))
                 accountBalance = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTBALANCE))
-                accountPoints = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
+                accountPoints = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
                 user_carbs = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CARBS))
                 user_calories = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CALORIES))
                 user_minerals = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
@@ -241,7 +241,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         var age : String
         var email_db : String
         var accountBalance : Double
-        var accountPoints : Double
+        var accountPoints : Int
         var user_carbs : Int
         var user_calories : Int
         var user_fat : Int
@@ -265,7 +265,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
                 age = cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_AGE))
                 email_db =cursor.getString(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_EMAIL))
                 accountBalance = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTBALANCE))
-                accountPoints = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
+                accountPoints = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_ACCOUNTPOINTS))
                 user_carbs = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CARBS))
                 user_calories = cursor.getInt(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_CALORIES))
                 user_minerals = cursor.getDouble(cursor.getColumnIndex(TableUserInfo.COLUMN_USER_MINERALS))
