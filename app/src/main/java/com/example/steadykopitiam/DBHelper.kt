@@ -29,7 +29,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
             TableUserInfo.COLUMN_USER_GENDER + " TEXT NOT NULL," +
             TableUserInfo.COLUMN_USER_HEIGHT + " DOUBLE NOT NULL," +
             TableUserInfo.COLUMN_USER_ACCOUNTBALANCE + " DOUBLE," +
-            TableUserInfo.COLUMN_USER_ACCOUNTPOINTS + "INTEGER," +
+            TableUserInfo.COLUMN_USER_ACCOUNTPOINTS + " INTEGER," +
             TableUserInfo.COLUMN_USER_BMI + " DOUBLE NOT NULL," +
             TableUserInfo.COLUMN_USER_CARBS + " INTEGER NOT NULL," +
             TableUserInfo.COLUMN_USER_FAT + " INTEGER NOT NULL,"+
@@ -137,6 +137,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         values.put(TableUserInfo.COLUMN_USER_PASSWORD,user.user_password)
         values.put(TableUserInfo.COLUMN_USER_PHONENUMBER,user.phoneNumber)
         val newRowID = db.insert(TableUserInfo.TABLE_USER,null,values)
+        println("new Row Id " + newRowID)
         return true;
     }
 
