@@ -1,35 +1,47 @@
-package com.example.steadykopitiam
+package com.example.steadykopitiam.ui.profile
 
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.*
-import com.example.steadykopitiam.ui.home.HomeActivity
-import kotlinx.android.synthetic.main.activity_register.*
-import android.widget.TextView
-
-import com.google.android.material.textfield.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.content.ContextCompat.startActivity
+import android.view.View
+import android.widget.*
+import com.example.steadykopitiam.DBHelper
+import com.example.steadykopitiam.R
+import com.example.steadykopitiam.UserRecord
+import com.example.steadykopitiam.ui.home.HomeActivity
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_age
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_email
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_height
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_name
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_password
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_phoneNumber
+import kotlinx.android.synthetic.main.activity_register.reg_input_layout_weight
+import kotlinx.android.synthetic.main.activity_register.register_age
+import kotlinx.android.synthetic.main.activity_register.register_email
+import kotlinx.android.synthetic.main.activity_register.register_height
+import kotlinx.android.synthetic.main.activity_register.register_name
+import kotlinx.android.synthetic.main.activity_register.register_password
+import kotlinx.android.synthetic.main.activity_register.register_phoneNumber
+import kotlinx.android.synthetic.main.activity_register.register_weight
 
-
-class RegisterActivity : AppCompatActivity(){
-
-    var choice = arrayOf("High","Medium","Low")
+class EditProfileActivity : AppCompatActivity() {
     lateinit var kopitiamDBHelper: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
-        kopitiamDBHelper = DBHelper(this)
+        setContentView(R.layout.activity_edit_profile)
 
-        val btn_to_register = findViewById<Button>(R.id.btn_to_register)
+        var choice = arrayOf("High","Medium","Low")
+        val btnUpdateProfile : Button = findViewById(R.id.btnUpdateProfile)
         val spinner = findViewById<Spinner>(R.id.spinnerChoice)
         var genderStr : String = ""
-        var dailtAct : String = ""
+        var dailyAct : String = ""
 
         val reg_input_layout_email: TextInputLayout = findViewById(R.id.reg_input_layout_email)
         val register_email : EditText = findViewById(R.id.register_email)
@@ -45,6 +57,7 @@ class RegisterActivity : AppCompatActivity(){
         val register_weight : EditText = findViewById(R.id.register_weight)
         val reg_input_layout_height: TextInputLayout = findViewById(R.id.reg_input_layout_height)
         val register_height : EditText = findViewById(R.id.register_height)
+        val radio_group : RadioGroup = findViewById(R.id.radio_group)
 
         //Text validation
         validation()
@@ -61,7 +74,7 @@ class RegisterActivity : AppCompatActivity(){
                 ) {
                     (parent.getChildAt(0) as TextView).setTextColor(Color.rgb(0,150,136))
                     (parent.getChildAt(0) as TextView).textSize = 18f
-                    dailtAct = choice[position]
+                    dailyAct = choice[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -75,16 +88,13 @@ class RegisterActivity : AppCompatActivity(){
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 val radio: RadioButton = findViewById(checkedId)
                 genderStr = radio.text.toString()
-//                Toast.makeText(applicationContext," On checked change " + genderStr,
-//                    Toast.LENGTH_SHORT).show()
             })
 
-
-        btn_to_register.setOnClickListener {
+        btnUpdateProfile.setOnClickListener {
             var valid : Boolean = true
             if(register_email.text.isEmpty()) {
-               reg_input_layout_email.setError("Please enter your email.")
-               valid = false
+                reg_input_layout_email.setError("Please enter your email.")
+                valid = false
             }
             if(register_password.text.isEmpty()) {
                 reg_input_layout_password.setError("Please enter your password.")
@@ -111,16 +121,18 @@ class RegisterActivity : AppCompatActivity(){
                 valid = false
             }
             if(valid) {
-                registerUser(dailtAct, genderStr)
-                val myIntent = Intent(this, HomeActivity::class.java)
+                updateUser(dailyAct, genderStr)
+                val myIntent = Intent(this, EditProfileActivity::class.java)
                 startActivity(myIntent)
+                this.overridePendingTransition(0, 0)
+                finish()
             }
 
         }
 
     }
 
-    fun registerUser(dailyAct:String, genderString: String){
+    fun updateUser(dailyAct:String, genderString: String){
 
         var username  = this.register_name.text.toString()
         var phoneNumber = this.register_phoneNumber.text.toString()
@@ -152,26 +164,28 @@ class RegisterActivity : AppCompatActivity(){
         var vitamins = "0.09"
         var fat = (calories * 0.275 / 9 )
 
-        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
-            fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
+        var result = kopitiamDBHelper.insertUser(
+            UserRecord(username,gender,height,weight,bmi.toDouble(),age,email,accountBalance.toInt(),accountPoints.toInt(),carb.toInt(),calories,
+                fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
+        )
         Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
     }
 
     fun validation() {
 
         register_email.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
-        }
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-        }
-        override fun afterTextChanged(s: Editable) {
-            if (s.length == 0)
-                reg_input_layout_email.setError("Please enter your email.")
-            else
-                reg_input_layout_email.setError(null)
-        }
+            }
+            override fun afterTextChanged(s: Editable) {
+                if (s.length == 0)
+                    reg_input_layout_email.setError("Please enter your email.")
+                else
+                    reg_input_layout_email.setError(null)
+            }
         })
 
         register_phoneNumber.addTextChangedListener(object : TextWatcher {

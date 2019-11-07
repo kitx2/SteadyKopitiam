@@ -48,6 +48,7 @@ class HomeActivity : AppCompatActivity() {
     private var myImageList = IntArray(size = 4)
     private val myImageNameList = arrayListOf<String>()
     private val myImageDescriptionList = arrayListOf<String>()
+    private val myImageFoodFocusList = arrayListOf<String>()
 
     //All Stall
     private var stallRecyclerView: RecyclerView? = null
@@ -174,6 +175,7 @@ class HomeActivity : AppCompatActivity() {
                        // update information of stall and food
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                       myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
                    }else if( i == 1 ){
                        var json : String? = null
                        val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
@@ -188,6 +190,8 @@ class HomeActivity : AppCompatActivity() {
                        // update information of stall and food
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                       myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                    }else if(i == 2 ){
                        var json : String? = null
                        val inputStream : InputStream = assets.open("Australia Signature Food")
@@ -202,6 +206,8 @@ class HomeActivity : AppCompatActivity() {
                        // update information of stall and food
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                       myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                    }else{
                        var json : String? = null
                        val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
@@ -216,6 +222,8 @@ class HomeActivity : AppCompatActivity() {
                        // update information of stall and food
                        myImageNameList.add(jsonOjb.getString("foodName"))
                        myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                       myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                    }
                }
            }catch(e: IOException){
@@ -270,6 +278,8 @@ class HomeActivity : AppCompatActivity() {
                    // update information of stall and food
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                }
                if(!addFibre && temp < count ){
                    var json : String? = null
@@ -286,6 +296,8 @@ class HomeActivity : AppCompatActivity() {
                    temp = temp + 1
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                }
 
                if(!addProtein && temp < count){
@@ -303,6 +315,8 @@ class HomeActivity : AppCompatActivity() {
                    temp = temp + 1
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                }
                if(!addVitamins && temp < count){
                    var json : String? = null
@@ -319,6 +333,8 @@ class HomeActivity : AppCompatActivity() {
                    temp = temp + 1
                    myImageNameList.add(jsonOjb.getString("foodName"))
                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                   myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+
                }
 
 
@@ -326,7 +342,6 @@ class HomeActivity : AppCompatActivity() {
 
 
     }
-
 
     // --- read stall info   --- //
     private fun readStalljson(){
@@ -350,12 +365,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-
-
-
     private fun populateList(): ArrayList<ModelFoodHorizontal> {
 
         val list = ArrayList<ModelFoodHorizontal>()
@@ -364,6 +373,7 @@ class HomeActivity : AppCompatActivity() {
             imageModel.setNames(myImageNameList[i])
             imageModel.setImage_drawables(myImageList[i])
             imageModel.setDescriptions(myImageDescriptionList[i])
+            imageModel.setFoodFocus(myImageFoodFocusList[i])
             list.add(imageModel)
         }
 

@@ -1,13 +1,18 @@
 package com.example.steadykopitiam.ui.profile
 
+import android.app.PendingIntent.getActivity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.example.steadykopitiam.R
 import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
@@ -17,6 +22,8 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
+
+
 class ProfileActivity : AppCompatActivity() {
     //TODO: Reference username from Database
     val username : String = "Test Username"
@@ -25,62 +32,71 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(com.example.steadykopitiam.R.layout.activity_profile)
         setTitle("Profile")
         initView()
+
+        val basicInfoCard : CardView = findViewById(R.id.basicInfoCard)
+
+        basicInfoCard.setOnClickListener(){
+            val myIntent = Intent(this, EditProfileActivity::class.java)
+            startActivity(myIntent)
+            this.overridePendingTransition(0, 0)
+        }
+
     }
 
     //Side Navbar
     private fun initView() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
-        val navigationView : NavigationView = findViewById(R.id.navigationView)
+        val toolbar: Toolbar = findViewById(com.example.steadykopitiam.R.id.toolbar)
+        val drawerLayout: DrawerLayout = findViewById(com.example.steadykopitiam.R.id.drawerLayout)
+        val navigationView : NavigationView = findViewById(com.example.steadykopitiam.R.id.navigationView)
 
         setSupportActionBar(toolbar)
         setUpDrawerLayout()
 
         //Load Inbox fragment first
-        navigationPosition = R.id.nav_profile
+        navigationPosition = com.example.steadykopitiam.R.id.nav_profile
         navigationView.setCheckedItem(navigationPosition)
         toolbar.title = "Profile"
 
         navigationView.setNavigationItemSelectedListener  { menuItem: MenuItem ->
             when (menuItem.itemId) {
-                R.id.nav_home -> {
+                com.example.steadykopitiam.R.id.nav_home -> {
                     toolbar.title = "Home"
-                    navigationPosition = R.id.nav_home
+                    navigationPosition = com.example.steadykopitiam.R.id.nav_home
                     val myIntent = Intent(this, HomeActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
                     finish()
                 }
-                R.id.nav_purchases -> {
+                com.example.steadykopitiam.R.id.nav_purchases -> {
                     toolbar.title = "Purchases"
-                    navigationPosition = R.id.nav_purchases
+                    navigationPosition = com.example.steadykopitiam.R.id.nav_purchases
                     val myIntent = Intent(this, PurchasesActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
                     finish()
                 }
-                R.id.nav_profile -> {
+                com.example.steadykopitiam.R.id.nav_profile -> {
                     toolbar.title = "Profile"
-                    navigationPosition = R.id.nav_profile
+                    navigationPosition = com.example.steadykopitiam.R.id.nav_profile
                     val myIntent = Intent(this, ProfileActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
                     finish()
                 }
-                R.id.nav_wallet -> {
+                com.example.steadykopitiam.R.id.nav_wallet -> {
                     toolbar.title = "Wallet"
-                    navigationPosition = R.id.nav_wallet
+                    navigationPosition = com.example.steadykopitiam.R.id.nav_wallet
                     val myIntent = Intent(this, WalletActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
                     finish()
                 }
-                R.id.nav_about -> {
+                com.example.steadykopitiam.R.id.nav_about -> {
                     toolbar.title = "About"
-                    navigationPosition = R.id.nav_about
+                    navigationPosition = com.example.steadykopitiam.R.id.nav_about
                     val myIntent = Intent(this, AboutActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
@@ -123,23 +139,23 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun setUpDrawerLayout() {
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+            this, drawerLayout, toolbar, com.example.steadykopitiam.R.string.navigation_drawer_open, com.example.steadykopitiam.R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
     }
 
     override fun onBackPressed() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        val toolbar: Toolbar = findViewById(com.example.steadykopitiam.R.id.toolbar)
+        val drawerLayout: DrawerLayout = findViewById(com.example.steadykopitiam.R.id.drawerLayout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        if (navigationPosition == R.id.nav_profile) {
+        if (navigationPosition == com.example.steadykopitiam.R.id.nav_profile) {
             finish()
         } else {
             //Navigate to Profile
-            navigationPosition = R.id.nav_profile
+            navigationPosition = com.example.steadykopitiam.R.id.nav_profile
             navigationView.setCheckedItem(navigationPosition)
             toolbar.title = "Profile"
         }

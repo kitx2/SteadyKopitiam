@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // error message
-        val errorCard : CardView = findViewById(R.id.errorCard)
+        val errorCard : CardView = this.findViewById(R.id.errorCard)
         errorCard.visibility = View.INVISIBLE
         val errorMsg : TextView = findViewById(R.id.errorMsg)
 
@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (user.isEmpty()) {
                     errorCard.visibility = View.VISIBLE
-                    errorMsg.text = "Wrong email or password."
+                    errorMsg.text = "Invalid email or password."
                 } else {
                     // -- to login to the main page -- //
                     errorCard.visibility = View.INVISIBLE

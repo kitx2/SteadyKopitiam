@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 import java.util.ArrayList
 
 class AdapterFoodViewHorizontal(ctx: Context, private val imageModelArrayList: ArrayList<ModelFoodHorizontal>) : RecyclerView.Adapter<AdapterFoodViewHorizontal.MyViewHolder>() {
@@ -30,6 +31,7 @@ class AdapterFoodViewHorizontal(ctx: Context, private val imageModelArrayList: A
         holder.iv.setImageResource(imageModelArrayList[position].getImage_drawables())
         holder.tv.setText(imageModelArrayList[position].getNames())
         holder.dv.setText(imageModelArrayList[position].getDescriptions())
+        holder.ffname.setText(imageModelArrayList[position].getFoodFocus())
 
     }
 
@@ -42,11 +44,13 @@ class AdapterFoodViewHorizontal(ctx: Context, private val imageModelArrayList: A
         var iv: ImageView
         var tv: TextView
         var dv: TextView
+        var ffname: TextView
 
         init {
             iv = itemView.findViewById(R.id.iv) as ImageView
             tv = itemView.findViewById(R.id.tv) as TextView
             dv = itemView.findViewById(R.id.dv) as TextView
+            ffname = itemView.findViewById(R.id.ffname) as TextView
         }
 
     }

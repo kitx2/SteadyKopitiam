@@ -9,6 +9,7 @@ class ModelFoodHorizontal {
     var name: String? = null
     var description: String? = null
     var image_drawable: Int = 0
+    var foodfocus: String? = null
 
     fun getNames(): String {
         return name.toString()
@@ -24,6 +25,14 @@ class ModelFoodHorizontal {
 
     fun setDescriptions(description: String) {
         this.description = description
+    }
+
+    fun getFoodFocus(): String {
+        return foodfocus.toString()
+    }
+
+    fun setFoodFocus(foodfocus: String) {
+        this.foodfocus = foodfocus
     }
 
     fun getImage_drawables(): Int {

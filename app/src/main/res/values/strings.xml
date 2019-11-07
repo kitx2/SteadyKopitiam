@@ -61,5 +61,9 @@
     <string name="foodMinerals">Minerals in g </string>
     <string name="foodCalories">Calories in g </string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update">Update</string>
+
 
 </resources>
