@@ -1,7 +1,10 @@
 package com.example.steadykopitiam.ui.wallet
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -21,6 +24,9 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import android.telephony.SmsManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class WalletActivity : AppCompatActivity() {
     //TODO: Reference username from Database
@@ -40,6 +46,10 @@ class WalletActivity : AppCompatActivity() {
         setContentView(R.layout.activity_wallet)
         initView()
         setTitle("Wallet")
+
+        //Request permission for SMS
+        if(!isSmsPermissionGranted())
+            requestReadAndSendSmsPermission()
 
         var topUpValue: Int = 0
         val btnTen: Button = findViewById(R.id.btnTen)
@@ -112,12 +122,11 @@ class WalletActivity : AppCompatActivity() {
             coinBalance.text = accountPoints.toString()
             currentBalance.text = String.format("$%.2f",accountBalance)
         }
-
-
-
     }
 
     fun topUpWallet(TopUpValue:Int) {
+        val smsManager = SmsManager.getDefault() as SmsManager
+        var smsMsg: String
         var finalAccountBalance = accountBalance + TopUpValue
         //TODO: SetText and Set Index position of spinner
         val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
@@ -132,8 +141,28 @@ class WalletActivity : AppCompatActivity() {
                     user.get(0).bmi,user.get(0).age,user.get(0).email,finalAccountBalance,user.get(0).accountPoints,user.get(0).user_carbs,user.get(0).user_calories,
                     user.get(0).user_fat,user.get(0).user_fibre,user.get(0).user_minerals,user.get(0).user_vitamins,user.get(0).user_dailyActivies,user.get(0).user_protein,user.get(0).user_password,user.get(0).phoneNumber)
             )
+            smsMsg = "Hi " + user.get(0).username + ", you have successfully added S$" + String.format("%.2f", finalAccountBalance) + " to your Steady Kopitiam Wallet."
+//            SMS(smsMsg,user.get(0).phoneNumber)
+            smsManager.sendTextMessage(user.get(0).phoneNumber, null, smsMsg, null, null)
         }
 
+    }
+
+    //Check permission for SMS
+    fun isSmsPermissionGranted():Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * Request runtime SMS permission
+     */
+    fun requestReadAndSendSmsPermission() {
+        var SMS_PERMISSION_CODE = 101
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+            // You may display a non-blocking explanation here, read more in the documentation:
+            // https://developer.android.com/training/permissions/requesting.html
+        }
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS), SMS_PERMISSION_CODE);
     }
 
 
