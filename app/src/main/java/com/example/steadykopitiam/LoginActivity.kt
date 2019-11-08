@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var sharedPreferences : SharedPreferences
     private var userpassword : String = ""
     private var useremail : String = ""
+    private var username : String = ""
 
 
 
@@ -66,9 +67,12 @@ class LoginActivity : AppCompatActivity() {
                     errorCard.visibility = View.INVISIBLE
                     userpassword = user.get(0).user_password
                     useremail = user.get(0).email
+                    username = user.get(0).username
+                    println("username in login actvity $$$$$"+username)
                     var sharedPrefEditor = sharedPreferences.edit()
                     sharedPrefEditor.putString("userPassword", userpassword)
                     sharedPrefEditor.putString("userEmail", useremail)
+                    sharedPrefEditor.putString("username",username)
                     sharedPrefEditor.commit()
 
                     val myIntent = Intent(this, HomeActivity::class.java)

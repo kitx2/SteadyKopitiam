@@ -132,7 +132,6 @@ class EditProfileActivity : AppCompatActivity() {
 
         }
 
-
     }
 
     fun updateUser(dailyAct:String, genderString: String):Boolean{

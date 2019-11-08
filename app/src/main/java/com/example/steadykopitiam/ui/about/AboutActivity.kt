@@ -1,5 +1,6 @@
 package com.example.steadykopitiam.ui.about
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class AboutActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    private var username : String? = ""
 
     var navigationPosition: Int = 4
 
@@ -27,6 +28,9 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_about)
         setTitle("About")
         initView()
+
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
     }
 
     //Side Navbar

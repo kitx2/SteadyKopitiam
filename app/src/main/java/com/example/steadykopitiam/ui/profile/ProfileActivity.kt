@@ -8,16 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import com.example.steadykopitiam.DBHelper
-import com.example.steadykopitiam.OrderSummaryRecord
-import com.example.steadykopitiam.R
-import com.example.steadykopitiam.UserRecord
+import com.example.steadykopitiam.*
 import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
@@ -39,7 +37,7 @@ import kotlin.math.roundToInt
 class ProfileActivity : AppCompatActivity() {
     //TODO: Reference username from Database
     lateinit var kopitiamDBHelper: DBHelper
-    var username : String = ""
+    var username : String? = ""
 
     private var userpassword : String? = ""
     private var useremail : String? = ""
@@ -71,7 +69,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.steadykopitiam.R.layout.activity_profile)
         setTitle("Profile")
-        initView()
+
 
         kopitiamDBHelper = DBHelper(this)
 
@@ -79,7 +77,9 @@ class ProfileActivity : AppCompatActivity() {
 
         userpassword = preferences.getString("userPassword", "")
         useremail = preferences.getString("userEmail", "")
-
+        username = preferences.getString("username","")
+        initView()
+        this.nameLabel.text = username
 
         retrieveUserNutrition(useremail!!,userpassword!!)
         this.calorieMax.text = calories.toString()+"g"
@@ -107,12 +107,6 @@ class ProfileActivity : AppCompatActivity() {
         this.mineralPercent.text = (((mineralsIntakeFromOrdSum / minerals)*100).roundToInt()).toString()+"%"
         this.vitaminPercent.text = (((vitaminsIntakeFromOrdSum / vitamins)*100).roundToInt()).toString()+"%"
 
-
-
-
-
-
-
         val basicInfoCard : CardView = findViewById(R.id.basicInfoCard)
 
         basicInfoCard.setOnClickListener(){
@@ -124,11 +118,22 @@ class ProfileActivity : AppCompatActivity() {
         val expansionLayout = findViewById<ExpansionLayout>(R.id.expansionLayout);
         expansionLayout.addListener(ExpansionLayout.Listener { expansionLayout, expanded ->
              fun onExpansionChanged(expansionLayout: ExpansionLayout, boolean: Boolean) {
-
             }
         })
 
 
+        val btnLogOut :Button = findViewById<Button>(R.id.btnLogout)
+        btnLogOut.setOnClickListener{
+            val logoutPrefEditor = preferences.edit()
+            logoutPrefEditor.putString("userPassword","")
+            logoutPrefEditor.putString("userEmail","")
+            logoutPrefEditor.putString("username","")
+            logoutPrefEditor.commit()
+
+            val myIntent = Intent(this, LoginActivity::class.java)
+            startActivity(myIntent)
+            finish()
+        }
     }
 
 
@@ -145,7 +150,6 @@ class ProfileActivity : AppCompatActivity() {
         bmi = user.get(0).bmi
     }
 
-
     private fun retrieveTotalNutritionIntake(){
         orderList = kopitiamDBHelper.retrieveAllOrderSummary()
         for(i in 0..orderList.size-1){
@@ -157,7 +161,6 @@ class ProfileActivity : AppCompatActivity() {
             vitaminsIntakeFromOrdSum = vitaminsIntakeFromOrdSum + orderList[i].orderSummaryVitamins
             caloriesIntakeFromOrdSum = caloriesIntakeFromOrdSum + orderList[i].orderSummaryCalories
             mineralsIntakeFromOrdSum = mineralsIntakeFromOrdSum + orderList[i].orderSummaryMinerals
-
         }
     }
 

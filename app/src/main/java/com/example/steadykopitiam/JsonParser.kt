@@ -89,7 +89,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                       // if recommnaded food is selected
                     else if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
                         foodRecord.setBasePrice(jsonObject.getString("fooddeductPrice").toDouble())
-                        println("food recc is true ")
+                        println("food recc is true is QR Code ")
                     }
                     else{
                         foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())

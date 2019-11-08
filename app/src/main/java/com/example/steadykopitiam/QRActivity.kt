@@ -173,14 +173,15 @@ class QRActivity : AppCompatActivity() {
             if(listOrderSumm[i].orderSummaryFoodName.equals(foodName)){
 
                 var date = listOrderSumm[i].orderSummaryTimeDate
-                // convert to string to date
+                // convert to string to date date from order summary
                 val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
                 var d = Date()
                 d = simpleDateFormat.parse(date)
+
                 val curTime = simpleDateFormat.format(Date())
                 var cur = simpleDateFormat.parse(curTime)
-                // means user eaten this food 3 days before
-                if((cur.time - 10) > d.time){
+                // means user eaten this food 24hours  before
+                if((cur.time - 86400000 ) < d.time){
                     println("hahahahalololololoo")
                     return listOrderSumm[i].orderSummaryExtraPrice
                 }

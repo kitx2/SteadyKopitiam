@@ -28,11 +28,12 @@ import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    var username : String? = ""
     lateinit var kopitiamDBHelper: DBHelper
     lateinit var sharedPreForRecc : SharedPreferences
     var navigationPosition: Int = 0
@@ -74,13 +75,15 @@ class HomeActivity : AppCompatActivity() {
         kopitiamDBHelper = DBHelper(this)
         readRecommendedjson()
         readStalljson()
-        initView()
+
         setTitle("Home")
 
 
         sharedPreForRecc = getSharedPreferences("IsReccFoodSelected", Context.MODE_PRIVATE)
-
-
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
+        println("Username ++++"+username)
+        initView()
 
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecycleViewer)
@@ -105,6 +108,7 @@ class HomeActivity : AppCompatActivity() {
                         var sharedPreForReccEditer = sharedPreForRecc.edit()
                         sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",true)
                         sharedPreForReccEditer.commit()
+                        println("Food Rec in Home ----+"+sharedPreForRecc.getBoolean("ReccFoodIsSelected",false))
                         val myIntent = Intent(applicationContext,QRActivity::class.java)
                         myIntent.putExtra("foodName",foodNameInRecc)
                         myIntent.putExtra("stallName",stallNameInRecc)
@@ -174,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
        // data to pass to stall activity, stall name, stall description and image id
        var orSum = kopitiamDBHelper.retrieveAllOrderSummary()
        if(orSum.size == 0 ){
-
+            println("order Summary is empty ^^^^^^^")
            // read recommended all stall list of food
            try{
                for(i in 0..myImageList.size-1){
@@ -267,32 +271,50 @@ class HomeActivity : AppCompatActivity() {
                // if there is order summary check its focus and  ** dont have stall name in ordersummary  but can assgign stall name with hardcode or .
                //if focus is in it then move to next stall but what if have all focus alr then call another method to check food name
                // store focus into a arraylist then open every json file to check if focus string not the same then retrieve food item from there
-               var focus = orSum[i].orderSummaryFocus
-               if(focus.equals("Carbs")){
-                   addCarbs = true
-                   count = count - 1
-               }
 
-               if(focus.equals("Protein")){
-                   addProtein = true
-                   count = count - 1
-               }
-               if (focus.equals("vitamins")){
-                   addVitamins = true
-                   count = count - 1
-               }
+               var date = orSum[i].orderSummaryTimeDate
+               // convert to string to date date from order summary
+               val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
+               var d = Date()
+               d = simpleDateFormat.parse(date)
 
-               if (focus.equals("fibre")){
-                   addFibre = true
-                   count = count - 1
+               val curTime = simpleDateFormat.format(Date())
+               var cur = simpleDateFormat.parse(curTime)
+               // means user eaten this food 1 days before
+               println("FoodName "+orSum[i].orderSummaryFoodName)
+               println("curr time "+ cur.time)
+               println("curr time minus day  "+ (cur.time - 86400000))
+               println(" order time "+ d.time)
+               if((cur.time - 86400000 ) < d.time){
+//                   println("FoodName "+orSum[i].orderSummaryFoodName)
+//                   println("curr time "+ cur.time)
+//                   println(" order time "+ d.time)
+                   var focus = orSum[i].orderSummaryFocus
+                   if(focus.equals("Carbs")){
+                       addCarbs = true
+                       count = count - 1
+                   }
+                   if(focus.equals("Protein")){
+                       addProtein = true
+                       count = count - 1
+                   }
+                   if (focus.equals("vitamins")){
+                       addVitamins = true
+                       count = count - 1
+                   }
+                   if (focus.equals("fibre")){
+                       addFibre = true
+                       count = count - 1
+                   }
                }
            }
             // track recommndantion food based on food (past) order summary
-           if(count!=0) {
+           if(count > 0) {
 
                myImageList = IntArray(count)
                var temp: Int = 0
                if (!addCarbs && temp < count) {
+                   println("Heheheheh")
                    var json: String? = null
                    val inputStream: InputStream = assets.open("Wong Ah Hua")
                    json = inputStream.bufferedReader().readText()
@@ -373,8 +395,6 @@ class HomeActivity : AppCompatActivity() {
                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
                }
            }
-
-
        }
 
 

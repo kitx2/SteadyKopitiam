@@ -36,7 +36,7 @@ import java.util.ArrayList
 
 class StallActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    private var username : String? = ""
 
     var navigationPosition: Int = 0
 
@@ -65,7 +65,7 @@ class StallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stall)
-        initView()
+
         stallName = intent.getStringExtra("stallName")
         println("Stall name " + stallName)
         setTitle(stallName)
@@ -77,6 +77,9 @@ class StallActivity : AppCompatActivity() {
         val myDrawable : Drawable = getResources().getDrawable(stallImageId)
         stallPic.setImageDrawable(myDrawable)
 
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
+        initView()
         readFood()
 
         //Steady Picks

@@ -1,5 +1,6 @@
 package com.example.steadykopitiam.ui.purchases
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,7 +27,7 @@ import java.util.*
 
 class PurchasesActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    var username : String? = ""
 
     var navigationPosition: Int = 1
 
@@ -56,7 +57,7 @@ class PurchasesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchases)
         setTitle("Purchases")
-        initView()
+
         kopitiamDBHelper = DBHelper(this)
         readOrderSummary()
 
@@ -69,6 +70,10 @@ class PurchasesActivity : AppCompatActivity() {
 //        myOrderNameList.add(foodName)
 //        myOrderPointList[0] = coinEarned
 //        myOrderPriceList = foodPrice
+
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
+        initView()
         orderRecycleView = findViewById(R.id.orderRecycleView)
 
         imageModelArrayList = populateList()

@@ -118,6 +118,7 @@ class RegisterActivity : AppCompatActivity(){
                     var sharedPrefEditor = sharedPreferences.edit()
                     sharedPrefEditor.putString("userPassword", register_password.text.toString())
                     sharedPrefEditor.putString("userEmail", register_email.text.toString())
+                    sharedPrefEditor.putString("username",register_name.text.toString())
                     sharedPrefEditor.commit()
 
                     Toast.makeText(this, "Account registered",Toast.LENGTH_SHORT).show()

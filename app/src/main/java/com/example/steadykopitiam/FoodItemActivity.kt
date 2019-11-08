@@ -43,6 +43,7 @@ class FoodItemActivity : AppCompatActivity() {
     private var userpassword : String? = ""
     private var useremail  : String? = ""
     private var awardedPoint : Int = 0
+    private var username : String? = ""
 
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
@@ -66,13 +67,15 @@ class FoodItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_item)
         kopitiamDBHelper = DBHelper(this)
-        initView()
+
         readRecommendedjson()
 
         //TODO: update stall name
         val stallName : String = intent.getStringExtra("foodStall")
         setTitle(stallName)
-
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
+        initView()
 
         //TODO: Retrieve JSON and extract specific food item details
         val foodName : String = intent.getStringExtra("foodName")
@@ -89,6 +92,7 @@ class FoodItemActivity : AppCompatActivity() {
         val foodDishType : String = intent.getStringExtra("foodDishType")
         val foodMinerals : String = intent.getStringExtra("foodMinerals")
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
+        println("food price "+foodBasePrice)
 
         //Render relevant text
         foodLabel.text = foodName
@@ -105,13 +109,13 @@ class FoodItemActivity : AppCompatActivity() {
         // if user had order food before in the past 3 days
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
         if(foodpricePref.getBoolean("isPriceIncrease",false)){
-            Toast.makeText(this, "You have purchased "+foodName+"in the past 3 days and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You have purchased "+foodName+"in the past 24 hours and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
         }
 
         // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
         var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
         if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
-            Toast.makeText(this, "You have select "+foodName+" from our recommendation list  ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You have select "+foodName+" from our recommendation list, Enjoy 50 cents discounted price!!  ",Toast.LENGTH_SHORT).show()
             var sharedPreForReccEditer = foodFromRecoList.edit()
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
             sharedPreForReccEditer.commit()
@@ -128,6 +132,7 @@ class FoodItemActivity : AppCompatActivity() {
         this.foodVitamin.text = "Vitamins - "+ foodVitamins+"g"
         this.foodMinerals.text = "Minerals - "+foodMinerals+"g"
         this.btnPurchase.text = "Purchase - $" + String.format("%.2f",foodBasePrice)
+
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecyclerView)
 
@@ -179,13 +184,11 @@ class FoodItemActivity : AppCompatActivity() {
         //Render coin redemption panel
         loadCoinRedemptionLayout(foodBasePrice)
         val switch = findViewById<Switch>(R.id.coinSwitch)
-        
+
         //TODO: Purchase food
         val btnPurchase : Button = findViewById(R.id.btnPurchase)
         btnPurchase.setOnClickListener {
             //TODO: how to determine the food price is extra or deduct or not
-
-            val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
 
             userpassword = preferences.getString("userPassword", "")
             useremail = preferences.getString("userEmail", "")
@@ -193,13 +196,13 @@ class FoodItemActivity : AppCompatActivity() {
             //TODO: Validate wallet amount, else prompt user to top-up
             if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
                 Toast.makeText(this, "Your account balance is insufficient to purchase food. Please top up your wallet.",Toast.LENGTH_SHORT).show()
+                finish()
             }else{
                 if(!user.isNullOrEmpty()) {
                     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
                     val curTime = simpleDateFormat.format(Date())
                     awardedPoint = (foodBasePrice * 10).toInt()
                     println("current Time is " + curTime)
-
 
                     var result = kopitiamDBHelper.createOrderSummary(
                         OrderSummaryRecord(curTime, awardedPoint, foodBasePrice, foodName, foodCarbs.toInt(), foodProtein.toInt(), foodFat.toInt(),
@@ -369,7 +372,6 @@ class FoodItemActivity : AppCompatActivity() {
                         myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
                         stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
                         myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
-
                     }
                 }
             }catch(e: IOException){
@@ -386,114 +388,124 @@ class FoodItemActivity : AppCompatActivity() {
                 // if there is order summary check its focus and  ** dont have stall name in ordersummary  but can assgign stall name with hardcode or .
                 //if focus is in it then move to next stall but what if have all focus alr then call another method to check food name
                 // store focus into a arraylist then open every json file to check if focus string not the same then retrieve food item from there
-                var focus = orSum[i].orderSummaryFocus
-                if(focus.equals("Carbs")){
-                    addCarbs = true
-                    count = count - 1
-                }
 
-                if(focus.equals("Protein")){
-                    addProtein = true
-                    count = count - 1
-                }
-                if (focus.equals("vitamins")){
-                    addVitamins = true
-                    count = count - 1
-                }
+                var date = orSum[i].orderSummaryTimeDate
+                // convert to string to date date from order summary
+                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
+                var d = Date()
+                d = simpleDateFormat.parse(date)
 
-                if (focus.equals("fibre")){
-                    addFibre = true
-                    count = count - 1
+                val curTime = simpleDateFormat.format(Date())
+                var cur = simpleDateFormat.parse(curTime)
+                // means user eaten this food 3 days before
+                if((cur.time - 86400000 ) < d.time){
+
+                    var focus = orSum[i].orderSummaryFocus
+                    if(focus.equals("Carbs")){
+                        addCarbs = true
+                        count = count - 1
+                    }
+
+                    if(focus.equals("Protein")){
+                        addProtein = true
+                        count = count - 1
+                    }
+                    if (focus.equals("vitamins")){
+                        addVitamins = true
+                        count = count - 1
+                    }
+
+                    if (focus.equals("fibre")){
+                        addFibre = true
+                        count = count - 1
+                    }
                 }
             }
             // track recommndantion food based on food (past) order summary
-            myImageList = IntArray(count)
-            var temp : Int = 0
-            if(!addCarbs && temp < count){
-                var json : String? = null
-                val inputStream : InputStream = assets.open("Wong Ah Hua")
-                json = inputStream.bufferedReader().readText()
-                var jsonArray = JSONArray(json)
-                var jsonOjb = jsonArray.getJSONObject(0)
-                var tempRec : String
-                // get food image
-                tempRec= (jsonOjb.getString("foodResourceId"))
-                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
-                myImageList[temp] = final
-                temp = temp + 1
-                // update information of stall and food
-                myImageNameList.add(jsonOjb.getString("foodName"))
-                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
-                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
-                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
-                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+            if(count>0) {
 
+                myImageList = IntArray(count)
+                var temp: Int = 0
+                if (!addCarbs && temp < count) {
+                    var json: String? = null
+                    val inputStream: InputStream = assets.open("Wong Ah Hua")
+                    json = inputStream.bufferedReader().readText()
+                    var jsonArray = JSONArray(json)
+                    var jsonOjb = jsonArray.getJSONObject(0)
+                    var tempRec: String
+                    // get food image
+                    tempRec = (jsonOjb.getString("foodResourceId"))
+                    var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
+                    myImageList[temp] = final
+                    temp = temp + 1
+                    // update information of stall and food
+                    myImageNameList.add(jsonOjb.getString("foodName"))
+                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                    stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+
+                }
+                if (!addFibre && temp < count) {
+                    var json: String? = null
+                    val inputStream: InputStream = assets.open("Australia Signature Food")
+                    json = inputStream.bufferedReader().readText()
+                    var jsonArray = JSONArray(json)
+                    var jsonOjb = jsonArray.getJSONObject(0)
+                    var tempRec: String
+                    // get food image
+                    tempRec = (jsonOjb.getString("foodResourceId"))
+                    var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
+                    myImageList[temp] = final
+                    // update information of stall and food
+                    temp = temp + 1
+                    myImageNameList.add(jsonOjb.getString("foodName"))
+                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                    stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+
+                }
+                if (!addProtein && temp < count) {
+                    var json: String? = null
+                    val inputStream: InputStream = assets.open("Eating Healthy Kitchen")
+                    json = inputStream.bufferedReader().readText()
+                    var jsonArray = JSONArray(json)
+                    var jsonOjb = jsonArray.getJSONObject(0)
+                    var tempRec: String
+                    // get food image
+                    tempRec = (jsonOjb.getString("foodResourceId"))
+                    var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
+                    myImageList[temp] = final
+                    // update information of stall and food
+                    temp = temp + 1
+                    myImageNameList.add(jsonOjb.getString("foodName"))
+                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                    stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+                }
+                if (!addVitamins && temp < count) {
+                    var json: String? = null
+                    val inputStream: InputStream = assets.open("Anderson Salad Kitchen")
+                    json = inputStream.bufferedReader().readText()
+                    var jsonArray = JSONArray(json)
+                    var jsonOjb = jsonArray.getJSONObject(0)
+                    var tempRec: String
+                    // get food image
+                    tempRec = (jsonOjb.getString("foodResourceId"))
+                    var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
+                    myImageList[temp] = final
+                    // update information of stall and food
+                    temp = temp + 1
+                    myImageNameList.add(jsonOjb.getString("foodName"))
+                    myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
+                    myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
+                    stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
+                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
+                }
             }
-            if(!addFibre && temp < count ){
-                var json : String? = null
-                val inputStream : InputStream = assets.open("Australia Signature Food")
-                json = inputStream.bufferedReader().readText()
-                var jsonArray = JSONArray(json)
-                var jsonOjb = jsonArray.getJSONObject(0)
-                var tempRec : String
-                // get food image
-                tempRec= (jsonOjb.getString("foodResourceId"))
-                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
-                myImageList[temp] = final
-                // update information of stall and food
-                temp = temp + 1
-                myImageNameList.add(jsonOjb.getString("foodName"))
-                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
-                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
-                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
-                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
-
-            }
-
-            if(!addProtein && temp < count){
-                var json : String? = null
-                val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
-                json = inputStream.bufferedReader().readText()
-                var jsonArray = JSONArray(json)
-                var jsonOjb = jsonArray.getJSONObject(0)
-                var tempRec : String
-                // get food image
-                tempRec= (jsonOjb.getString("foodResourceId"))
-                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
-                myImageList[temp] = final
-                // update information of stall and food
-                temp = temp + 1
-                myImageNameList.add(jsonOjb.getString("foodName"))
-                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
-                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
-                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
-                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
-
-            }
-            if(!addVitamins && temp < count){
-                var json : String? = null
-                val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
-                json = inputStream.bufferedReader().readText()
-                var jsonArray = JSONArray(json)
-                var jsonOjb = jsonArray.getJSONObject(0)
-                var tempRec : String
-                // get food image
-                tempRec= (jsonOjb.getString("foodResourceId"))
-                var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
-                myImageList[temp] = final
-                // update information of stall and food
-                temp = temp + 1
-                myImageNameList.add(jsonOjb.getString("foodName"))
-                myImageDescriptionList.add(jsonOjb.getString("foodDescription"))
-                myImageFoodFocusList.add(jsonOjb.getString("foodFocus"))
-                stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
-                myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
-            }
-
-
         }
-
-
     }
 
     fun loadCoinRedemptionLayout(foodBasePrice:Double) {
@@ -659,7 +671,7 @@ class FoodItemActivity : AppCompatActivity() {
 
     private fun changeNavigationHeaderInfo() {
         val headerView = navigationView.getHeaderView(0)
-        headerView.username.text = "lokeshdesai@android4dev.com"
+        headerView.username.text = username
     }
 
     private fun setUpDrawerLayout() {
