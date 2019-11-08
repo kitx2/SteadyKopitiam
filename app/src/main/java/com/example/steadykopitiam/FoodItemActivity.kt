@@ -3,6 +3,7 @@ package com.example.steadykopitiam
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -73,7 +74,6 @@ class FoodItemActivity : AppCompatActivity() {
         setTitle(stallName)
 
 
-
         //TODO: Retrieve JSON and extract specific food item details
         val foodName : String = intent.getStringExtra("foodName")
         val foodProtein : String = intent.getStringExtra("foodProtein")
@@ -89,16 +89,18 @@ class FoodItemActivity : AppCompatActivity() {
         val foodDishType : String = intent.getStringExtra("foodDishType")
         val foodMinerals : String = intent.getStringExtra("foodMinerals")
         val foodBasePrice : Double = intent.getDoubleExtra("foodBasePrice",0.0)
-        val foodImage : String = intent.getStringExtra("foodImage")
 
-        val imagePlaceholder : ImageView = findViewById(R.id.stallPlaceholder)
-//        val foodLabel : TextView = findViewById(R.id.foodLabel)
-//        val foodDescLabel: TextView = findViewById(R.id.foodDescLabel)
-        var id = application.resources.getIdentifier("jamacian_curried_shrimp_and_mango_soup:drawable",null,null)
-        imagePlaceholder.setImageResource(id)
+        //Render relevant text
         foodLabel.text = foodName
         foodDescLabel.text = foodDescription
 
+        //Handle foodImage rendering in ImageView
+        val foodImage : String = intent.getStringExtra("foodImage")
+        val PACKAGE_NAME: String = getApplicationContext().getPackageName();
+        val imagePlaceholder : ImageView = findViewById(R.id.stallPlaceholder)
+        var id = application.resources.getIdentifier(PACKAGE_NAME+":drawable/"+foodImage,null,null)
+        var res: Drawable = application.resources.getDrawable(id)
+        imagePlaceholder.setImageDrawable(res)
 
         // if user had order food before in the past 3 days
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
@@ -114,7 +116,6 @@ class FoodItemActivity : AppCompatActivity() {
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
             sharedPreForReccEditer.commit()
         }
-
 
         //TODO: Render the details into Nutrition display table
         this.foodLabel.text = foodName
@@ -178,12 +179,10 @@ class FoodItemActivity : AppCompatActivity() {
         //Render coin redemption panel
         loadCoinRedemptionLayout(foodBasePrice)
         val switch = findViewById<Switch>(R.id.coinSwitch)
-
-
+        
         //TODO: Purchase food
         val btnPurchase : Button = findViewById(R.id.btnPurchase)
         btnPurchase.setOnClickListener {
-            //TODO: Validate wallet amount, else prompt user to top-up
             //TODO: how to determine the food price is extra or deduct or not
 
             val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
@@ -191,7 +190,7 @@ class FoodItemActivity : AppCompatActivity() {
             userpassword = preferences.getString("userPassword", "")
             useremail = preferences.getString("userEmail", "")
             user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
-            // check wallet balance
+            //TODO: Validate wallet amount, else prompt user to top-up
             if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
                 Toast.makeText(this, "Your account balance is insufficient to purchase food. Please top up your wallet.",Toast.LENGTH_SHORT).show()
             }else{
@@ -214,6 +213,8 @@ class FoodItemActivity : AppCompatActivity() {
                     var redeemedAmt: Double
                     var pointsConsumed: Int
 
+                    //TODO: Persist purchase order in DB
+                    //TODO: Store 10% rebate of spending amount in wallet
                     if(switch.isChecked) {
                         var userPoints = user.get(0).accountPoints
                         var pointsRequiredToPurchase = (foodBasePrice * 100).toInt()
@@ -268,7 +269,7 @@ class FoodItemActivity : AppCompatActivity() {
                     }
 //                    Toast.makeText(this, "Switch check state = " + switch.isChecked.toString(),Toast.LENGTH_SHORT).show()
 
-
+                    //TODO - BONUS feature: Send sms for confirmation of order made
                     if (result && deductWallet) {
                         Toast.makeText(this, "Food has been added into order summary.", Toast.LENGTH_SHORT).show()
                         val myIntent = Intent(applicationContext, PurchasesActivity::class.java)
@@ -283,9 +284,6 @@ class FoodItemActivity : AppCompatActivity() {
                     Toast.makeText(this, "Food has not been added into order summary.", Toast.LENGTH_SHORT).show()
                 }
             }
-            //TODO: Persist purchase order in DB
-            //TODO: Store 10% rebate of spending amount in wallet
-            //TODO - BONUS feature: Send sms for confirmation of order made
             //Direct user to last order
         }
     }
