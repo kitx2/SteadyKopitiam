@@ -11,11 +11,9 @@ import android.widget.*
 import com.example.steadykopitiam.ui.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_register.*
 import android.widget.TextView
-
 import com.google.android.material.textfield.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.content.ContextCompat.startActivity
 
 
 class RegisterActivity : AppCompatActivity(){
@@ -77,7 +75,7 @@ class RegisterActivity : AppCompatActivity(){
 
         // Get radio group selected item
         radio_group.setOnCheckedChangeListener(
-            RadioGroup.OnCheckedChangeListener { group, checkedId ->
+            RadioGroup.OnCheckedChangeListener { _, checkedId ->
                 val radio: RadioButton = findViewById(checkedId)
                 genderStr = radio.text.toString()
             })
@@ -114,22 +112,27 @@ class RegisterActivity : AppCompatActivity(){
                 valid = false
             }
             if(valid) {
-                registerUser(dailtAct, genderStr)
-                val myIntent = Intent(this, HomeActivity::class.java)
+                if(registerUser(dailtAct, genderStr)) {
+                    val myIntent = Intent(this, HomeActivity::class.java)
 
-                var sharedPrefEditor = sharedPreferences.edit()
-                sharedPrefEditor.putString("userPassword", register_password.text.toString())
-                sharedPrefEditor.putString("userEmail", register_email.text.toString())
-                sharedPrefEditor.commit()
+                    var sharedPrefEditor = sharedPreferences.edit()
+                    sharedPrefEditor.putString("userPassword", register_password.text.toString())
+                    sharedPrefEditor.putString("userEmail", register_email.text.toString())
+                    sharedPrefEditor.commit()
 
-                startActivity(myIntent)
+                    Toast.makeText(this, "Account registered",Toast.LENGTH_SHORT).show()
+
+                    startActivity(myIntent)
+                } else {
+                    Toast.makeText(this, "Account not registering",Toast.LENGTH_SHORT).show()
+                }
             }
 
         }
 
     }
 
-    fun registerUser(dailyAct:String, genderString: String){
+    fun registerUser(dailyAct:String, genderString: String):Boolean{
 
         var username  = this.register_name.text.toString()
         var phoneNumber = this.register_phoneNumber.text.toString()
@@ -139,11 +142,11 @@ class RegisterActivity : AppCompatActivity(){
         var height    = this.register_height.text.toString().toDouble()
         var weight    = this.register_weight.text.toString().toDouble()
         var bmi = (weight / (height*height))
-        var calories : Int = 0
+        var calories: Int
         var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
         var gender      : String = genderString
-        var accountBalance : String = "0"
-        var accountPoints : String = "0"
+        var accountBalance: Double = "0.0".toDouble()
+        var accountPoints: Int = "0".toInt()
 
 
         if(dailyAct.equals("High")){
@@ -161,10 +164,8 @@ class RegisterActivity : AppCompatActivity(){
         var vitamins = "0.09"
         var fat = (calories * 0.275 / 9 )
 
-        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight,
-            bmi,age,email,accountBalance.toDouble(),accountPoints.toInt(),carb.toInt(),calories,
-            fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
-
+        var result = kopitiamDBHelper.insertUser(UserRecord(username,gender,height,weight, bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories, fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber))
+        return result
     }
 
     fun validation() {

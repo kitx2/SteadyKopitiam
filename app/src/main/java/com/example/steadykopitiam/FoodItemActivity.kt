@@ -1,36 +1,31 @@
 package com.example.steadykopitiam
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.steadykopitiam.ui.home.HomeActivity
+import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_food_item.*
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.drawerLayout
 import kotlinx.android.synthetic.main.activity_home.navigationView
 import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.nav_header_main.view.*
-import android.preference.PreferenceManager
-import android.content.SharedPreferences
-import android.widget.ImageView
-import android.widget.TextView
-import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
@@ -46,7 +41,7 @@ class FoodItemActivity : AppCompatActivity() {
     var user = ArrayList<UserRecord>()
     private var userpassword : String? = ""
     private var useremail  : String? = ""
-    private var awardedPoint : Double = 0.0
+    private var awardedPoint : Int = 0
 
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
@@ -65,6 +60,7 @@ class FoodItemActivity : AppCompatActivity() {
     private var stallnameInRecommendedList = arrayListOf<String>()
     private val myImageFoodPrice = arrayListOf<String>()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_item)
@@ -123,15 +119,14 @@ class FoodItemActivity : AppCompatActivity() {
         //TODO: Render the details into Nutrition display table
         this.foodLabel.text = foodName
         this.foodDescLabel.text = foodDescription
-        this.foodCarbs.text = "Carbs in g " + foodCarbs
-        this.foodProtein.text = "Protein in g "+ foodProtein
-        this.foodCalories.text = "Calories in g "+ foodCalories
-        this.foodFat.text = "Fat in g "+foodFat
-        this.foodFibre.text = "Fibre in g " + foodFibre
-        this.foodVitamin.text = "Vitamins in g "+ foodVitamins
-        this.foodMinerals.text = "Minerals in g "+foodMinerals
-        this.btnPurchase.text = "Purchase $" + foodBasePrice
-
+        this.foodCarbs.text = "Carbs - " + foodCarbs +"g"
+        this.foodProtein.text = "Protein - "+ foodProtein +"g"
+        this.foodCalories.text = "Calories - "+ foodCalories+"g"
+        this.foodFat.text = "Fat - "+foodFat+ "g"
+        this.foodFibre.text = "Fibre - " + foodFibre+"g"
+        this.foodVitamin.text = "Vitamins - "+ foodVitamins+"g"
+        this.foodMinerals.text = "Minerals - "+foodMinerals+"g"
+        this.btnPurchase.text = "Purchase - $" + String.format("%.2f",foodBasePrice)
         //Steady Picks
         steadyPicksRecyclerView = findViewById(R.id.SteadyPicksRecyclerView)
 
@@ -180,10 +175,9 @@ class FoodItemActivity : AppCompatActivity() {
                 })
         )
 
-        //TODO: Retrieve available coins for redemption
-
-        //TODO: Update discounted price in button.Text
-
+        //Render coin redemption panel
+        loadCoinRedemptionLayout(foodBasePrice)
+        val switch = findViewById<Switch>(R.id.coinSwitch)
 
 
         //TODO: Purchase food
@@ -197,31 +191,97 @@ class FoodItemActivity : AppCompatActivity() {
             userpassword = preferences.getString("userPassword", "")
             useremail = preferences.getString("userEmail", "")
             user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
-            // check if wallet got enought money
+            // check wallet balance
             if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
-                Toast.makeText(this, "Your account balance is not enough to pucharse food,Please Top up!! ",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Your account balance is insufficient to purchase food. Please top up your wallet.",Toast.LENGTH_SHORT).show()
             }else{
+                if(!user.isNullOrEmpty()) {
+                    val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
+                    val curTime = simpleDateFormat.format(Date())
+                    awardedPoint = (foodBasePrice * 10).toInt()
+                    println("current Time is " + curTime)
 
-                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
-                val curTime = simpleDateFormat.format(Date())
-                awardedPoint = ( foodBasePrice / 10 )
-                println("current Time is "+ curTime)
+
+                    var result = kopitiamDBHelper.createOrderSummary(
+                        OrderSummaryRecord(curTime, awardedPoint, foodBasePrice, foodName, foodCalories.toInt(), foodProtein.toInt(), foodFat.toInt(),
+                            foodMinerals.toDouble(), foodVitamins.toDouble(), foodCalories.toInt(), foodFocus, foodFibre.toInt(), foodExtraPrice.toString()
+                        )
+                    )
+
+                    var deductWallet: Boolean
+                    var finalAccountBalance: Double
+                    var finalAccountPoints: Int
+                    var redeemedAmt: Double
+                    var pointsConsumed: Int
+
+                    if(switch.isChecked) {
+                        var userPoints = user.get(0).accountPoints
+                        var pointsRequiredToPurchase = (foodBasePrice * 100).toInt()
+
+                        if (userPoints >= pointsRequiredToPurchase) {
+                            finalAccountBalance = user.get(0).accountBalance
+                            finalAccountPoints = user.get(0).accountPoints + awardedPoint - pointsRequiredToPurchase
+
+                            deductWallet = kopitiamDBHelper.updateUser(
+                                UserRecord(user.get(0).username, user.get(0).gender, user.get(0).height, user.get(0).weight, user.get(0).bmi,
+                                    user.get(0).age, user.get(0).email, finalAccountBalance, finalAccountPoints, user.get(0).user_carbs,
+                                    user.get(0).user_calories, user.get(0).user_fat, user.get(0).user_fibre, user.get(0).user_minerals,
+                                    user.get(0).user_vitamins, user.get(0).user_dailyActivies, user.get(0).user_protein, user.get(0).user_password, user.get(0).phoneNumber
+                                )
+                            )
+                            pointsConsumed = pointsRequiredToPurchase
+                            redeemedAmt = foodBasePrice
+
+                            Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            finalAccountBalance = (userPoints / 100.0) + (user.get(0).accountBalance - foodBasePrice)
+                            finalAccountPoints = user.get(0).accountPoints + awardedPoint - userPoints
+
+                            deductWallet = kopitiamDBHelper.updateUser(
+                                UserRecord(user.get(0).username, user.get(0).gender, user.get(0).height, user.get(0).weight, user.get(0).bmi,
+                                    user.get(0).age, user.get(0).email, finalAccountBalance, finalAccountPoints, user.get(0).user_carbs,
+                                    user.get(0).user_calories, user.get(0).user_fat, user.get(0).user_fibre, user.get(0).user_minerals,
+                                    user.get(0).user_vitamins, user.get(0).user_dailyActivies, user.get(0).user_protein, user.get(0).user_password, user.get(0).phoneNumber
+                                )
+                            )
+                            pointsConsumed = userPoints
+                            redeemedAmt = userPoints / 100.0
+
+                            Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        finalAccountBalance = user.get(0).accountBalance - foodBasePrice
+                        finalAccountPoints = user.get(0).accountPoints + awardedPoint
+
+                        deductWallet = kopitiamDBHelper.updateUser(
+                            UserRecord(user.get(0).username, user.get(0).gender, user.get(0).height, user.get(0).weight, user.get(0).bmi,
+                                user.get(0).age, user.get(0).email, finalAccountBalance, finalAccountPoints, user.get(0).user_carbs,
+                                user.get(0).user_calories, user.get(0).user_fat, user.get(0).user_fibre, user.get(0).user_minerals,
+                                user.get(0).user_vitamins, user.get(0).user_dailyActivies, user.get(0).user_protein, user.get(0).user_password, user.get(0).phoneNumber
+                            )
+                        )
+                        pointsConsumed = 0
+                        redeemedAmt = 0.00
+
+                        Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
+                    }
+//                    Toast.makeText(this, "Switch check state = " + switch.isChecked.toString(),Toast.LENGTH_SHORT).show()
 
 
-                var result = kopitiamDBHelper.createOrderSummary(
-                    OrderSummaryRecord(curTime,awardedPoint,foodBasePrice,foodName,foodCalories.toInt(),foodProtein.toInt(),
-                    foodFat.toInt(),foodMinerals.toDouble(),foodVitamins.toDouble(),foodCalories.toInt(),foodFocus,foodFibre.toInt(),foodExtraPrice.toString())
-                )
-                if(result){
-                    Toast.makeText(this,"Food has been added into order summary.",Toast.LENGTH_SHORT).show()
-                    val myIntent = Intent(applicationContext, PurchasesActivity::class.java)
+                    if (result && deductWallet) {
+                        Toast.makeText(this, "Food has been added into order summary.", Toast.LENGTH_SHORT).show()
+                        val myIntent = Intent(applicationContext, PurchasesActivity::class.java)
 //                    myIntent.putExtra("foodName",foodName)
 //                    myIntent.putExtra("foodPrice",foodBasePrice)
 //                    myIntent.putExtra("coinEarced",awardedPoint)
-                    startActivity(myIntent)
-                    finish()
+                        startActivity(myIntent)
+                        this.overridePendingTransition(0, 0)
+                        finish()
+                    }
+                } else {
+                    Toast.makeText(this, "Food has not been added into order summary.", Toast.LENGTH_SHORT).show()
                 }
-
             }
             //TODO: Persist purchase order in DB
             //TODO: Store 10% rebate of spending amount in wallet
@@ -242,7 +302,7 @@ class FoodItemActivity : AppCompatActivity() {
                     println(" TTTTT ")
                     if(i == 0 ){
                         println(" RRRRRR ")
-                        var json : String? = null
+                        var json: String?
                         val inputStream : InputStream = assets.open("Wong Ah Hua")
                         json = inputStream.bufferedReader().readText()
                         var jsonArray = JSONArray(json)
@@ -259,7 +319,7 @@ class FoodItemActivity : AppCompatActivity() {
                         stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
                         myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
                     }else if( i == 1 ){
-                        var json : String? = null
+                        var json: String?
                         val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
                         json = inputStream.bufferedReader().readText()
                         var jsonArray = JSONArray(json)
@@ -277,7 +337,7 @@ class FoodItemActivity : AppCompatActivity() {
                         myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
 
                     }else if(i == 2 ){
-                        var json : String? = null
+                        var json: String?
                         val inputStream : InputStream = assets.open("Australia Signature Food")
                         json = inputStream.bufferedReader().readText()
                         var jsonArray = JSONArray(json)
@@ -295,7 +355,7 @@ class FoodItemActivity : AppCompatActivity() {
                         myImageFoodPrice.add(jsonOjb.getString("foodBasePrice"))
 
                     }else{
-                        var json : String? = null
+                        var json: String?
                         val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
                         json = inputStream.bufferedReader().readText()
                         var jsonArray = JSONArray(json)
@@ -436,6 +496,47 @@ class FoodItemActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    fun loadCoinRedemptionLayout(foodBasePrice:Double) {
+        //TODO: Retrieve available coins for redemption
+        var checkedState: Boolean
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+
+        if(!user.isNullOrEmpty()) {
+            val btnPurchase = findViewById<Button>(R.id.btnPurchase)
+            val sw = findViewById<Switch>(R.id.coinSwitch)
+            val coinAmountLabel = findViewById<TextView>(R.id.coinAmountLabel)
+            val deductedLabel = findViewById<TextView>(R.id.deductedLabel)
+            var userPoints = user.get(0).accountPoints
+            var pointsRequiredToPurchase = (foodBasePrice * 100).toInt()
+            if (userPoints >= pointsRequiredToPurchase) {
+                coinAmountLabel.text = pointsRequiredToPurchase.toString()
+                deductedLabel.text =
+                    "[-S$" + String.format("%.2f", pointsRequiredToPurchase / 100.0) + "]"
+            } else {
+                coinAmountLabel.text = userPoints.toString()
+                deductedLabel.text = "[-S$" + String.format("%.2f", userPoints / 100.0) + "]"
+            }
+
+            //TODO: Update discounted price in button.Text
+            sw?.setOnCheckedChangeListener({ _, isChecked ->
+                if (isChecked) {
+                    if (userPoints >= pointsRequiredToPurchase) {
+                        btnPurchase.text =
+                            "Purchase - $" + String.format("%.2f",foodBasePrice - pointsRequiredToPurchase / 100.0)
+                    } else {
+                        btnPurchase.text = "Purchase - $" + String.format("%.2f",foodBasePrice - userPoints / 100.0)
+                    }
+
+                } else {
+                    btnPurchase.text = "Purchase - $" + String.format("%.2f",foodBasePrice)
+                }
+            })
+        }
     }
 
     private fun populateList(): ArrayList<ModelFoodHorizontal> {

@@ -2,7 +2,7 @@ package com.example.steadykopitiam
 
 class OrderSummaryRecord(
     val orderSummaryTimeDate : String,
-    val orderSummaryAwardedPoints : Double,
+    val orderSummaryAwardedPoints : Int,
     val orderSummarySubtotal : Double,
     val orderSummaryFoodName  : String ,
     val orderSummaryFoodCarbs : Int,

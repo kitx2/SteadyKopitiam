@@ -68,7 +68,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
             "CREATE TABLE " + TableOrderSummaryInfo.TABLE_ORDERSUMMARY + "(" +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_ID + "INTEGER PRIMARY KEY," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_TIMEDARTE + " TEXT," +
-                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS + " DOUBLE," +
+                    TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS + " INTEGER," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_SUBTOTAL + " DOUBLE," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES + " INTEGER," +
                     TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE + " INTEGER," +
@@ -154,7 +154,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         val db = writableDatabase
         println("Before writaDatabase ___&&&&" )
 
-        var cursor : Cursor? = null
+        var cursor: Cursor?
         try{
             cursor = db.rawQuery("select * from "+
             TableUserInfo.TABLE_USER,null )
@@ -222,7 +222,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         println("Before writaDatabase ___&&&&" )
         println("email " + email)
         println("password "+password )
-        var cursor : Cursor? = null
+        var cursor: Cursor?
 
 
         try{
@@ -374,7 +374,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODMINERALS,orderSummary.orderSummaryMinerals)
         values.put(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODEXTRAOPRICE,orderSummary.orderSummaryExtraPrice)
 
-        val newRowID = db.insert(TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null,values)
+        db.insert(TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null,values)
         return true;
     }
 
@@ -383,7 +383,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         val db = writableDatabase
 
 
-        var cursor : Cursor? = null
+        var cursor: Cursor?
         try{
             cursor = db.rawQuery("select * from "+
                     TableOrderSummaryInfo.TABLE_ORDERSUMMARY,null )
@@ -393,7 +393,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         }
 
         var orderSummaryTimeDate : String
-        var orderSummaryAwardedPoints : Double
+        var orderSummaryAwardedPoints : Int
         var orderSummarySubtotal : Double
         var orderSummaryFoodName  : String
         var orderSummaryFoodCarbs : Int
@@ -404,11 +404,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,DATABASE_NAME,null,
         var orderSummaryCalories : Int
         var orderSummaryFocus : String
         var orderSummaryFibre : Int
-        var orderSummaryExtraPrice : String = ""
+        var orderSummaryExtraPrice: String
 
         if(cursor!!.moveToFirst()){
             while(cursor.isAfterLast==false){
-                orderSummaryAwardedPoints = cursor.getDouble(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS))
+                orderSummaryAwardedPoints = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_AWARDEDPOINTS))
                 orderSummaryCalories = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODCALORIES))
                 orderSummaryFat = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFAT))
                 orderSummaryFibre = cursor.getInt(cursor.getColumnIndex(TableOrderSummaryInfo.COLUMN_ORDERSUMMARY_FOODFIBRE))

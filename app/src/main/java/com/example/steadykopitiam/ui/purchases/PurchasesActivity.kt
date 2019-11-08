@@ -46,7 +46,7 @@ class PurchasesActivity : AppCompatActivity() {
     //TODO: Update foodList
     private val myOrderDateList = arrayListOf<String>()
     private val myOrderNameList = arrayListOf<String>()
-    private var myOrderPointList =  DoubleArray(size=1)
+    private var myOrderPointList =  IntArray(size=1)
 //    var double : Double = 4.00
 //    var pricetag : String = "S$".plus(String.format("%.2f", double))
     private var myOrderPriceList = arrayListOf<String>()
@@ -84,7 +84,7 @@ class PurchasesActivity : AppCompatActivity() {
         var orderSum = kopitiamDBHelper.retrieveAllOrderSummary()
         // update new size of double array
         orderSum.sortByDescending {it.orderSummaryTimeDate }
-        myOrderPointList = DoubleArray(orderSum.size)
+        myOrderPointList = IntArray(orderSum.size)
 
         for(i in 0..orderSum.size-1){
             myOrderNameList.add(orderSum[i].orderSummaryFoodName)

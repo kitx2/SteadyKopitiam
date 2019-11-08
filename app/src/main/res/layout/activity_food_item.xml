@@ -123,29 +123,16 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/foodCalories"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/foodCalories" />
+
+                                <TextView
                                     android:id="@+id/foodCarbs"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/foodCarbs" />
-
-                                <TextView
-                                    android:id="@+id/foodProtein"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/foodProtein" />
-
-                                <TextView
-                                    android:id="@+id/foodFibre"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/foodFibre" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/foodFat"
@@ -154,17 +141,10 @@
                                     android:text="@string/foodFat" />
 
                                 <TextView
-                                    android:id="@+id/foodVitamin"
+                                    android:id="@+id/foodFibre"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/foodVitamins" />
-
-                                <TextView
-                                    android:id="@+id/foodMinerals"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/foodMinerals" />
-
+                                    android:text="@string/foodFibre" />
 
                             </LinearLayout>
 
@@ -175,14 +155,26 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/foodCalories"
+                                    android:id="@+id/foodMinerals"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/foodCalories" />
+                                    android:text="@string/foodMinerals" />
 
+                                <TextView
+                                    android:id="@+id/foodProtein"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/foodProtein" />
+
+                                <TextView
+                                    android:id="@+id/foodVitamin"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/foodVitamins" />
 
 
                             </LinearLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -191,6 +183,7 @@
                         android:id="@+id/imageView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="2"
                         app:srcCompat="@mipmap/ic_launcher_round" />
 
@@ -255,32 +248,73 @@
                         android:orientation="horizontal">
 
 
-                        <TextView
-                            android:id="@+id/coinLabel"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:fontFamily="@font/roboto"
-                            android:text="Redeem 2 Steady Coins"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/deductedLabel"
-                            android:layout_width="0dp"
+                            <TextView
+                                android:id="@+id/coinLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="0"
+                                android:fontFamily="@font/roboto"
+                                android:text="Redeem"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/coinAmountLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:fontFamily="@font/roboto"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:text="2"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/coinLabel2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0"
+                                android:fontFamily="@font/roboto"
+                                android:text="Steady Coins"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto"
-                            android:text="[-S$0.02]"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="0.5"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/deductedLabel"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/roboto"
+                                android:gravity="right"
+                                android:text="[-S$0.02]"
+                                android:textStyle="bold" />
+                        </LinearLayout>
 
                         <Switch
-                            android:id="@+id/switch1"
+                            android:id="@+id/coinSwitch"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
-                            android:layout_weight="1"
+                            android:layout_weight="1.5"
                             android:thumbTint="@color/colorPrimary" />
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

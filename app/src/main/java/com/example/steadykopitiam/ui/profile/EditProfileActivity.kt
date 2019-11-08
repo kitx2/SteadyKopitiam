@@ -172,11 +172,9 @@ class EditProfileActivity : AppCompatActivity() {
         var fat = (calories * 0.275 / 9 )
 
         var result = kopitiamDBHelper.updateUser(
-            UserRecord(username,gender,height,weight,
-                bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories,
-                fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
+            UserRecord(username,gender,height,weight, bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories, fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
         )
-//        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
         kopitiamDBHelper = DBHelper(this)
 
         //TODO: SetText and Set Index position of spinner

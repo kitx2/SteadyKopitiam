@@ -20,8 +20,12 @@ import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_home.drawerLayout
+import kotlinx.android.synthetic.main.activity_home.navigationView
+import kotlinx.android.synthetic.main.activity_home.toolbar
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
-
+import com.github.florent37.expansionpanel.ExpansionLayout
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -43,6 +47,14 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(myIntent)
             this.overridePendingTransition(0, 0)
         }
+
+        val expansionLayout = findViewById<ExpansionLayout>(R.id.expansionLayout);
+        expansionLayout.addListener(ExpansionLayout.Listener { expansionLayout, expanded ->
+             fun onExpansionChanged(expansionLayout: ExpansionLayout, boolean: Boolean) {
+
+            }
+        })
+
 
     }
 
