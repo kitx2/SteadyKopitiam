@@ -178,6 +178,20 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <Button
+                        android:id="@+id/btnLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@color/colorPrimary"
+                        android:fontFamily="@font/roboto"
+                        android:text="LOGOUT"
+                        android:textColor="@color/colorWhite" />
+
                 </LinearLayout>
 
             </LinearLayout>
