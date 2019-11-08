@@ -288,18 +288,20 @@ class HomeActivity : AppCompatActivity() {
                }
            }
             // track recommndantion food based on food (past) order summary
-           myImageList = IntArray(count)
-           var temp : Int = 0
-               if(!addCarbs && temp < count){
-                   var json : String? = null
-                   val inputStream : InputStream = assets.open("Wong Ah Hua")
+           if(count!=0) {
+
+               myImageList = IntArray(count)
+               var temp: Int = 0
+               if (!addCarbs && temp < count) {
+                   var json: String? = null
+                   val inputStream: InputStream = assets.open("Wong Ah Hua")
                    json = inputStream.bufferedReader().readText()
                    var jsonArray = JSONArray(json)
                    var jsonOjb = jsonArray.getJSONObject(0)
-                   var tempRec : String
+                   var tempRec: String
                    // get food image
-                   tempRec= (jsonOjb.getString("foodResourceId"))
-                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   tempRec = (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
                    myImageList[temp] = final
                    temp = temp + 1
                    // update information of stall and food
@@ -310,16 +312,16 @@ class HomeActivity : AppCompatActivity() {
                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
 
                }
-               if(!addFibre && temp < count ){
-                   var json : String? = null
-                   val inputStream : InputStream = assets.open("Australia Signature Food")
+               if (!addFibre && temp < count) {
+                   var json: String? = null
+                   val inputStream: InputStream = assets.open("Australia Signature Food")
                    json = inputStream.bufferedReader().readText()
                    var jsonArray = JSONArray(json)
                    var jsonOjb = jsonArray.getJSONObject(0)
-                   var tempRec : String
+                   var tempRec: String
                    // get food image
-                   tempRec= (jsonOjb.getString("foodResourceId"))
-                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   tempRec = (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
                    myImageList[temp] = final
                    // update information of stall and food
                    temp = temp + 1
@@ -331,16 +333,16 @@ class HomeActivity : AppCompatActivity() {
 
                }
 
-               if(!addProtein && temp < count){
-                   var json : String? = null
-                   val inputStream : InputStream = assets.open("Eating Healthy Kitchen")
+               if (!addProtein && temp < count) {
+                   var json: String? = null
+                   val inputStream: InputStream = assets.open("Eating Healthy Kitchen")
                    json = inputStream.bufferedReader().readText()
                    var jsonArray = JSONArray(json)
                    var jsonOjb = jsonArray.getJSONObject(0)
-                   var tempRec : String
+                   var tempRec: String
                    // get food image
-                   tempRec= (jsonOjb.getString("foodResourceId"))
-                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   tempRec = (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
                    myImageList[temp] = final
                    // update information of stall and food
                    temp = temp + 1
@@ -351,16 +353,16 @@ class HomeActivity : AppCompatActivity() {
                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
 
                }
-               if(!addVitamins && temp < count){
-                   var json : String? = null
-                   val inputStream : InputStream = assets.open("Anderson Salad Kitchen")
+               if (!addVitamins && temp < count) {
+                   var json: String? = null
+                   val inputStream: InputStream = assets.open("Anderson Salad Kitchen")
                    json = inputStream.bufferedReader().readText()
                    var jsonArray = JSONArray(json)
                    var jsonOjb = jsonArray.getJSONObject(0)
-                   var tempRec : String
+                   var tempRec: String
                    // get food image
-                   tempRec= (jsonOjb.getString("foodResourceId"))
-                   var final = resources.getIdentifier(tempRec,"drawable",this.packageName)
+                   tempRec = (jsonOjb.getString("foodResourceId"))
+                   var final = resources.getIdentifier(tempRec, "drawable", this.packageName)
                    myImageList[temp] = final
                    // update information of stall and food
                    temp = temp + 1
@@ -370,6 +372,7 @@ class HomeActivity : AppCompatActivity() {
                    stallnameInRecommendedList.add(jsonOjb.getString("foodStall"))
                    myImageFoodPrice.add(jsonOjb.getString("fooddeductPrice"))
                }
+           }
 
 
        }
@@ -404,14 +407,16 @@ class HomeActivity : AppCompatActivity() {
     private fun populateList(): ArrayList<ModelFoodHorizontal> {
 
         val list = ArrayList<ModelFoodHorizontal>()
-        for (i in 0..myImageList.size-1) {
-            val imageModel = ModelFoodHorizontal()
-            imageModel.setNames(myImageNameList[i])
-            imageModel.setImage_drawables(myImageList[i])
-            imageModel.setDescriptions(myImageDescriptionList[i])
-            imageModel.setFoodFocus(myImageFoodFocusList[i])
-            imageModel.setStallName(stallnameInRecommendedList[i])
-            list.add(imageModel)
+        if(myImageNameList.size> 0){
+            for (i in 0..myImageList.size-1) {
+                val imageModel = ModelFoodHorizontal()
+                imageModel.setNames(myImageNameList[i])
+                imageModel.setImage_drawables(myImageList[i])
+                imageModel.setDescriptions(myImageDescriptionList[i])
+                imageModel.setFoodFocus(myImageFoodFocusList[i])
+                imageModel.setStallName(stallnameInRecommendedList[i])
+                list.add(imageModel)
+            }
         }
 
         return list

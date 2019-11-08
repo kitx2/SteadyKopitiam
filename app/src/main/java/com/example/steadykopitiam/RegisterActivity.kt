@@ -143,7 +143,7 @@ class RegisterActivity : AppCompatActivity(){
         var weight    = this.register_weight.text.toString().toDouble()
         var bmi = (weight / (height*height))
         var calories: Int
-        var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
+        var bmr = (10 * weight) + (6.25 * height * 100) - (5 * age.toInt())
         var gender      : String = genderString
         var accountBalance: Double = "0.0".toDouble()
         var accountPoints: Int = "0".toInt()

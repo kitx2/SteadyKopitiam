@@ -202,7 +202,7 @@ class FoodItemActivity : AppCompatActivity() {
 
 
                     var result = kopitiamDBHelper.createOrderSummary(
-                        OrderSummaryRecord(curTime, awardedPoint, foodBasePrice, foodName, foodCalories.toInt(), foodProtein.toInt(), foodFat.toInt(),
+                        OrderSummaryRecord(curTime, awardedPoint, foodBasePrice, foodName, foodCarbs.toInt(), foodProtein.toInt(), foodFat.toInt(),
                             foodMinerals.toDouble(), foodVitamins.toDouble(), foodCalories.toInt(), foodFocus, foodFibre.toInt(), foodExtraPrice.toString()
                         )
                     )

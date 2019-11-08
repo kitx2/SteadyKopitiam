@@ -1,6 +1,7 @@
 package com.example.steadykopitiam.ui.profile
 
 import android.app.PendingIntent.getActivity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.steadykopitiam.DBHelper
+import com.example.steadykopitiam.OrderSummaryRecord
 import com.example.steadykopitiam.R
+import com.example.steadykopitiam.UserRecord
 import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
@@ -26,11 +30,40 @@ import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import com.github.florent37.expansionpanel.ExpansionLayout
+import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.expansion_panel_macro_panel.*
+import kotlinx.android.synthetic.main.expansion_panel_other_panel.*
+import kotlin.math.roundToInt
 
 
 class ProfileActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    lateinit var kopitiamDBHelper: DBHelper
+    var username : String = ""
+
+    private var userpassword : String? = ""
+    private var useremail : String? = ""
+    // variable to track data
+    private var user = ArrayList<UserRecord>()
+    private var carbs : Int = 0
+    private var protein : Int = 0
+    private var fat : Int = 0
+    private var fibre : Int = 0
+    private var vitamins : Double = 0.0
+    private var minerals : Double = 0.0
+    private var calories : Int = 0
+    private var bmi : Double = 0.0
+    private var orderList = ArrayList<OrderSummaryRecord>()
+
+    private var carbsIntake : Int = 0
+    private var proteinIntakeFromOrdSum : Int = 0
+    private var fatIntakeFromOrdSum : Int = 0
+    private var fibreIntakeFromOrdSum : Int = 0
+    private var vitaminsIntakeFromOrdSum : Double = 0.0
+    private var mineralsIntakeFromOrdSum : Double = 0.0
+    private var caloriesIntakeFromOrdSum : Int = 0
+    private var bmiIntake : Double = 0.0
+
 
     var navigationPosition: Int = 2
 
@@ -39,6 +72,46 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(com.example.steadykopitiam.R.layout.activity_profile)
         setTitle("Profile")
         initView()
+
+        kopitiamDBHelper = DBHelper(this)
+
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        userpassword = preferences.getString("userPassword", "")
+        useremail = preferences.getString("userEmail", "")
+
+
+        retrieveUserNutrition(useremail!!,userpassword!!)
+        this.calorieMax.text = calories.toString()+"g"
+        this.carbMax.text = carbs.toString()+"g"
+        this.proteinMax.text = protein.toString()+"g"
+        this.fatMax.text = fat.toString()+"g"
+        this.fiberMax.text = fibre.toString()+"g"
+        this.mineralMax.text = minerals.toString()+"g"
+        this.vitaminMax.text = vitamins.toString()+"g"
+
+        retrieveTotalNutritionIntake()
+        this.calorieIntake.text = caloriesIntakeFromOrdSum.toString()+"g"
+        this.carbIntake.text = carbsIntake.toString()+"g"
+        this.proteinIntake.text = proteinIntakeFromOrdSum.toString()+"g"
+        this.fatIntake.text = fatIntakeFromOrdSum.toString()+"g"
+        this.fiberIntake.text = fibreIntakeFromOrdSum.toString()+"g"
+        this.mineralIntake.text = mineralsIntakeFromOrdSum.toString()+"g"
+        this.vitaminIntake.text = vitaminsIntakeFromOrdSum.toString()+"g"
+
+        this.caloriePercent.text = (((caloriesIntakeFromOrdSum.toDouble() /calories.toDouble())*100).roundToInt()).toString()+"%"
+        this.carbPercent.text = (((carbsIntake.toDouble() / carbs.toDouble())*100).roundToInt()).toString()+"%"
+        this.proteinPercent.text = (((proteinIntakeFromOrdSum.toDouble() / protein.toDouble())*100).roundToInt()).toString()+"g"
+        this.fatPercent.text = (((fatIntakeFromOrdSum.toDouble() / fat.toDouble())*100).roundToInt()).toString()+"%"
+        this.fiberPercent.text = (((fibreIntakeFromOrdSum.toDouble() / fibre.toDouble())*100).roundToInt()).toString()+"%"
+        this.mineralPercent.text = (((mineralsIntakeFromOrdSum / minerals)*100).roundToInt()).toString()+"%"
+        this.vitaminPercent.text = (((vitaminsIntakeFromOrdSum / vitamins)*100).roundToInt()).toString()+"%"
+
+
+
+
+
+
 
         val basicInfoCard : CardView = findViewById(R.id.basicInfoCard)
 
@@ -56,6 +129,36 @@ class ProfileActivity : AppCompatActivity() {
         })
 
 
+    }
+
+
+    private fun retrieveUserNutrition(useremail:String ,userpassword:String ){
+        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
+        username = user.get(0).username
+        carbs = user.get(0).user_carbs
+        protein = user.get(0).user_protein
+        fat = user.get(0).user_fat
+        fibre = user.get(0).user_fibre
+        vitamins = user.get(0).user_vitamins
+        calories = user.get(0).user_calories
+        minerals = user.get(0).user_minerals
+        bmi = user.get(0).bmi
+    }
+
+
+    private fun retrieveTotalNutritionIntake(){
+        orderList = kopitiamDBHelper.retrieveAllOrderSummary()
+        for(i in 0..orderList.size-1){
+            println("Foodname !!!!!"+ orderList[i].orderSummaryFoodName)
+            carbsIntake = carbsIntake + orderList[i].orderSummaryFoodCarbs
+            proteinIntakeFromOrdSum = proteinIntakeFromOrdSum + orderList[i].orderSummaryProtein
+            fatIntakeFromOrdSum = fatIntakeFromOrdSum + orderList[i].orderSummaryFat
+            fibreIntakeFromOrdSum = fibreIntakeFromOrdSum + orderList[i].orderSummaryFibre
+            vitaminsIntakeFromOrdSum = vitaminsIntakeFromOrdSum + orderList[i].orderSummaryVitamins
+            caloriesIntakeFromOrdSum = caloriesIntakeFromOrdSum + orderList[i].orderSummaryCalories
+            mineralsIntakeFromOrdSum = mineralsIntakeFromOrdSum + orderList[i].orderSummaryMinerals
+
+        }
     }
 
     //Side Navbar
