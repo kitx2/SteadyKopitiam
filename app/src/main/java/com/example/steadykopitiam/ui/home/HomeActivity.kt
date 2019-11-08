@@ -1,16 +1,22 @@
 package com.example.steadykopitiam.ui.home
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_home.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -40,6 +46,13 @@ class HomeActivity : AppCompatActivity() {
     private var stallName : String = ""
     private var stallDescription : String = ""
     private var stallImageId : Int = 0
+
+
+    private val permissionList = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    var allPermissionsGrantedFlag : Int = 0
 
     //Steady picks
     private var steadyPicksRecyclerView: RecyclerView? = null
@@ -167,7 +180,15 @@ class HomeActivity : AppCompatActivity() {
                     }
                 })
         )
-
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(allPermissionEnabled()){
+                allPermissionsGrantedFlag = 1
+            }else{
+                setupMultipePermissions()
+            }
+        }else{
+            allPermissionsGrantedFlag = 1
+        }
     }
 
 
@@ -608,6 +629,42 @@ class HomeActivity : AppCompatActivity() {
             navigationPosition = R.id.nav_home
             navigationView.setCheckedItem(navigationPosition)
             toolbar.title = "Home"
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun allPermissionEnabled() : Boolean {
+        return permissionList.none{checkSelfPermission(it)!=
+                PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setupMultipePermissions(){
+        val remaniningPermission = permissionList.filter{
+            checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED
+        }
+        requestPermissions(remaniningPermission.toTypedArray(),101)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == 101 ){
+            if(grantResults.any{it != PackageManager.PERMISSION_GRANTED}){
+                @TargetApi(Build.VERSION_CODES.M)
+                if(permissionList.any{shouldShowRequestPermissionRationale(it)}){
+                    AlertDialog.Builder(this)
+                        .setMessage("Press Permission to Decide Permission Again ")
+                        .setPositiveButton("Permission"){dialog,which -> setupMultipePermissions()}
+                        .setNegativeButton("Cancel"){dialog, which -> dialog.dismiss()}
+                        .create()
+                        .show()
+                }
+            }
         }
     }
 }

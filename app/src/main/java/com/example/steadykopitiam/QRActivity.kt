@@ -42,17 +42,14 @@ import kotlin.collections.ArrayList
 
 class QRActivity : AppCompatActivity() {
     lateinit var kopitiamDBHelper: DBHelper
-    var allPermissionsGrantedFlag : Int = 0
+
     private var jsonURL : String? = ""
     private var finalPrice : String =" "
     private var listOrderSumm = ArrayList<OrderSummaryRecord>()
     lateinit var sharedPreferences: SharedPreferences
 
 
-    private val permissionList = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,15 +149,7 @@ class QRActivity : AppCompatActivity() {
             }
         }))
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(allPermissionEnabled()){
-                allPermissionsGrantedFlag = 1
-            }else{
-                setupMultipePermissions()
-            }
-        }else{
-            allPermissionsGrantedFlag = 1
-        }
+
     }
 
 
@@ -195,41 +184,7 @@ class QRActivity : AppCompatActivity() {
         return ""
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun allPermissionEnabled() : Boolean {
-        return permissionList.none{checkSelfPermission(it)!=
-                PackageManager.PERMISSION_GRANTED
-        }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun setupMultipePermissions(){
-        val remaniningPermission = permissionList.filter{
-            checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED
-        }
-        requestPermissions(remaniningPermission.toTypedArray(),101)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == 101 ){
-            if(grantResults.any{it != PackageManager.PERMISSION_GRANTED}){
-                @TargetApi(Build.VERSION_CODES.M)
-                if(permissionList.any{shouldShowRequestPermissionRationale(it)}){
-                    AlertDialog.Builder(this)
-                        .setMessage("Press Permission to Decide Permission Again ")
-                        .setPositiveButton("Permission"){dialog,which -> setupMultipePermissions()}
-                        .setNegativeButton("Cancel"){dialog, which -> dialog.dismiss()}
-                        .create()
-                        .show()
-                }
-            }
-        }
-    }
 
 
 
