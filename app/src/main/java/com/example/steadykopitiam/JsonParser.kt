@@ -81,7 +81,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                 if(jsonObject.getString("foodName").equals(foodName)){
                     sharedPref = c?.getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
                     foodFromRecoList = c?.getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
-
+                    println("is Food selected from reco Listy in JSon Parser"+ foodFromRecoList.getBoolean("ReccFoodIsSelected",false))
                     // check if price increase
                     if(sharedPref.getBoolean("isPriceIncrease",false)){
                         foodRecord.setBasePrice(jsonObject.getString("foodExtraPrice").toDouble())
@@ -89,7 +89,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                       // if recommnaded food is selected
                     else if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
                         foodRecord.setBasePrice(jsonObject.getString("fooddeductPrice").toDouble())
-                        println("food recc is true is QR Code ")
+                        println("food recc is true is QR Code in JSON Parser")
                     }
                     else{
                         foodRecord.setBasePrice(jsonObject.getString("foodBasePrice").toDouble())

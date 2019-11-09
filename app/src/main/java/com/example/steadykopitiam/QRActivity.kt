@@ -137,13 +137,13 @@ class QRActivity : AppCompatActivity() {
                     jsonURL = barcodes?.valueAt(0)?.displayValue
                     InternerJSON(this@QRActivity,jsonURL!!,stallName,foodName,foodPrice).execute()
 //                    finish()
-
-                    println(" %%%% Hellow OWrld ")
-                    sleep(50)
-                    //println(sharedPreferences.getString("Key", "default value"))
-                    Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
-                    cameraSource.stop()
-                    cameraSource.release()
+                    barcodeDetector.release()
+//                    println(" %%%% Hellow OWrld ")
+//                    sleep(50)
+//                    //println(sharedPreferences.getString("Key", "default value"))
+//                    Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
+//                    cameraSource.stop()
+//                    cameraSource.release()
 
                 }
             }
