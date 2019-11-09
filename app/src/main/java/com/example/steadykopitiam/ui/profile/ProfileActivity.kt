@@ -101,7 +101,7 @@ class ProfileActivity : AppCompatActivity() {
 
         this.caloriePercent.text = (((caloriesIntakeFromOrdSum.toDouble() /calories.toDouble())*100).roundToInt()).toString()+"%"
         this.carbPercent.text = (((carbsIntake.toDouble() / carbs.toDouble())*100).roundToInt()).toString()+"%"
-        this.proteinPercent.text = (((proteinIntakeFromOrdSum.toDouble() / protein.toDouble())*100).roundToInt()).toString()+"%"
+        this.proteinPercent.text = (((proteinIntakeFromOrdSum.toDouble() / protein.toDouble())*100).roundToInt()).toString()+"g"
         this.fatPercent.text = (((fatIntakeFromOrdSum.toDouble() / fat.toDouble())*100).roundToInt()).toString()+"%"
         this.fiberPercent.text = (((fibreIntakeFromOrdSum.toDouble() / fibre.toDouble())*100).roundToInt()).toString()+"%"
         this.mineralPercent.text = (((mineralsIntakeFromOrdSum / minerals)*100).roundToInt()).toString()+"%"

@@ -66,7 +66,6 @@ class FoodItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_item)
-//        Thread.sleep(500)
         kopitiamDBHelper = DBHelper(this)
 
         readRecommendedjson()
@@ -116,12 +115,10 @@ class FoodItemActivity : AppCompatActivity() {
         // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
         var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
         if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
-            println("YOYOOYYOYO "+foodFromRecoList.getBoolean("ReccFoodIsSelected",false))
             Toast.makeText(this, "You have select "+foodName+" from our recommendation list, Enjoy 50 cents discounted price!!  ",Toast.LENGTH_SHORT).show()
             var sharedPreForReccEditer = foodFromRecoList.edit()
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
             sharedPreForReccEditer.commit()
-
         }
 
         //TODO: Render the details into Nutrition display table
@@ -199,7 +196,7 @@ class FoodItemActivity : AppCompatActivity() {
             //TODO: Validate wallet amount, else prompt user to top-up
             if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
                 Toast.makeText(this, "Your account balance is insufficient to purchase food. Please top up your wallet.",Toast.LENGTH_SHORT).show()
-
+                finish()
             }else{
                 if(!user.isNullOrEmpty()) {
                     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
