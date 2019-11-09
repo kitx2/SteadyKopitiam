@@ -50,7 +50,8 @@ class HomeActivity : AppCompatActivity() {
 
     private val permissionList = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.ACCESS_FINE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.SEND_SMS
     )
     var allPermissionsGrantedFlag : Int = 0
 
@@ -584,23 +585,6 @@ class HomeActivity : AppCompatActivity() {
         //Change navigation header information
         changeNavigationHeaderInfo()
 
-//        drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener{
-//            override fun onDrawerStateChanged(p0: Int) {
-////                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onDrawerSlide(p0: View, p1: Float) {
-////                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onDrawerClosed(p0: View) {
-////                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onDrawerOpened(p0: View) {
-////                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//        })
     }
 
     private fun changeNavigationHeaderInfo() {

@@ -24,12 +24,20 @@ class TutorialActivity : AppIntro() {
         // Just create a `SliderPage` and provide title, description, background and image.
         // AppIntro will do the rest.
         val sliderPage1 = SliderPage()
-        sliderPage1.title = "View your diet history"
+        sliderPage1.title = "Steady your diet"
         sliderPage1.description = "Track your diet with Steady Kopitiam"
         var checklist = application.resources.getIdentifier("$PACKAGE_NAME:drawable/checklist",null,null)
         sliderPage1.imageDrawable = checklist
         sliderPage1.bgColor = Color.parseColor("#0963A3")
         addSlide(AppIntroFragment.newInstance(sliderPage1))
+
+        val sliderPage5 = SliderPage()
+        sliderPage5.title = "Picks nutritious meal for you"
+        sliderPage5.description = "Steady Picks recommends food with nutrient you need"
+        var recommended = application.resources.getIdentifier("$PACKAGE_NAME:drawable/recommended",null,null)
+        sliderPage5.imageDrawable = recommended
+        sliderPage5.bgColor = Color.parseColor("#4F3B3B")
+        addSlide(AppIntroFragment.newInstance(sliderPage5))
 
         val sliderPage2 = SliderPage()
         sliderPage2.title = "Best value Steady Picks"
@@ -42,10 +50,9 @@ class TutorialActivity : AppIntro() {
         val sliderPage3 = SliderPage()
         sliderPage3.title = "Buy more, rebate more"
         sliderPage3.description = "Get 10% rebate as Steady Coins by ordering with us"
-
         var digitalwallet = application.resources.getIdentifier("$PACKAGE_NAME:drawable/digitalwallet",null,null)
         sliderPage3.imageDrawable = digitalwallet
-        sliderPage3.bgColor = Color.parseColor("#e5c100")
+        sliderPage3.bgColor = Color.parseColor("#d0672e")
         addSlide(AppIntroFragment.newInstance(sliderPage3))
 
         val sliderPage4 = SliderPage()
@@ -55,7 +62,6 @@ class TutorialActivity : AppIntro() {
         sliderPage4.imageDrawable = dish
         sliderPage4.bgColor = Color.parseColor("#207a3c")
         addSlide(AppIntroFragment.newInstance(sliderPage4))
-
 
         // Instead of fragments, you can also use our default slide.
         // Just create a `SliderPage` and provide title, description, background and image.

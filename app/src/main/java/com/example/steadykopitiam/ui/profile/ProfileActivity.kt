@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import com.github.florent37.expansionpanel.ExpansionLayout
-import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.android.synthetic.main.expansion_panel_macro_panel.*
 import kotlinx.android.synthetic.main.expansion_panel_other_panel.*
 import kotlin.math.roundToInt
@@ -87,8 +86,8 @@ class ProfileActivity : AppCompatActivity() {
         this.proteinMax.text = protein.toString()+"g"
         this.fatMax.text = fat.toString()+"g"
         this.fiberMax.text = fibre.toString()+"g"
-        this.mineralMax.text = minerals.toString()+"g"
-        this.vitaminMax.text = vitamins.toString()+"g"
+        this.mineralMax.text = String.format("%.2f",minerals)+"g"
+        this.vitaminMax.text = String.format("%.2f",vitamins)+"g"
 
         retrieveTotalNutritionIntake()
         this.calorieIntake.text = caloriesIntakeFromOrdSum.toString()+"g"
@@ -96,10 +95,10 @@ class ProfileActivity : AppCompatActivity() {
         this.proteinIntake.text = proteinIntakeFromOrdSum.toString()+"g"
         this.fatIntake.text = fatIntakeFromOrdSum.toString()+"g"
         this.fiberIntake.text = fibreIntakeFromOrdSum.toString()+"g"
-        this.mineralIntake.text = mineralsIntakeFromOrdSum.toString()+"g"
-        this.vitaminIntake.text = vitaminsIntakeFromOrdSum.toString()+"g"
+        this.mineralIntake.text = String.format("%.2f",mineralsIntakeFromOrdSum)+"g"
+        this.vitaminIntake.text = String.format("%.2f",vitaminsIntakeFromOrdSum)+"g"
 
-        this.caloriePercent.text = (((caloriesIntakeFromOrdSum.toDouble() /calories.toDouble())*100).roundToInt()).toString()+"%"
+        this.caloriePercent.text = (((caloriesIntakeFromOrdSum.toDouble() /calories.toDouble())*100).roundToInt()).toString() +"%"
         this.carbPercent.text = (((carbsIntake.toDouble() / carbs.toDouble())*100).roundToInt()).toString()+"%"
         this.proteinPercent.text = (((proteinIntakeFromOrdSum.toDouble() / protein.toDouble())*100).roundToInt()).toString()+"%"
         this.fatPercent.text = (((fatIntakeFromOrdSum.toDouble() / fat.toDouble())*100).roundToInt()).toString()+"%"

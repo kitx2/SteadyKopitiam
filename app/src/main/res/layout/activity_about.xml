@@ -65,6 +65,7 @@
                             app:srcCompat="@drawable/steadykopitiam_full" />
 
                         <TextView
+                            android:id="@+id/versionLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -155,15 +156,42 @@
                         android:paddingBottom="10dp">
 
                         <TextView
+                            android:id="@+id/textView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/roboto"
+                            android:text="Contact Us"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginRight="20dp"
                             android:fontFamily="@font/roboto"
                             android:gravity="center_vertical"
                             android:text="For any enquiries, please email us at e0052936@u.nus.edu or e0119427@u.nus.edu"
                             android:textAlignment="textStart"
                             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
+                        <Button
+                            android:id="@+id/btnFeedback"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/colorPrimary"
+                            android:fontFamily="@font/roboto"
+                            android:text="SEND FEEDBACK"
+                            android:textColor="@color/colorWhite" />
 
                     </LinearLayout>
 

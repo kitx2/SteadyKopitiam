@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat
 
 class WalletActivity : AppCompatActivity() {
     //TODO: Reference username from Database
-    val username : String = "Test Username"
+    var username : String? = "Test Username"
     var navigationPosition: Int = 3
     lateinit var kopitiamDBHelper: DBHelper
 
@@ -44,7 +44,10 @@ class WalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wallet)
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
         initView()
+
         setTitle("Wallet")
 
         //Request permission for SMS

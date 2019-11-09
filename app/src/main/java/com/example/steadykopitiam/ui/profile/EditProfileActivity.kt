@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import com.example.steadykopitiam.DBHelper
 import com.example.steadykopitiam.UserRecord
@@ -31,6 +32,7 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.steadykopitiam.R.layout.activity_edit_profile)
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         val btnUpdateProfile : Button = findViewById(com.example.steadykopitiam.R.id.btnUpdateProfile)
         val spinner = findViewById<Spinner>(com.example.steadykopitiam.R.id.profile_spinnerChoice)
@@ -173,7 +175,6 @@ class EditProfileActivity : AppCompatActivity() {
         var result = kopitiamDBHelper.updateUser(
             UserRecord(username,gender,height,weight, bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories, fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
         )
-        Toast.makeText(this, "Added User : "+result, Toast.LENGTH_LONG).show()
         kopitiamDBHelper = DBHelper(this)
 
         //TODO: SetText and Set Index position of spinner
