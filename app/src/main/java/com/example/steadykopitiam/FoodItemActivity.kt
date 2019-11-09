@@ -14,11 +14,14 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
+import com.example.steadykopitiam.ui.profile.ProfileActivity
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.material.navigation.NavigationView
@@ -106,19 +109,30 @@ class FoodItemActivity : AppCompatActivity() {
         var res: Drawable = application.resources.getDrawable(id)
         imagePlaceholder.setImageDrawable(res)
 
+        //Information panel for discount or increased pricing
+        val infoPanel = findViewById<CardView>(R.id.infoPanel)
+        val infoLabel = findViewById<TextView>(R.id.infoLabel)
+        infoPanel.visibility = View.VISIBLE
+
         // if user had order food before in the past 3 days
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
         if(foodpricePref.getBoolean("isPriceIncrease",false)){
-            Toast.makeText(this, "You have purchased "+foodName+"in the past 24 hours and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You have purchased "+foodName+" in the past 24 hours and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
+            infoLabel.text = "You have purchased "+foodName+" in the past 24 hours and price will be increase 50 cents"
         }
 
         // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
         var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
         if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
             Toast.makeText(this, "You have select "+foodName+" from our recommendation list, Enjoy 50 cents discounted price!!  ",Toast.LENGTH_SHORT).show()
+            infoLabel.text = "You have select "+foodName+" from our recommendation list. Enjoy 50 cents discounted price!"
             var sharedPreForReccEditer = foodFromRecoList.edit()
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
             sharedPreForReccEditer.commit()
+        }
+
+        if(foodFromRecoList.getBoolean("ReccFoodIsSelected",true) && foodpricePref.getBoolean("isPriceIncrease",true)) {
+            infoPanel.visibility = View.GONE
         }
 
         //TODO: Render the details into Nutrition display table
@@ -642,26 +656,40 @@ class FoodItemActivity : AppCompatActivity() {
                     navigationPosition = R.id.nav_home
                     val myIntent = Intent(this, HomeActivity::class.java)
                     startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
                     finish()
                 }
                 R.id.nav_purchases -> {
                     toolbar.title = "Purchases"
                     navigationPosition = R.id.nav_purchases
+                    val myIntent = Intent(this, PurchasesActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
                 R.id.nav_profile -> {
                     toolbar.title = "Profile"
                     navigationPosition = R.id.nav_profile
+                    val myIntent = Intent(this, ProfileActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
                 R.id.nav_wallet -> {
                     toolbar.title = "Wallet"
                     navigationPosition = R.id.nav_wallet
                     val myIntent = Intent(this, WalletActivity::class.java)
                     startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
                     finish()
                 }
                 R.id.nav_about -> {
                     toolbar.title = "About"
                     navigationPosition = R.id.nav_about
+                    val myIntent = Intent(this, AboutActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
                 }
             }
             // set item as selected to persist highlight

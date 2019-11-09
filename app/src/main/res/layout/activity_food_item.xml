@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
-                <LinearLayout
+                    <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -234,6 +234,29 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/infoPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/colorPrimary"
+                    app:contentPaddingBottom="10dp"
+                    app:contentPaddingTop="10dp">
+
+                    <TextView
+                        android:id="@+id/infoLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="0"
+                        android:fontFamily="@font/roboto"
+                        android:text="Redeem Steady Coins for discount!"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+
+                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"

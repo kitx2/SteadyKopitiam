@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -77,6 +78,14 @@ class PurchasesActivity : AppCompatActivity() {
         orderRecycleView = findViewById(R.id.orderRecycleView)
 
         imageModelArrayList = populateList()
+
+        val emptyPanel = findViewById<LinearLayout>(R.id.emptyPanel)
+        if(imageModelArrayList.isNullOrEmpty()) {
+            emptyPanel.visibility = View.VISIBLE
+        } else {
+            emptyPanel.visibility = View.GONE
+        }
+
         Log.d("hjhjh", imageModelArrayList!!.size.toString() + "")
         adapter = AdapterOrderViewVertical(applicationContext, imageModelArrayList!!)
         orderRecycleView!!.adapter = adapter
