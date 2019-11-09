@@ -80,7 +80,7 @@ class QRActivity : AppCompatActivity() {
 
         }
         sharedPrefEditor.commit()
-        println("FoodPrice is "+foodPrice)
+        println("FoodPrice is after checking food ordered before "+foodPrice)
 
         qrlabel.setText("Please scan the QR code from the selected stall below.")
         stallLabel.setText(stallName)
@@ -137,13 +137,12 @@ class QRActivity : AppCompatActivity() {
                     jsonURL = barcodes?.valueAt(0)?.displayValue
                     InternerJSON(this@QRActivity,jsonURL!!,stallName,foodName,foodPrice).execute()
 //                    finish()
-
-                    println(" %%%% Hellow OWrld ")
-                    sleep(50)
+                    sleep(500)
+                    barcodeDetector.release()
+//                    cameraSource.release()
                     //println(sharedPreferences.getString("Key", "default value"))
-                    Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
-                    cameraSource.stop()
-                    cameraSource.release()
+                     Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
+
 
                 }
             }
