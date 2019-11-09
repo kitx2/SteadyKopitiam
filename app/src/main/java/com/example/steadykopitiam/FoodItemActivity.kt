@@ -55,7 +55,7 @@ class FoodItemActivity : AppCompatActivity() {
 
 
     //TODO: Update foodList
-    private var myImageList = intArrayOf()
+    private var myImageList = IntArray(size = 4)
     private val myImageNameList = arrayListOf<String>()
     private val myImageDescriptionList = arrayListOf<String>()
     private val myImageFoodFocusList = arrayListOf<String>()
@@ -204,17 +204,14 @@ class FoodItemActivity : AppCompatActivity() {
                     awardedPoint = (foodBasePrice * 10).toInt()
                     println("current Time is " + curTime)
 
-                    var result = kopitiamDBHelper.createOrderSummary(
-                        OrderSummaryRecord(curTime, awardedPoint, foodBasePrice, foodName, foodCarbs.toInt(), foodProtein.toInt(), foodFat.toInt(),
-                            foodMinerals.toDouble(), foodVitamins.toDouble(), foodCalories.toInt(), foodFocus, foodFibre.toInt(), foodExtraPrice.toString()
-                        )
-                    )
+
 
                     var deductWallet: Boolean
                     var finalAccountBalance: Double
                     var finalAccountPoints: Int
                     var redeemedAmt: Double
                     var pointsConsumed: Int
+                    var finalPurchasePrice: Double
 
                     //TODO: Persist purchase order in DB
                     //TODO: Store 10% rebate of spending amount in wallet
@@ -235,6 +232,7 @@ class FoodItemActivity : AppCompatActivity() {
                             )
                             pointsConsumed = pointsRequiredToPurchase
                             redeemedAmt = foodBasePrice
+                            finalPurchasePrice = 0.0
 
                             Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
 
@@ -251,6 +249,7 @@ class FoodItemActivity : AppCompatActivity() {
                             )
                             pointsConsumed = userPoints
                             redeemedAmt = userPoints / 100.0
+                            finalPurchasePrice = foodBasePrice - (userPoints / 100.0)
 
                             Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
                         }
@@ -267,11 +266,16 @@ class FoodItemActivity : AppCompatActivity() {
                         )
                         pointsConsumed = 0
                         redeemedAmt = 0.00
+                        finalPurchasePrice = foodBasePrice
 
                         Toast.makeText(this, "Consumed points = " + pointsConsumed + "\nRedeemedAmt = " + String.format("%.2f",redeemedAmt), Toast.LENGTH_SHORT).show()
                     }
-//                    Toast.makeText(this, "Switch check state = " + switch.isChecked.toString(),Toast.LENGTH_SHORT).show()
 
+                    var result = kopitiamDBHelper.createOrderSummary(
+                        OrderSummaryRecord(curTime, awardedPoint, finalPurchasePrice, foodName, foodCarbs.toInt(), foodProtein.toInt(), foodFat.toInt(),
+                            foodMinerals.toDouble(), foodVitamins.toDouble(), foodCalories.toInt(), foodFocus, foodFibre.toInt(), foodExtraPrice.toString()
+                        )
+                    )
                     //TODO - BONUS feature: Send sms for confirmation of order made
                     if (result && deductWallet) {
                         Toast.makeText(this, "Food has been added into order summary.", Toast.LENGTH_SHORT).show()
@@ -552,14 +556,16 @@ class FoodItemActivity : AppCompatActivity() {
     private fun populateList(): ArrayList<ModelFoodHorizontal> {
 
         val list = ArrayList<ModelFoodHorizontal>()
-        for (i in 0..myImageList.size-1) {
-            val imageModel = ModelFoodHorizontal()
-            imageModel.setNames(myImageNameList[i])
-            imageModel.setImage_drawables(myImageList[i])
-            imageModel.setDescriptions(myImageDescriptionList[i])
-            imageModel.setFoodFocus((myImageFoodFocusList[i]))
-            imageModel.setStallName(stallnameInRecommendedList[i])
-            list.add(imageModel)
+        if(myImageNameList.size> 0) {
+            for (i in 0..myImageList.size - 1) {
+                val imageModel = ModelFoodHorizontal()
+                imageModel.setNames(myImageNameList[i])
+                imageModel.setImage_drawables(myImageList[i])
+                imageModel.setDescriptions(myImageDescriptionList[i])
+                imageModel.setFoodFocus((myImageFoodFocusList[i]))
+                imageModel.setStallName(stallnameInRecommendedList[i])
+                list.add(imageModel)
+            }
         }
 
 //        val list = java.util.ArrayList<ModelFoodHorizontal>()

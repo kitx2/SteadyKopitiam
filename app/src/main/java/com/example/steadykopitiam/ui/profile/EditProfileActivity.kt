@@ -247,7 +247,7 @@ class EditProfileActivity : AppCompatActivity() {
         var weight    = register_weight.text.toString().toDouble()
         var bmi = (weight / (height*height))
         var calories : Int = 0
-        var bmr = (10 * weight) + (6.25 * height) - (5 * age.toInt())
+        var bmr = (10 * weight) + (6.25 * height * 100) - (5 * age.toInt())
         var gender      : String = genderString
 
         if(dailyAct.equals("High")){
@@ -273,8 +273,11 @@ class EditProfileActivity : AppCompatActivity() {
         //TODO: SetText and Set Index position of spinner
         val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
 
-        userpassword = preferences.getString("userPassword", "")
-        useremail = preferences.getString("userEmail", "")
+        var sharedPrefEditor = preferences.edit()
+        sharedPrefEditor.putString("userPassword", register_password.text.toString())
+        sharedPrefEditor.putString("userEmail", register_email.text.toString())
+        sharedPrefEditor.putString("username",register_name.text.toString())
+        sharedPrefEditor.commit()
         user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
 
         return result
@@ -439,7 +442,7 @@ class EditProfileActivity : AppCompatActivity() {
             accountPoints = user.get(0).accountPoints
             reg_bmi.setText(user.get(0).bmi.toString())
 
-            var gender: String = user.get(0).gender
+            var gender: String = user.get(0).gender.decapitalize()
 //            Toast.makeText(this, gender, Toast.LENGTH_SHORT).show()
             if (gender.equals("male")) {
                 (radio_group.getChildAt(0) as RadioButton).isChecked = true
