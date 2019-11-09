@@ -48,6 +48,12 @@ class RegisterActivity : AppCompatActivity(){
         val register_weight : EditText = findViewById(R.id.register_weight)
         val reg_input_layout_height: TextInputLayout = findViewById(R.id.reg_input_layout_height)
         val register_height : EditText = findViewById(R.id.register_height)
+        val reg_bmi : EditText = findViewById(R.id.profile_bmi)
+        val reg_bmiStatus : TextView = findViewById(R.id.bmiStatus)
+        reg_bmi.setEnabled(false)
+        reg_bmi.setTextColor(Color.parseColor("#8e8e8e"))
+        reg_bmi.setBackgroundColor(Color.TRANSPARENT)
+
 
         //Text validation
         validation()
@@ -80,6 +86,91 @@ class RegisterActivity : AppCompatActivity(){
                 genderStr = radio.text.toString()
             })
 
+        register_height.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                val heightStr    = register_height.text.toString()
+                val weightStr    = register_weight.text.toString()
+                var status:String
+                var height:Double
+                var weight:Double
+                var bmi:Double
+
+                if(heightStr.isBlank()) {
+                    height = 0.0
+                } else {
+                    height = heightStr.toDouble()
+                }
+                if(weightStr.isBlank()) {
+                    weight = 0.0
+                } else {
+                    weight = weightStr.toDouble()
+                }
+                bmi = weight / (height*height)
+                if(bmi.isInfinite() || bmi.isNaN()) {
+                    bmi = 0.0
+                    status = ""
+                } else if(bmi < 18.5) {
+                    status = "(Underweight)"
+                } else if (bmi >= 18.5 && bmi <= 22.9) {
+                    status = "(Normal)"
+                } else if (bmi >= 23.0 && bmi <= 27.4) {
+                    status = "(Pre-obesity)"
+                } else {
+                    status = "(Obesity)"
+                }
+
+                reg_bmi.setText(String.format("%.2f",bmi))
+                reg_bmiStatus.setText(status)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+        register_weight.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                val heightStr = register_height.text.toString()
+                val weightStr = register_weight.text.toString()
+                var status: String
+                var height: Double
+                var weight: Double
+                var bmi: Double
+
+                if (heightStr.isBlank()) {
+                    height = 0.0
+                } else {
+                    height = heightStr.toDouble()
+                }
+                if (weightStr.isBlank()) {
+                    weight = 0.0
+                } else {
+                    weight = weightStr.toDouble()
+                }
+                bmi = weight / (height * height)
+                if (bmi.isInfinite() || bmi.isNaN()) {
+                    bmi = 0.0
+                    status = ""
+                } else if (bmi < 18.5) {
+                    status = "(Underweight)"
+                } else if (bmi >= 18.5 && bmi <= 22.9) {
+                    status = "(Normal)"
+                } else if (bmi >= 23.0 && bmi <= 27.4) {
+                    status = "(Pre-obesity)"
+                } else {
+                    status = "(Obesity)"
+                }
+
+                reg_bmi.setText(String.format("%.2f", bmi))
+                reg_bmiStatus.setText(status)
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
 
         btn_to_register.setOnClickListener {
             var valid : Boolean = true

@@ -278,6 +278,51 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/profile_input_layout_bmi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    app:errorTextAppearance="@style/ErrorText">
+
+                    <EditText
+                        android:id="@+id/profile_bmi"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:editable="false"
+                        android:fontFamily="@font/roboto"
+                        android:hint="@string/edit_bmi"
+                        android:maxLength="5"
+                        android:numeric="decimal"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimary"
+                        android:textColorHint="@color/colorLightGrey"
+                        android:textCursorDrawable="@color/colorPrimary" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/bmiStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="@color/colorDisabledGrey"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
@@ -287,6 +332,7 @@
                     android:id="@+id/reg_input_layout_choice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
                     android:textColorHint="@color/colorPrimary"
                     app:helperText="@string/register_dailyActivity"
                     app:helperTextEnabled="false">

@@ -7,6 +7,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
@@ -16,6 +17,7 @@ import com.example.steadykopitiam.UserRecord
 import com.google.android.material.textfield.TextInputLayout
 import android.widget.RadioButton
 import android.widget.ArrayAdapter
+import com.example.steadykopitiam.R
 
 
 class EditProfileActivity : AppCompatActivity() {
@@ -54,7 +56,12 @@ class EditProfileActivity : AppCompatActivity() {
         val reg_input_layout_height: TextInputLayout = findViewById(com.example.steadykopitiam.R.id.profile_input_layout_height)
         val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
         val radio_group : RadioGroup = this.findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
+        val reg_bmi : EditText = findViewById(R.id.profile_bmi)
+        val reg_bmiStatus : TextView = findViewById(R.id.bmiStatus)
 
+        reg_bmi.setEnabled(false)
+        reg_bmi.setTextColor(Color.parseColor("#8e8e8e"))
+        reg_bmi.setBackgroundColor(Color.TRANSPARENT)
 
         if (spinner != null) {
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, choice)
@@ -76,8 +83,6 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
         }
-
-
         // Get radio group selected item
         radio_group.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
@@ -89,6 +94,94 @@ class EditProfileActivity : AppCompatActivity() {
         fetchUser()
         //Text validation
         validation()
+
+        register_height.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                val heightStr    = register_height.text.toString()
+                val weightStr    = register_weight.text.toString()
+                var status:String
+                var height:Double
+                var weight:Double
+                var bmi:Double
+
+                if(heightStr.isBlank()) {
+                    height = 0.0
+                } else {
+                    height = heightStr.toDouble()
+                }
+                if(weightStr.isBlank()) {
+                    weight = 0.0
+                } else {
+                    weight = weightStr.toDouble()
+                }
+                bmi = weight / (height*height)
+                if(bmi.isInfinite() || bmi.isNaN()) {
+                    bmi = 0.0
+                    status = ""
+                } else if(bmi < 18.5) {
+                    status = "(Underweight)"
+                } else if (bmi >= 18.5 && bmi <= 22.9) {
+                    status = "(Normal)"
+                } else if (bmi >= 23.0 && bmi <= 27.4) {
+                    status = "(Pre-obesity)"
+                } else {
+                    status = "(Obesity)"
+                }
+
+                reg_bmi.setText(String.format("%.2f",bmi))
+                reg_bmiStatus.setText(status)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+        register_weight.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                val heightStr    = register_height.text.toString()
+                val weightStr    = register_weight.text.toString()
+                var status:String
+                var height:Double
+                var weight:Double
+                var bmi:Double
+
+                if(heightStr.isBlank()) {
+                    height = 0.0
+                } else {
+                    height = heightStr.toDouble()
+                }
+                if(weightStr.isBlank()) {
+                    weight = 0.0
+                } else {
+                    weight = weightStr.toDouble()
+                }
+                bmi = weight / (height*height)
+                if(bmi.isInfinite() || bmi.isNaN()) {
+                    bmi = 0.0
+                    status = ""
+                } else if(bmi < 18.5) {
+                    status = "(Underweight)"
+                } else if (bmi >= 18.5 && bmi <= 22.9) {
+                    status = "(Normal)"
+                } else if (bmi >= 23.0 && bmi <= 27.4) {
+                    status = "(Pre-obesity)"
+                } else {
+                    status = "(Obesity)"
+                }
+
+                reg_bmi.setText(String.format("%.2f",bmi))
+                reg_bmiStatus.setText(status)
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+
 
         //Update user data
         btnUpdateProfile.setOnClickListener {
@@ -321,7 +414,9 @@ class EditProfileActivity : AppCompatActivity() {
         val register_weight : EditText = findViewById(com.example.steadykopitiam.R.id.profile_weight)
         val register_height : EditText = findViewById(com.example.steadykopitiam.R.id.profile_height)
         val radio_group : RadioGroup = findViewById(com.example.steadykopitiam.R.id.profile_radio_group)
-
+        val reg_bmi : EditText = findViewById(R.id.profile_bmi)
+        val reg_bmiStatus : TextView = findViewById(R.id.bmiStatus)
+        var status : String
 
         kopitiamDBHelper = DBHelper(this)
 
@@ -342,6 +437,7 @@ class EditProfileActivity : AppCompatActivity() {
             register_weight.setText(user.get(0).weight.toString())
             accountBalance = user.get(0).accountBalance
             accountPoints = user.get(0).accountPoints
+            reg_bmi.setText(user.get(0).bmi.toString())
 
             var gender: String = user.get(0).gender
 //            Toast.makeText(this, gender, Toast.LENGTH_SHORT).show()
@@ -350,6 +446,21 @@ class EditProfileActivity : AppCompatActivity() {
             } else {
                 (radio_group.getChildAt(1) as RadioButton).isChecked = true
             }
+
+            var bmi = user.get(0).bmi
+            if(bmi.isInfinite() || bmi.isNaN()) {
+                bmi = 0.0
+                status = ""
+            } else if(bmi < 18.5) {
+                status = "(Underweight)"
+            } else if (bmi >= 18.5 && bmi <= 22.9) {
+                status = "(Normal)"
+            } else if (bmi >= 23.0 && bmi <= 27.4) {
+                status = "(Pre-obesity)"
+            } else {
+                status = "(Obesity)"
+            }
+            reg_bmiStatus.setText(status)
 
             val spinner =
                 findViewById<Spinner>(com.example.steadykopitiam.R.id.profile_spinnerChoice)
