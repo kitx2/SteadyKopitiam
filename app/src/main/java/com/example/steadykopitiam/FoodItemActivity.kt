@@ -196,7 +196,7 @@ class FoodItemActivity : AppCompatActivity() {
             //TODO: Validate wallet amount, else prompt user to top-up
             if(!user.equals(null) && user.get(0).accountBalance < foodBasePrice ){
                 Toast.makeText(this, "Your account balance is insufficient to purchase food. Please top up your wallet.",Toast.LENGTH_SHORT).show()
-                finish()
+
             }else{
                 if(!user.isNullOrEmpty()) {
                     val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
