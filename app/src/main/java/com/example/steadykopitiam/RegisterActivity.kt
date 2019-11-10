@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
-import kotlinx.android.synthetic.main.activity_register.*
-import android.widget.TextView
 import com.google.android.material.textfield.TextInputLayout
-import android.text.Editable
-import android.text.TextWatcher
-import com.example.steadykopitiam.ui.profile.ProfileActivity
+import kotlinx.android.synthetic.main.activity_register.*
+import java.util.regex.Pattern.compile
 
 
 class RegisterActivity : AppCompatActivity(){
@@ -22,6 +23,15 @@ class RegisterActivity : AppCompatActivity(){
     var choice = arrayOf("High","Medium","Low")
     lateinit var kopitiamDBHelper: DBHelper
     lateinit var sharedPreferences : SharedPreferences
+    private val emailRegex = compile(
+        "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                "\\@" +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                "(" +
+                "\\." +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                ")+"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,21 +102,21 @@ class RegisterActivity : AppCompatActivity(){
                 val heightStr    = register_height.text.toString()
                 val weightStr    = register_weight.text.toString()
                 var status:String
-                var height:Double
-                var weight:Double
-                var bmi:Double
+                var height: String
+                var weight: String
+                var bmi: Double
 
-                if(heightStr.isBlank()) {
-                    height = 0.0
+                if (heightStr.isBlank() || heightStr.startsWith(".")) {
+                    height = "0"
                 } else {
-                    height = heightStr.toDouble()
+                    height = heightStr
                 }
-                if(weightStr.isBlank()) {
-                    weight = 0.0
+                if (weightStr.isBlank() || weightStr.startsWith(".")) {
+                    weight = "0"
                 } else {
-                    weight = weightStr.toDouble()
+                    weight = weightStr
                 }
-                bmi = weight / (height*height)
+                bmi = weight.toDouble() / (height.toDouble() * height.toDouble())
                 if(bmi.isInfinite() || bmi.isNaN()) {
                     bmi = 0.0
                     status = ""
@@ -135,21 +145,21 @@ class RegisterActivity : AppCompatActivity(){
                 val heightStr = register_height.text.toString()
                 val weightStr = register_weight.text.toString()
                 var status: String
-                var height: Double
-                var weight: Double
+                var height: String
+                var weight: String
                 var bmi: Double
 
-                if (heightStr.isBlank()) {
-                    height = 0.0
+                if (heightStr.isBlank() || heightStr.startsWith(".")) {
+                    height = "0"
                 } else {
-                    height = heightStr.toDouble()
+                    height = heightStr
                 }
-                if (weightStr.isBlank()) {
-                    weight = 0.0
+                if (weightStr.isBlank() || weightStr.startsWith(".")) {
+                    weight = "0"
                 } else {
-                    weight = weightStr.toDouble()
+                    weight = weightStr
                 }
-                bmi = weight / (height * height)
+                bmi = weight.toDouble() / (height.toDouble() * height.toDouble())
                 if (bmi.isInfinite() || bmi.isNaN()) {
                     bmi = 0.0
                     status = ""
@@ -176,8 +186,12 @@ class RegisterActivity : AppCompatActivity(){
         btn_to_register.setOnClickListener {
             var valid : Boolean = true
             if(register_email.text.isEmpty()) {
-               reg_input_layout_email.setError("Please enter your email.")
-               valid = false
+                reg_input_layout_email.setError("Please enter your email.")
+                valid = false
+            }
+            if (!emailRegex.matcher(register_email.text.toString()).matches())  {
+                reg_input_layout_email.setError("Invalid email address")
+                valid = false
             }
             if(register_password.text.isEmpty()) {
                 reg_input_layout_password.setError("Please enter your password.")
@@ -187,22 +201,51 @@ class RegisterActivity : AppCompatActivity(){
                 reg_input_layout_phoneNumber.setError("Please enter your phone number.")
                 valid = false
             }
+            if(register_phoneNumber.text.length != 8) {
+                reg_input_layout_phoneNumber.setError("Please enter 8-digit phone number.")
+                valid = false
+            }
             if (register_age.text.isEmpty()) {
                 reg_input_layout_age.setError("Please enter your age.")
+                valid = false
+            }
+            if (!register_age.text.isEmpty() && register_age.text.toString().toInt() >= 116) {
+                reg_input_layout_age.setError("Oldest man alive is age of 116 years. Try again.")
+                valid = false
+            }
+            if (!register_age.text.isEmpty() && register_age.text.toString().toInt() == 0) {
+                reg_input_layout_age.setError("Are you kidding me? Try again.")
                 valid = false
             }
             if (register_name.text.isEmpty()) {
                 reg_input_layout_name.setError("Please enter your name.")
                 valid = false
             }
-            if (register_height.text.isEmpty()) {
+            if (register_height.text.isEmpty() || register_height.text.toString().startsWith(".")) {
                 reg_input_layout_height.setError("Please enter your height.")
                 valid = false
             }
-            if (register_weight.text.isEmpty()) {
+            if(!register_height.text.isEmpty() && register_height.text.toString().toDouble() >= 3.00) {
+                reg_input_layout_height.setError("Tallest man on Earth is 2.72m. Try again.")
+                valid = false
+            }
+            if(!register_height.text.isEmpty() && register_height.text.toString().toDouble() <= 0.60) {
+                reg_input_layout_height.setError("Shortest man on Earth is 0.55m. Try again.")
+                valid = false
+            }
+            if (register_weight.text.isEmpty() || register_weight.text.toString().startsWith(".")) {
                 reg_input_layout_weight.setError("Please enter your weight.")
                 valid = false
             }
+            if(!register_weight.text.isEmpty() && register_weight.text.toString().toDouble() >= 640.00) {
+                reg_input_layout_weight.setError("Heaviest man on Earth is 635kg. Try again.")
+                valid = false
+            }
+            if(!register_weight.text.isEmpty() && register_weight.text.toString().toDouble() <= 2.10) {
+                reg_input_layout_weight.setError("Lightest man on Earth is 2.1kg. Try again.")
+                valid = false
+            }
+
             if(valid) {
                 if(registerUser(dailtAct, genderStr)) {
                     val myIntent = Intent(this, HomeActivity::class.java)
@@ -214,7 +257,6 @@ class RegisterActivity : AppCompatActivity(){
                     sharedPrefEditor.commit()
 
 //                    Toast.makeText(this, "Account registered",Toast.LENGTH_SHORT).show()
-
                     startActivity(myIntent)
                 } else {
                     Toast.makeText(this, "Account not registering",Toast.LENGTH_SHORT).show()
@@ -353,7 +395,7 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0)
+                if (s.length == 0 || s.toString().startsWith("."))
                     reg_input_layout_height.setError("Please enter your height.")
                 else
                     reg_input_layout_height.setError(null)
@@ -368,7 +410,7 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0)
+                if (s.length == 0 || s.toString().startsWith("."))
                     reg_input_layout_weight.setError("Please enter your weight.")
                 else
                     reg_input_layout_weight.setError(null)
