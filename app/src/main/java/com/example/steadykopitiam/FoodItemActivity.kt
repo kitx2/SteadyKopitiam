@@ -117,14 +117,12 @@ class FoodItemActivity : AppCompatActivity() {
         // if user had order food before in the past 3 days
         var foodpricePref = getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
         if(foodpricePref.getBoolean("isPriceIncrease",false)){
-            Toast.makeText(this, "You have purchased "+foodName+" in the past 24 hours and price will be increase 50 cents ",Toast.LENGTH_SHORT).show()
             infoLabel.text = "You have purchased "+foodName+" in the past 24 hours and price will be increase 50 cents"
         }
 
         // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
         var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
         if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
-            Toast.makeText(this, "You have select "+foodName+" from our recommendation list, Enjoy 50 cents discounted price!!  ",Toast.LENGTH_SHORT).show()
             infoLabel.text = "You have select "+foodName+" from our recommendation list. Enjoy 50 cents discounted price!"
             var sharedPreForReccEditer = foodFromRecoList.edit()
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
@@ -177,11 +175,7 @@ class FoodItemActivity : AppCompatActivity() {
                         myIntent.putExtra("stallName",stallNameInRecc)
                         myIntent.putExtra("foodPrice",foodPrice)
                         startActivity(myIntent)
-                        Toast.makeText(
-                            applicationContext,
-                            imageModelArrayList!![position].getNames(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+
                         //Start new Activity
                         //TODO: Pass stall name to QR Activity
 
@@ -318,9 +312,9 @@ class FoodItemActivity : AppCompatActivity() {
             // read recommended all stall list of food
             try{
                 for(i in 0..myImageList.size-1){
-                    println(" TTTTT ")
+
                     if(i == 0 ){
-                        println(" RRRRRR ")
+
                         var json: String?
                         val inputStream : InputStream = assets.open("Wong Ah Hua")
                         json = inputStream.bufferedReader().readText()
@@ -420,22 +414,28 @@ class FoodItemActivity : AppCompatActivity() {
 
                     var focus = orSum[i].orderSummaryFocus
                     if(focus.equals("Carbs")){
-                        addCarbs = true
-                        count = count - 1
+                        if(addCarbs!=true){
+                            addCarbs = true
+                            count = count - 1
+                        }
                     }
-
                     if(focus.equals("Protein")){
-                        addProtein = true
-                        count = count - 1
+                        if(addProtein!=true){
+                            addProtein = true
+                            count = count - 1
+                        }
                     }
                     if (focus.equals("vitamins")){
-                        addVitamins = true
-                        count = count - 1
+                        if(addVitamins!=(true)){
+                            addVitamins = true
+                            count = count - 1
+                        }
                     }
-
                     if (focus.equals("fibre")){
-                        addFibre = true
-                        count = count - 1
+                        if(addFibre!=true){
+                            addFibre = true
+                            count = count - 1
+                        }
                     }
                 }
             }

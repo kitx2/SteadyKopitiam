@@ -99,15 +99,8 @@ class StallActivity : AppCompatActivity() {
                 object : StallActivity.ClickListener {
 
                     override fun onClick(view: View, position: Int) {
-                        Toast.makeText(
-                            applicationContext,
-                            imageModelArrayList!![position].getNames(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-
                         //Start new Activity
                         //TODO: Pass stall name to QR Activity
-
                         val myIntent = Intent(applicationContext, QRActivity::class.java)
                         myIntent.putExtra("foodName",imageModelArrayList!![position].getNames())
                         myIntent.putExtra("stallName",stallName)
@@ -115,7 +108,6 @@ class StallActivity : AppCompatActivity() {
                         myIntent.putExtra("foodPrice",imageModelArrayList!![position].getPrices())
                         startActivity(myIntent)
                     }
-
                     override fun onLongClick(view: View?, position: Int) {
 
                     }

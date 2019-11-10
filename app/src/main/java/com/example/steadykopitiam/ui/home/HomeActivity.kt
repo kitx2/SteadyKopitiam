@@ -129,12 +129,6 @@ class HomeActivity : AppCompatActivity() {
                         myIntent.putExtra("foodPrice",foodPrice)
                         startActivity(myIntent)
 
-                        Toast.makeText(
-                            applicationContext,
-                            imageModelArrayList!![position].getNames(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-
                     }
 
                     override fun onLongClick(view: View?, position: Int) {
@@ -168,11 +162,7 @@ class HomeActivity : AppCompatActivity() {
                         myIntent.putExtra("stallName",stallName)
                         myIntent.putExtra("stallDescription",stallDescription)
                         myIntent.putExtra("stallImageid",stallImageId)
-                        Toast.makeText(
-                            applicationContext,
-                            stallImageModelArrayList!![position].getNames(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+
                         startActivity(myIntent)
                     }
 
@@ -299,34 +289,38 @@ class HomeActivity : AppCompatActivity() {
                val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm:ss")
                var d = Date()
                d = simpleDateFormat.parse(date)
-
                val curTime = simpleDateFormat.format(Date())
                var cur = simpleDateFormat.parse(curTime)
-               // means user eaten this food 1 days before
-               println("FoodName "+orSum[i].orderSummaryFoodName)
-               println("curr time "+ cur.time)
-               println("curr time minus day  "+ (cur.time - 86400000))
-               println(" order time "+ d.time)
+
+
                if((cur.time - 86400000 ) < d.time){
-//                   println("FoodName "+orSum[i].orderSummaryFoodName)
-//                   println("curr time "+ cur.time)
-//                   println(" order time "+ d.time)
+
                    var focus = orSum[i].orderSummaryFocus
                    if(focus.equals("Carbs")){
-                       addCarbs = true
-                       count = count - 1
+                       if(addCarbs!=true){
+                           addCarbs = true
+                           count = count - 1
+                       }
                    }
                    if(focus.equals("Protein")){
-                       addProtein = true
-                       count = count - 1
+                       if(addProtein!=true){
+                           addProtein = true
+                           count = count - 1
+                       }
+
                    }
                    if (focus.equals("vitamins")){
-                       addVitamins = true
-                       count = count - 1
+                       if(addVitamins!=true){
+                           addVitamins = true
+                           count = count - 1
+                       }
+
                    }
                    if (focus.equals("fibre")){
-                       addFibre = true
-                       count = count - 1
+                       if(addFibre!=true){
+                           addFibre = true
+                           count = count - 1
+                       }
                    }
                }
            }
