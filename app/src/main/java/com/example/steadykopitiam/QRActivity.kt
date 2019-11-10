@@ -12,17 +12,34 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
+import android.view.MenuItem
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.example.steadykopitiam.ui.about.AboutActivity
+import com.example.steadykopitiam.ui.home.HomeActivity
+import com.example.steadykopitiam.ui.profile.ProfileActivity
+import com.example.steadykopitiam.ui.purchases.PurchasesActivity
+import com.example.steadykopitiam.ui.wallet.WalletActivity
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_food_item.*
+import kotlinx.android.synthetic.main.activity_food_item.drawerLayout
+import kotlinx.android.synthetic.main.activity_food_item.navigationView
+import kotlinx.android.synthetic.main.activity_food_item.toolbar
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.BufferedInputStream
@@ -42,19 +59,23 @@ import kotlin.collections.ArrayList
 
 class QRActivity : AppCompatActivity() {
     lateinit var kopitiamDBHelper: DBHelper
-
+    var navigationPosition: Int = 0
     private var jsonURL : String? = ""
     private var finalPrice : String =" "
     private var listOrderSumm = ArrayList<OrderSummaryRecord>()
     lateinit var sharedPreferences: SharedPreferences
-
-
+    var username : String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
         kopitiamDBHelper = DBHelper(this)
+        setTitle("Stall QR Scanner")
+
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+        username = preferences.getString("username","")
+        initView()
 
         val qrlabel : TextView = findViewById(R.id.qrLabel)
         val stallLabel : TextView = findViewById(R.id.stallLabel)
@@ -173,10 +194,101 @@ class QRActivity : AppCompatActivity() {
         return ""
     }
 
+    private fun initView() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        val navigationView : NavigationView = findViewById(R.id.navigationView)
 
+        setSupportActionBar(toolbar)
+        setUpDrawerLayout()
 
+        //Load Inbox fragment first
+        navigationPosition = R.id.nav_home
+        navigationView.setCheckedItem(navigationPosition)
+        toolbar.title = "Home"
 
+        navigationView.setNavigationItemSelectedListener  { menuItem: MenuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    toolbar.title = "Home"
+                    navigationPosition = R.id.nav_home
+                    val myIntent = Intent(this, HomeActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
+                R.id.nav_purchases -> {
+                    toolbar.title = "Purchases"
+                    navigationPosition = R.id.nav_purchases
+                    val myIntent = Intent(this, PurchasesActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
+                R.id.nav_profile -> {
+                    toolbar.title = "Profile"
+                    navigationPosition = R.id.nav_profile
+                    val myIntent = Intent(this, ProfileActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
+                R.id.nav_wallet -> {
+                    toolbar.title = "Wallet"
+                    navigationPosition = R.id.nav_wallet
+                    val myIntent = Intent(this, WalletActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
+                R.id.nav_about -> {
+                    toolbar.title = "About"
+                    navigationPosition = R.id.nav_about
+                    val myIntent = Intent(this, AboutActivity::class.java)
+                    startActivity(myIntent)
+                    this.overridePendingTransition(0, 0)
+                    finish()
+                }
+            }
+            // set item as selected to persist highlight
+            menuItem.isChecked = true
+            // close drawer when item is tapped
+            drawerLayout.closeDrawers()
+            true
+        }
 
+        //Change navigation header information
+        changeNavigationHeaderInfo()
 
+    }
+
+    private fun changeNavigationHeaderInfo() {
+        val headerView = navigationView.getHeaderView(0)
+        headerView.username.text = username
+    }
+
+    private fun setUpDrawerLayout() {
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+    }
+
+    override fun onBackPressed() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        if (navigationPosition == R.id.nav_home) {
+            finish()
+        } else {
+            //Navigate to Inbox Fragment
+            navigationPosition = R.id.nav_home
+            navigationView.setCheckedItem(navigationPosition)
+            toolbar.title = "Home"
+        }
+    }
 
 }

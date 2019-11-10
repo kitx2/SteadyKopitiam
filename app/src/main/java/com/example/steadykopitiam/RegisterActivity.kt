@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.google.android.material.textfield.TextInputLayout
 import android.text.Editable
 import android.text.TextWatcher
+import com.example.steadykopitiam.ui.profile.ProfileActivity
 
 
 class RegisterActivity : AppCompatActivity(){
@@ -28,7 +29,7 @@ class RegisterActivity : AppCompatActivity(){
         kopitiamDBHelper = DBHelper(this)
         sharedPreferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
 
-
+        val btnBack = findViewById<Button>(R.id.btnBack)
         val btn_to_register = findViewById<Button>(R.id.btn_to_register)
         val spinner = findViewById<Spinner>(R.id.spinnerChoice)
         var genderStr : String = ""
@@ -212,7 +213,7 @@ class RegisterActivity : AppCompatActivity(){
                     sharedPrefEditor.putString("username",register_name.text.toString())
                     sharedPrefEditor.commit()
 
-                    Toast.makeText(this, "Account registered",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Account registered",Toast.LENGTH_SHORT).show()
 
                     startActivity(myIntent)
                 } else {
@@ -220,6 +221,13 @@ class RegisterActivity : AppCompatActivity(){
                 }
             }
 
+        }
+
+        btnBack.setOnClickListener {
+            val myIntent = Intent(this, LoginActivity::class.java)
+            startActivity(myIntent)
+            this.overridePendingTransition(0, 0)
+            finish()
         }
 
     }

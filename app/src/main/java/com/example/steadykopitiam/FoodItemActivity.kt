@@ -123,7 +123,7 @@ class FoodItemActivity : AppCompatActivity() {
         // if user had choose food from recommendations list prompt a message to display 50 cents is discounted
         var foodFromRecoList = getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
         if(foodFromRecoList.getBoolean("ReccFoodIsSelected",false)){
-            infoLabel.text = "You have select "+foodName+" from our recommendation list. Enjoy 50 cents discounted price!"
+            infoLabel.text = "You have selected "+foodName+" from our Steady Picks list. Enjoy 50 cents off from reg. price!"
             var sharedPreForReccEditer = foodFromRecoList.edit()
             sharedPreForReccEditer.putBoolean("ReccFoodIsSelected",false)
             sharedPreForReccEditer.commit()

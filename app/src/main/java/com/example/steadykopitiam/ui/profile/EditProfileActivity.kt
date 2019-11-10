@@ -36,6 +36,7 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(com.example.steadykopitiam.R.layout.activity_edit_profile)
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        val btnBack = findViewById<Button>(R.id.btnBack)
         val btnUpdateProfile : Button = findViewById(com.example.steadykopitiam.R.id.btnUpdateProfile)
         val spinner = findViewById<Spinner>(com.example.steadykopitiam.R.id.profile_spinnerChoice)
         var genderStr : String = ""
@@ -59,9 +60,19 @@ class EditProfileActivity : AppCompatActivity() {
         val reg_bmi : EditText = findViewById(R.id.profile_bmi)
         val reg_bmiStatus : TextView = findViewById(R.id.bmiStatus)
 
+        val mainLayout = findViewById<LinearLayout>(R.id.mainLayout).requestFocus()
+
         reg_bmi.setEnabled(false)
         reg_bmi.setTextColor(Color.parseColor("#8e8e8e"))
         reg_bmi.setBackgroundColor(Color.TRANSPARENT)
+
+        register_email.setEnabled(false)
+        register_email.setTextColor(Color.parseColor("#8e8e8e"))
+        register_email.setBackgroundColor(Color.TRANSPARENT)
+
+        register_password.setEnabled(false)
+        register_password.setTextColor(Color.parseColor("#8e8e8e"))
+        register_password.setBackgroundColor(Color.TRANSPARENT)
 
         if (spinner != null) {
             val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, choice)
@@ -236,6 +247,13 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
 
+        }
+
+        btnBack.setOnClickListener {
+            val myIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(myIntent)
+            this.overridePendingTransition(0, 0)
+            finish()
         }
 
     }

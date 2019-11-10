@@ -1,7 +1,7 @@
 [
   {
     "foodName" : "Chicken Rice",
-    "foodDescription" : " Chicken, roasted, with skin, served with rice and chilli sauce",
+    "foodDescription" : "Chicken, roasted, with skin, served with rice and chilli sauce",
     "foodBasePrice"   : "4.00",
     "fooddeductPrice" : "3.50",
     "foodExtraPrice"  : "4.50",

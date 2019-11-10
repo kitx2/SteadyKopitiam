@@ -60,7 +60,7 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             c.applicationContext.startActivity(myIntent)
 
         } else {
-            Toast.makeText(c, "You scan the wrong QR Code !!! Please proceed to the correct stall", Toast.LENGTH_LONG).show()
+            Toast.makeText(c, "Invalid QR code detected. Please proceed to " + foodStall, Toast.LENGTH_LONG).show()
         }
     }
     // --- to read the food information correctly and handle price based on past order --- Jy
