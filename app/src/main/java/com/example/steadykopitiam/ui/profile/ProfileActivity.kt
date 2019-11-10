@@ -130,6 +130,7 @@ class ProfileActivity : AppCompatActivity() {
             logoutPrefEditor.commit()
 
             val myIntent = Intent(this, LoginActivity::class.java)
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(myIntent)
             finish()
         }

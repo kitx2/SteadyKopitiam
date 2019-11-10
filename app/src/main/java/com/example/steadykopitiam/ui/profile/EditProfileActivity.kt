@@ -218,6 +218,17 @@ class EditProfileActivity : AppCompatActivity() {
                 var bool: Boolean = updateUser(dailyAct, genderStr)
                 if(bool) {
 //                    Toast.makeText(this, bool.toString(), Toast.LENGTH_LONG).show()
+                    kopitiamDBHelper = DBHelper(this)
+
+                    //TODO: SetText and Set Index position of spinner
+                    val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+                    var sharedPrefEditor = preferences.edit()
+                    sharedPrefEditor.putString("userPassword", register_password.text.toString())
+                    sharedPrefEditor.putString("userEmail", register_email.text.toString())
+                    sharedPrefEditor.putString("username",register_name.text.toString())
+                    sharedPrefEditor.commit()
+
                     val myIntent = Intent(this, ProfileActivity::class.java)
                     startActivity(myIntent)
                     this.overridePendingTransition(0, 0)
@@ -268,17 +279,6 @@ class EditProfileActivity : AppCompatActivity() {
         var result = kopitiamDBHelper.updateUser(
             UserRecord(username,gender,height,weight, bmi,age,email,accountBalance,accountPoints,carb.toInt(),calories, fat.toInt(),fibra.toInt(),minerails.toDouble(),vitamins.toDouble(),dailyAct,protein.toInt(),password,phoneNumber)
         )
-        kopitiamDBHelper = DBHelper(this)
-
-        //TODO: SetText and Set Index position of spinner
-        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
-
-        var sharedPrefEditor = preferences.edit()
-        sharedPrefEditor.putString("userPassword", register_password.text.toString())
-        sharedPrefEditor.putString("userEmail", register_email.text.toString())
-        sharedPrefEditor.putString("username",register_name.text.toString())
-        sharedPrefEditor.commit()
-        user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
 
         return result
     }
@@ -442,12 +442,12 @@ class EditProfileActivity : AppCompatActivity() {
             accountPoints = user.get(0).accountPoints
             reg_bmi.setText(user.get(0).bmi.toString())
 
-            var gender: String = user.get(0).gender.decapitalize()
+            var gender: String = user.get(0).gender
 //            Toast.makeText(this, gender, Toast.LENGTH_SHORT).show()
-            if (gender.equals("male")) {
-                (radio_group.getChildAt(0) as RadioButton).isChecked = true
-            } else {
+            if (gender.equals("Female")) {
                 (radio_group.getChildAt(1) as RadioButton).isChecked = true
+            } else {
+                (radio_group.getChildAt(0) as RadioButton).isChecked = true
             }
 
             var bmi = user.get(0).bmi
