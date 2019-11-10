@@ -120,9 +120,7 @@ class QRActivity : AppCompatActivity() {
         })
 
         //TODO: Success in reading JSON
-//        val myIntent = Intent(applicationContext, FoodItemActivity::class.java)
-//        startActivity(myIntent)
-//        finish()
+
 
         barcodeDetector.setProcessor((object:Detector.Processor<Barcode>{
             override fun release() {
@@ -137,15 +135,8 @@ class QRActivity : AppCompatActivity() {
                     jsonURL = barcodes?.valueAt(0)?.displayValue
                     InternerJSON(this@QRActivity,jsonURL!!,stallName,foodName,foodPrice).execute()
                     barcodeDetector.release()
-                    sleep(500)
+                    sleep(800)
                     finish()
-
-//                    println(" %%%% Hellow OWrld ")
-
-//                    //println(sharedPreferences.getString("Key", "default value"))
-//                    Toast.makeText(applicationContext, sharedPreferences.getString("Key", "default value"), Toast.LENGTH_SHORT).show()
-//                    cameraSource.stop()
-//                    cameraSource.release()
 
                 }
             }
@@ -173,13 +164,9 @@ class QRActivity : AppCompatActivity() {
                 var cur = simpleDateFormat.parse(curTime)
                 // means user eaten this food 24hours  before
                 if((cur.time - 86400000 ) < d.time){
-                    println("hahahahalololololoo")
+
                     return listOrderSumm[i].orderSummaryExtraPrice
                 }
-
-                println(" currtime " + cur.time)
-                println("ORder sumaaary tyime "+ d.time)
-
             }
         }
 

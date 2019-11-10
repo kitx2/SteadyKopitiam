@@ -58,14 +58,10 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
             println("Food price DeDucted &&&&&&!!!!!!"+ foodRecord.getDeductedPrice())
             myIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             c.applicationContext.startActivity(myIntent)
-        } else {
-            Toast.makeText(c, "unable to parse", Toast.LENGTH_LONG).show()
-            Toast.makeText(
-                c, "this is the data we were trying to parse : " +
-                        jsonData, Toast.LENGTH_LONG
-            ).show()
-        }
 
+        } else {
+            Toast.makeText(c, "You scan the wrong QR Code !!! Please proceed to the correct stall", Toast.LENGTH_LONG).show()
+        }
     }
     // --- to read the food information correctly and handle price based on past order --- Jy
     private fun parse() : Boolean {
@@ -73,12 +69,13 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
         try {
             val ja = JSONArray(jsonData)
             size = JSONArray(jsonData).length()
-
+            var checkCorrectQRcodeScab : Boolean = false
             // to find which food is selected
             for(i in 0..ja.length()-1){
                 var jsonObject = ja.getJSONObject(i)
 
                 if(jsonObject.getString("foodName").equals(foodName)){
+                    checkCorrectQRcodeScab = true
                     sharedPref = c?.getSharedPreferences("foodPriceIncPrefs",Context.MODE_PRIVATE)
                     foodFromRecoList = c?.getSharedPreferences("IsReccFoodSelected",Context.MODE_PRIVATE)
                     println("is Food selected from reco Listy in JSon Parser"+ foodFromRecoList.getBoolean("ReccFoodIsSelected",false))
@@ -111,9 +108,16 @@ class JsonParser(private var c: Context, private var jsonData: String,private va
                     foodRecord.setImage(jsonObject.getString("foodResourceId"))
                 }
             }
-            return true
+
+            if(checkCorrectQRcodeScab == true ){
+                return true
+            }else{
+                return false
+            }
+
         } catch (e: JSONException) {
-            e.printStackTrace()
+            println("False in JSon Parser $$$$$$$")
+//            e.printStackTrace()
             return false
         }
     }
