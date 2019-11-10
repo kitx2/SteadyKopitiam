@@ -1,35 +1,30 @@
 package com.example.steadykopitiam.ui.profile
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.example.steadykopitiam.*
 import com.example.steadykopitiam.ui.about.AboutActivity
 import com.example.steadykopitiam.ui.home.HomeActivity
 import com.example.steadykopitiam.ui.purchases.PurchasesActivity
 import com.example.steadykopitiam.ui.wallet.WalletActivity
+import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_home.drawerLayout
 import kotlinx.android.synthetic.main.activity_home.navigationView
 import kotlinx.android.synthetic.main.activity_home.toolbar
 import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
-import com.github.florent37.expansionpanel.ExpansionLayout
 import kotlinx.android.synthetic.main.expansion_panel_macro_panel.*
 import kotlinx.android.synthetic.main.expansion_panel_other_panel.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlin.math.roundToInt
 
 
@@ -80,7 +75,7 @@ class ProfileActivity : AppCompatActivity() {
         initView()
         this.nameLabel.text = username
 
-        retrieveUserNutrition(useremail!!,userpassword!!)
+        retrieveUserNutrition()
         this.calorieMax.text = calories.toString()+"g"
         this.carbMax.text = carbs.toString()+"g"
         this.proteinMax.text = protein.toString()+"g"
@@ -137,17 +132,26 @@ class ProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun retrieveUserNutrition(useremail:String ,userpassword:String ){
+    private fun retrieveUserNutrition(){
+        //TODO: SetText and Set Index position of spinner
+        val preferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE)
+
+        val userpassword = preferences.getString("userPassword", "")
+        val useremail = preferences.getString("userEmail", "")
         user = kopitiamDBHelper.readUser(useremail!!,userpassword!!)
-        username = user.get(0).username
-        carbs = user.get(0).user_carbs
-        protein = user.get(0).user_protein
-        fat = user.get(0).user_fat
-        fibre = user.get(0).user_fibre
-        vitamins = user.get(0).user_vitamins
-        calories = user.get(0).user_calories
-        minerals = user.get(0).user_minerals
-        bmi = user.get(0).bmi
+
+        if (!user.isEmpty()) {
+            username = user.get(0).username
+            carbs = user.get(0).user_carbs
+            protein = user.get(0).user_protein
+            fat = user.get(0).user_fat
+            fibre = user.get(0).user_fibre
+            vitamins = user.get(0).user_vitamins
+            calories = user.get(0).user_calories
+            minerals = user.get(0).user_minerals
+            bmi = user.get(0).bmi
+
+        }
     }
 
     private fun retrieveTotalNutritionIntake(){
