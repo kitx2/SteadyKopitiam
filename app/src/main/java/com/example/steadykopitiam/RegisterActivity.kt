@@ -197,6 +197,10 @@ class RegisterActivity : AppCompatActivity(){
                 reg_input_layout_password.setError("Please enter your password.")
                 valid = false
             }
+            if(register_password.text.length < 8) {
+                reg_input_layout_password.setError("Passwords must be at least 8 characters in length.")
+                valid = false
+            }
             if (register_phoneNumber.text.isEmpty()) {
                 reg_input_layout_phoneNumber.setError("Please enter your phone number.")
                 valid = false
@@ -313,18 +317,23 @@ class RegisterActivity : AppCompatActivity(){
     fun validation() {
 
         register_email.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
-        }
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-        }
-        override fun afterTextChanged(s: Editable) {
-            if (s.length == 0)
-                reg_input_layout_email.setError("Please enter your email.")
-            else
-                reg_input_layout_email.setError(null)
-        }
+            }
+            override fun afterTextChanged(s: Editable) {
+                if (s.length == 0) {
+                    reg_input_layout_email.setError("Please enter your email.")
+                }
+                else if(!emailRegex.matcher(register_email.text.toString()).matches()) {
+                    reg_input_layout_email.setError("Invalid email address")
+                }
+                else {
+                    reg_input_layout_email.setError(null)
+                }
+            }
         })
 
         register_phoneNumber.addTextChangedListener(object : TextWatcher {
@@ -335,10 +344,15 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0)
+                if (s.length == 0) {
                     reg_input_layout_phoneNumber.setError("Please enter your phone number.")
-                else
+                }
+                else if (s.length < 8) {
+                    reg_input_layout_phoneNumber.setError("Please enter 8-digit phone number.")
+                }
+                else {
                     reg_input_layout_phoneNumber.setError(null)
+                }
             }
         })
 
@@ -365,10 +379,15 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0)
+                if (s.length == 0) {
                     reg_input_layout_password.setError("Please enter your password.")
-                else
+                }
+                else if(s.length < 8) {
+                    reg_input_layout_password.setError("Passwords must be at least 8 characters in length.")
+                }
+                else {
                     reg_input_layout_password.setError(null)
+                }
             }
         })
 
@@ -380,10 +399,17 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0)
+                if (register_age.text.isEmpty()) {
                     reg_input_layout_age.setError("Please enter your age.")
-                else
+                }
+                else if (!register_age.text.isEmpty() && register_age.text.toString().toInt() >= 116) {
+                    reg_input_layout_age.setError("Oldest man alive is age of 116 years. Try again.")
+                }
+                else if (!register_age.text.isEmpty() && register_age.text.toString().toInt() == 0) {
+                    reg_input_layout_age.setError("Are you kidding me? Try again.")
+                } else {
                     reg_input_layout_age.setError(null)
+                }
             }
         })
 
@@ -395,10 +421,16 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0 || s.toString().startsWith("."))
+                if (register_height.text.isEmpty() || register_height.text.toString().startsWith(".")) {
                     reg_input_layout_height.setError("Please enter your height.")
-                else
+                }
+                else if(register_height.text.toString().toDouble() >= 3.00) {
+                    reg_input_layout_height.setError("Tallest man on Earth is 2.72m. Try again.")
+                }else if(register_height.text.toString().toDouble() <= 0.60) {
+                    reg_input_layout_height.setError("Shortest man on Earth is 0.55m. Try again.")
+                } else {
                     reg_input_layout_height.setError(null)
+                }
             }
         })
 
@@ -410,10 +442,17 @@ class RegisterActivity : AppCompatActivity(){
 
             }
             override fun afterTextChanged(s: Editable) {
-                if (s.length == 0 || s.toString().startsWith("."))
+                if (register_weight.text.isEmpty() || register_weight.text.toString().startsWith(".")) {
                     reg_input_layout_weight.setError("Please enter your weight.")
-                else
+                }
+                else if(register_weight.text.toString().toDouble() >= 640.00) {
+                    reg_input_layout_weight.setError("Heaviest man on Earth is 635kg. Try again.")
+                }
+                else if(register_weight.text.toString().toDouble() <= 2.10) {
+                    reg_input_layout_weight.setError("Lightest man on Earth is 2.1kg. Try again.")
+                } else {
                     reg_input_layout_weight.setError(null)
+                }
             }
         })
 
